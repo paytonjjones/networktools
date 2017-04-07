@@ -1,0 +1,242 @@
+---
+title: 'Impact: A New Statistic for Network Analysis (networktools)'
+author: "Payton Jones"
+date: "April 6, 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("~/R/networktools package/networktools/vignettes")
+devtools::document()
+require(qgraph)
+```
+
+## What is impact?
+
+The structures of a networks are meaningful. A well connected network means something different than a sparsely connected network. And even if two networks have the same overall level of connectivity, changes in the structure indicate meaningful differences.
+
+The structures of networks sometimes vary as a function of external variables. For instance, Pe et al. (2015) found that the structure of negative mood networks varied as a function of whether or not individuals had been diagnosed with major depression. You can see this clearly in the figure from the paper presented below: people who have been diagnosed with major depressive disorder have much thicker edges between their negative emotions.
+
+![](figures/pe_figure.png)
+
+The structures of networks may also vary as a function of __internal__ variables; that is to say, as a function of each node. Imagine, for instance, that instead of separating people into networks by "depressed" and "nondepressed", we had separated them by their reported level of sadness in the node "sad". Would structural differences exist between the two networks? This is the question that impact statistics aim to answer!
+
+> __Impact statistics measure the degree to which nodes impact network structure.__
+
+Let's look at an example in some simulated data to get an idea of what impact can do.
+
+## Impact in a social network
+
+### The _social_ dataset
+
+A group of friends are members of an online social media platform. We have data on 400 social media posts on this platform. For each post, the friends decided either participated in the conversation, or they didn't. They were given a score of 1 if they engaged in group conversation regarding the post, and a score of 0 if they did not engage with the post. We can create a social network based on how social engagement patterns.
+
+The data is included under the name _social_ in the _networktools_ package. We fit a network using _IsingFit_ to this data, to try and understand how different members of the group are connected in their engagement. The results can be seen below.
+
+```{r initial social}
+socialq <- IsingFit::IsingFit(social, plot=FALSE, progressbar=FALSE)
+plot(socialq, layout="circle")
+```
+
+### What is Kim's impact?
+
+We have an interesting question about our data: Kim seems to be a very polarizing individual, and want to know how her participation affects the dynamic for rest of the group. Are the connections between friends different depending on whether or not Kim participates?
+
+Let's take a visual look by separating the "Kim absent"" conversations from the "Kim present" conversations:
+
+```{r social impact 1, echo=FALSE}
+impsocial<-impact(social, binary.data=TRUE)
+plot(impsocial$Edge, nodes="Kim", title=c("Kim absent", "Kim present"))
+```
+
+These networks appear to be very different. In particular, it seems that the group is much less connected overall when Kim is present. But can we quantify this?
+
+One measure of overall connectedness in a network is _global strength_. The _global strength invariance_ between two networks is the global strength of one network minus the global strength of the other. Kim's __global strength impact__ is simply the global strength invariance between the "Kim absent" network and the "Kim present" network.
+
+We can compute the global strength impact with the _global.impact_ function:
+
+```{r social impact 2}
+kim_global <- global.impact(social, nodes="Kim", binary.data=TRUE)
+kim_global$impact
+```
+
+Kim has a global strength impact of -14.05, meaning that the global strength of the entire network goes down by 14.05 when Kim is involved. 
+
+You might have noticed that Kim doesn't appear in these impact plots. When we split the network according to Kim's data, we are restricting the variance on the node "Kim". This causes all kinds of statistical problems and confounds. To avoid these problems, we temporarily exclude the node of interest when computing impact. 
+
+### What is Rod's impact?
+
+We also have some theories about Rod. Let's take a look:
+```{r}
+plot(impsocial$Edge, nodes="Rod")
+```
+
+Rod is certainly shaking things up, but in a different way. The overall connectivity between the two networks doesn't seem much different, but the structure seems to change.
+
+We can quantify this with the __network structure impact__. This corresponds to the _network structure invariance_ between the "Rod absent" and "Rod present" networks:
+
+```{r}
+rod_structure <- structure.impact(social, nodes="Rod", binary.data=TRUE)
+rod_structure$impact
+```
+
+You might have noticed that couple of edges in particular are very different depending on Rod. Maybe we are interested in the relationship between Pat and Pam. We can test for this edge explicitly using the __edge impact__ statistic:
+
+```{r}
+rod_edge <- edge.impact(social, nodes="Rod", binary.data=TRUE)
+rod_edge$impact$Rod["Pat","Pam"]
+```
+
+### Putting it all together with the _impact_ function
+
+So far we've calculated __global strength impact__ (with _global.impact_), __network structure impact__ (with _structure.impact_), and __edge impact__ (with _edge.impact_). For simplicity's sake, and to save on computational burden, we can calculate all three at once using the _impact_ function.
+
+This will return a list of three items:
+-an object of class _global.impact_
+-an object of class _structure.impact_
+-an object of class _edge.impact_
+
+```{r}
+social_impact <- impact(social, binary.data=TRUE)
+```
+
+So far we've looked at the impacts of specific nodes, based on our hypotheses. But it's also useful to look at the impacts of the nodes in the aggregate. Let's look at a visualization:
+
+```{r}
+plot(social_impact)
+```
+
+## Impact in the _depression_ dataset
+
+Let's examine impact in a different type of network. Depression can be described as a network of symptoms. I created a simulated dataset containing severity ratings for 9 symptoms of major depressive disorder in 1000 individuals. Symptom ratings are self-reported on a 100 point sliding scale.
+
+Let's take a look at the overall association network for the symptoms:
+
+```{r}
+names(depression)
+qgraph(cor(depression))
+```
+
+This time around, let's start out by looking at the impact statistics in the aggregate.
+
+```{r}
+impact_depression <- impact(depression)
+plot(impact_depression)
+```
+
+We'll take a closer look at psychomotor retardation and sleep disturbance later on. Before we do, let's discuss how impact in this dataset differs from the first dataset.
+
+### Impact with continuous data
+
+When we had binary data, it was easy to separate the network into "Kim absent" and "Kim present". When our data is continuous, things aren't so simple: we can't just separate the networks easily into "sadness" or "no sadness". 
+
+When data is continuous, the default for computing impact is to use a median split.
+
+But wait a second...didn't I hear somewhere that median splits are evil and should never be used? 
+
+Well, admittedly, median splits are occasionally quite evil. That's because when you perform a median split, you lose variance-- something statisticians strive never to do. Generally, instead of a median split, you can use regression to look at the values from each individual observation without losing variance. Unfortunately, network structure is not a property of an individual observation-- it is a property of a sample. That means that we'll have to split our sample up into chunks somehow. I experimented with several methods to keep things in a regression context (random sampling, semi-random sampling, deciles), but found that these methods are highly unreliable unless you have an incredibly large sample. The median split, while slightly less sensitive to subtle changes, is reliable. You can also experiment with different kinds of splits using the _split_ argument.
+
+Let's continue forward and learn a little more about visualization of impact functions.
+
+## Explicitly testing impact statistics with _impact.NCT_
+
+In order to be interpreted in a meaningful way, the significance (or confidence interval) of impact statistics should be explicitly tested.
+
+The _NCT_ function from the _NetworkComparisonTest_ package uses a permutation test to determine the significance of structure invariances between two networks. Because impact statistics are mathematically defined as structural invariance between two networks, _NCT_ is an appropriate method to test the significance of impact statistics. _impact.NCT_ is a nice wrapper function that combines _impact_ with _NCT_. 
+
+_impact.NCT_ returns a list with NCT objects for each node tested. Each NCT object includes p-values for invariances (which in this case, are equivalent to impacts).
+
+The _NCT_ method is computationally intensive. For this reason, it is recommended that users test subsets of nodes using the _nodes_ argument, rather than testing all nodes simultaneously. Let's test the global strength and network structure impacts of both psychomotor retardation and sleep disturbance. Let's also test the edge impact of sleep disturbance on the edge between fatigue and worthlessness. Let's use 25 permutations for the sake of speed (in a real analysis, you'd want 1000 permutations or more).
+
+```{r}
+NCT_depression <- impact.NCT(depression, it=25, nodes=c("psychomotor_retardation", "sleep_disturbance"), progressbar=FALSE, test.edges=TRUE, edges=list(c(5,6)))
+```
+
+Now let's pull the relevant p-values out of that object.
+
+```{r}
+#Global strength impact of psychomotor retardation
+NCT_depression$psychomotor_retardation$glstrinv.pval
+#Network structure impact of psychomotor retardation
+NCT_depression$psychomotor_retardation$nwinv.pval
+#Global strength impact of concentration problems
+NCT_depression$sleep_disturbance$glstrinv.pval
+#Network structure impact of psychomotor retardation
+NCT_depression$sleep_disturbance$nwinv.pval
+#Edge impact of concentration problems on fatigue--worthlessness
+NCT_depression$sleep_disturbance$einv.pvals
+```
+
+## Visualizing impact
+
+The default options for plotting impact functions are pretty useful, and come with some handy arguments. You can explore these further in the documentation files:
+
+```{r eval=FALSE}
+?plot.all.impact
+?plot.global.impact
+?plot.structure.impact
+?plot.edge.impact
+```
+
+Let's practice visualization with the _depression_ dataset. First, let's visualize impact overall.
+
+```{r}
+plot(impact_depression, order="value", zscores=TRUE)
+
+```
+
+Now let's visualize the impact of sleep disturbance. We can visualize sleep disturbance by looking at two separate networks (the "low" and "high" networks).
+
+```{r}
+plot(impact_depression$Edge, nodes="sleep_disturbance", type="contrast")
+```
+
+We can also visualize each edge impact _as an edge_ in a single network. In this single network, each edge represents the _change_ in edge from low to high.
+
+```{r}
+
+plot(impact_depression$Edge, nodes="sleep_disturbance", type="single", title="Single impact graph: Edge impact visualized as edges")
+```
+
+If you want to go further, the key to understanding how to visualize your impact output is realizing that all of the relevant networks are contained in the _edge.impact_ object. The _edge.impact_ object contains the "high" and "low" networks (in adjacency matrix format) for each node under _edge_impact_object\$hi\$nodename_ and _edge_impact_object\$lo\$nodename_. This gives you some more flexibility. Check it out:
+
+```{r}
+par(mfrow=c(1,2))
+qgraph(impact_depression$Edge$hi$psychomotor_retardation, title="High Psychomotor Retardation", layout="spring", color="lightblue")
+qgraph(impact_depression$Edge$lo$psychomotor_retardation, title="Low Psychomotor Retardation", layout="spring", color="lightgreen")
+```
+
+## Common problems and fixes
+
+When calculating impact statistics on your data, you might stumble upon the following warning:
+
+```{r}
+#: Sample size difference after split is >10% of total sample}
+```
+
+Essentially, this warning indicates that when splitting your data in two, the resulting halves have differing sample sizes. This can occur if your data has limited variance (read: lots of observations that fall on the median), your sample size is small overall, or you have floor/ceiling effects. 
+
+Why is this a problem? The sparcity of networks computed via graphical LASSO depends on the sample size. Comparing two networks of different sample sizes can result in false positives for network invariance.
+
+So what can you do to fix it? One way to fix this problem (if you have continuous data) is to force the sample sizes to be equal. You can do this by setting the _split_ argument to "forceEqual". Another way to address this problem is to set the _gamma_ argument to 0, so that you are comparing association networks (which are less influenced by sample size than LASSOs).
+
+Another problem inherent in network analysis in general is sample size. You need a big sample to compute a network! This problem is compounded in impact, where you must temporarily cut your sample in half. There aren't any magic fixes to this problem, and it is up to the user to be careful about this issue.
+
+## What questions can __impact__ answer? 
+
+In this vignette, we covered the potential uses of impact in social networks and psychopathology networks. Impact applies to other types of networks as well. Here are a few questions that impact might address:
+
+* Which brain areas are responsible for modulating functional connectivity?
+* Are there subtypes of schizophrenia that depend on the level of negative symptoms?
+* How does the presence of an authority figure impact social relationships in the workplace?
+* How does one's level of anxiety modulate how their emotions are related to one another?
+* Which nodes in an electrical grid modulate the connectivity within the grid?
+* Does John's presence impact the relationship between Dave and Sue?
+* Does the level of anhedonia in depression affect the overall connectivity between symptoms?
+* Which nodes in my network are important?
+
+Now you have one more tool in your belt for understanding your network data. Happy exploring!
+

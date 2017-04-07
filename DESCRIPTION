@@ -1,0 +1,18 @@
+Package: networktools
+Title: Assorted Tools for Network Analysis
+Version: 0.0.0.9000
+Authors@R: person("Payton", "Jones", email = "payton_jones@g.harvard.edu", role = c("aut", "cre"))
+Description: Includes tools for calculating and visualizing impact 
+    (global strength impact, network structure impact, edge impact).
+Depends: R (>= 3.3.2)
+License:  GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: qgraph,igraph,IsingFit,reshape2,nnet,ggplot2,gridExtra,stats,graphics,utils,NetworkComparisonTest
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
+URL: http://github.com/paytonjjones/networktools
+BugReports: http://github.com/paytonjjones/networktools/issues
+
