@@ -2,9 +2,11 @@
 title: 'Impact: A New Statistic for Network Analysis (networktools)'
 author: "Payton Jones"
 date: "April 6, 2017"
-output:
-  html_document: default
-  pdf_document: default
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{impact}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
