@@ -2,17 +2,20 @@
 title: 'Impact: A New Statistic for Network Analysis (networktools)'
 author: "Payton Jones"
 date: "April 6, 2017"
-output: rmarkdown::html_vignette
+output:
+  pdf_document:
 vignette: >
   %\VignetteIndexEntry{impact}
+  %\VignetteKeyword{impact}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\SweaveUTF8
+  \usepackage[utf8](inputenc)
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 setwd("~/R/networktools package/networktools/vignettes")
-devtools::document()
+require(networktools)
 require(qgraph)
 ```
 
@@ -34,7 +37,7 @@ Let's look at an example in some simulated data to get an idea of what impact ca
 
 ### The _social_ dataset
 
-A group of friends are members of an online social media platform. We have data on 400 social media posts on this platform. For each post, the friends decided either participated in the conversation, or they didn't. They were given a score of 1 if they engaged in group conversation regarding the post, and a score of 0 if they did not engage with the post. We can create a social network based on how social engagement patterns.
+A group of friends are members of an online social media platform. We have data on 400 social media posts on this platform. For each post, the friends decided either participated in the conversation, or they didn't. They were given a score of 1 if they engaged in group conversation regarding the post, and a score of 0 if they did not engage with the post. We can create a social network based on social engagement patterns.
 
 The data is included under the name _social_ in the _networktools_ package. We fit a network using _IsingFit_ to this data, to try and understand how different members of the group are connected in their engagement. The results can be seen below.
 
@@ -45,7 +48,7 @@ plot(socialq, layout="circle")
 
 ### What is Kim's impact?
 
-We have an interesting question about our data: Kim seems to be a very polarizing individual, and want to know how her participation affects the dynamic for rest of the group. Are the connections between friends different depending on whether or not Kim participates?
+We have an interesting question about our data: Kim seems to be a very polarizing individual, and we want to know how her participation affects the dynamic for rest of the group. Are the connections between friends different depending on whether or not Kim participates?
 
 Let's take a visual look by separating the "Kim absent"" conversations from the "Kim present" conversations:
 
@@ -72,8 +75,8 @@ You might have noticed that Kim doesn't appear in these impact plots. When we sp
 ### What is Rod's impact?
 
 We also have some theories about Rod. Let's take a look:
-```{r}
-plot(impsocial$Edge, nodes="Rod")
+```{r, echo=FALSE}
+plot(impsocial$Edge, nodes="Rod", title=c("Rod absent", "Rod present"))
 ```
 
 Rod is certainly shaking things up, but in a different way. The overall connectivity between the two networks doesn't seem much different, but the structure seems to change.
@@ -97,9 +100,9 @@ rod_edge$impact$Rod["Pat","Pam"]
 So far we've calculated __global strength impact__ (with _global.impact_), __network structure impact__ (with _structure.impact_), and __edge impact__ (with _edge.impact_). For simplicity's sake, and to save on computational burden, we can calculate all three at once using the _impact_ function.
 
 This will return a list of three items:
--an object of class _global.impact_
--an object of class _structure.impact_
--an object of class _edge.impact_
+*an object of class _global.impact_
+*an object of class _structure.impact_
+*an object of class _edge.impact_
 
 ```{r}
 social_impact <- impact(social, binary.data=TRUE)
@@ -154,7 +157,9 @@ _impact.NCT_ returns a list with NCT objects for each node tested. Each NCT obje
 The _NCT_ method is computationally intensive. For this reason, it is recommended that users test subsets of nodes using the _nodes_ argument, rather than testing all nodes simultaneously. Let's test the global strength and network structure impacts of both psychomotor retardation and sleep disturbance. Let's also test the edge impact of sleep disturbance on the edge between fatigue and worthlessness. Let's use 25 permutations for the sake of speed (in a real analysis, you'd want 1000 permutations or more).
 
 ```{r}
-NCT_depression <- impact.NCT(depression, it=25, nodes=c("psychomotor_retardation", "sleep_disturbance"), progressbar=FALSE, test.edges=TRUE, edges=list(c(5,6)))
+NCT_depression <- impact.NCT(depression, it=25, 
+                             nodes=c("psychomotor_retardation", "sleep_disturbance"), 
+                             progressbar=FALSE, test.edges=TRUE, edges=list(c(5,6)))
 ```
 
 Now let's pull the relevant p-values out of that object.
@@ -185,30 +190,35 @@ The default options for plotting impact functions are pretty useful, and come wi
 
 Let's practice visualization with the _depression_ dataset. First, let's visualize impact overall.
 
+We can customize our graph. Let's put the impacts in order from highest to lowest, and let's plot the z-scores of the impact instead of the raw values.
+
 ```{r}
 plot(impact_depression, order="value", zscores=TRUE)
 
 ```
 
-Now let's visualize the impact of sleep disturbance. We can visualize sleep disturbance by looking at two separate networks (the "low" and "high" networks).
+Now let's visualize the impact of sleep disturbance. We can visualize sleep disturbance by looking at two separate networks (the "low" and "high" networks). This type of plot is specified with _type="contrast"_
 
 ```{r}
 plot(impact_depression$Edge, nodes="sleep_disturbance", type="contrast")
 ```
 
-We can also visualize each edge impact _as an edge_ in a single network. In this single network, each edge represents the _change_ in edge from low to high.
+We can also visualize each edge impact _as an edge_ in a single network. In this single network, each edge represents the _change_ in edge from low to high. This type of plot is specified with _type="single"_. We can also customize the title.
 
 ```{r}
 
-plot(impact_depression$Edge, nodes="sleep_disturbance", type="single", title="Single impact graph: Edge impact visualized as edges")
+plot(impact_depression$Edge, nodes="sleep_disturbance", type="single", 
+     title="Single impact graph: Edge impact visualized as edges")
 ```
 
 If you want to go further, the key to understanding how to visualize your impact output is realizing that all of the relevant networks are contained in the _edge.impact_ object. The _edge.impact_ object contains the "high" and "low" networks (in adjacency matrix format) for each node under _edge_impact_object\$hi\$nodename_ and _edge_impact_object\$lo\$nodename_. This gives you some more flexibility. Check it out:
 
 ```{r}
 par(mfrow=c(1,2))
-qgraph(impact_depression$Edge$hi$psychomotor_retardation, title="High Psychomotor Retardation", layout="spring", color="lightblue")
-qgraph(impact_depression$Edge$lo$psychomotor_retardation, title="Low Psychomotor Retardation", layout="spring", color="lightgreen")
+qgraph(impact_depression$Edge$hi$psychomotor_retardation, 
+       title="High Psychomotor Retardation", layout="spring", color="lightblue")
+qgraph(impact_depression$Edge$lo$psychomotor_retardation, 
+       title="Low Psychomotor Retardation", layout="spring", color="lightgreen")
 ```
 
 ## Common problems and fixes
@@ -232,12 +242,12 @@ Another problem inherent in network analysis in general is sample size. You need
 In this vignette, we covered the potential uses of impact in social networks and psychopathology networks. Impact applies to other types of networks as well. Here are a few questions that impact might address:
 
 * Which brain areas are responsible for modulating functional connectivity?
-* Are there subtypes of schizophrenia that depend on the level of negative symptoms?
 * How does the presence of an authority figure impact social relationships in the workplace?
+* Does the level of anhedonia in depression affect the overall connectivity between symptoms?
+* Are there subtypes of schizophrenia that depend on the level of negative symptoms?
+* Does John's presence impact the relationship between Dave and Sue?
 * How does one's level of anxiety modulate how their emotions are related to one another?
 * Which nodes in an electrical grid modulate the connectivity within the grid?
-* Does John's presence impact the relationship between Dave and Sue?
-* Does the level of anhedonia in depression affect the overall connectivity between symptoms?
 * Which nodes in my network are important?
 
 Now you have one more tool in your belt for understanding your network data. Happy exploring!

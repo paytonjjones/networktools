@@ -84,12 +84,13 @@ print.expectedInf <- function(x,...){
 
 #' Plot "all.impact" objects
 #'
-#' Convenience function for generating impact plots 
+#' Convenience function for generating impact plots
 #'
 #' @param x an output object from an impact function (class \code{all.impact})
 #' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
-#' highest to lowest impact value 
+#' highest to lowest impact value
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
+#' @param abs_val logical. Plot absolute values of global strength impacts
 #' @param ... other plotting specifications (ggplot2)
 #'
 #' @details
@@ -104,11 +105,12 @@ print.expectedInf <- function(x,...){
 #' plot(out1, order="value", zscore=TRUE)
 #' @method plot all.impact
 #' @export
-plot.all.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,...){
+plot.all.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE, abs_val=FALSE,...){
   df <- data.frame(names(x$Global.Strength$impact), x$Global.Strength$impact, x$Network.Structure$impact)
   colnames(df) <- c("NodeName", "Global Strength Impact", "Network Structure Impact")
   if(zscore) {df$`Global Strength Impact` <- scale(df$`Global Strength Impact`)
   df$`Network Structure Impact` <- scale(df$`Network Structure Impact`)}
+  if(abs_val) {df$`Global Strength Impact` <- abs(df$`Global Strength Impact`)}
   longdf <- suppressWarnings(suppressMessages(reshape2::melt(df)))
   colnames(longdf) <- c("NodeName", "Impact.Type", "ImpValue")
   NodeName <- longdf[,1]; ImpValue <- longdf[,3]
@@ -137,20 +139,20 @@ plot.all.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,
 
 
 #' Plot "global.impact" objects
-#' 
-#' Convenience function for generating global strength impact plots 
+#'
+#' Convenience function for generating global strength impact plots
 #'
 #' @param x an output object from an impact function (class \code{global.impact})
 #' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
-#' highest to lowest impact value 
+#' highest to lowest impact value
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
 #' @param ... other plotting specifications (ggplot2)
 #'
 #' @details
 #'
-#' Inputting an object of class \code{global.impact} 
+#' Inputting an object of class \code{global.impact}
 #' will return a line plot that shows the relative global impacts of each node.
-#' 
+#'
 #' @examples
 #' out1 <- global.impact(depression)
 #' plot(out1)
@@ -159,11 +161,12 @@ plot.all.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,
 #' plot(out2$Global.Strength)
 #' @method plot global.impact
 #' @export
-plot.global.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,...) {
+plot.global.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,abs_val=FALSE,...) {
   df <- data.frame(names(x$impact), x$impact)
   colnames(df) <- c("NodeName", "ImpValue")
   NodeName <- df[,1]; ImpValue <- df[,2]
   if(zscore) {df$ImpValue <- scale(df$ImpValue)}
+  if(abs_val) {df$ImpValue <- abs(df$ImpValue)}
   if(order[1]=="value") {
     df <- df[with(df, order(df$ImpValue)),]
     df$NodeName <- factor(as.character(df$NodeName), levels = unique(as.character(df$NodeName)[order(df$ImpValue)]))
@@ -180,25 +183,25 @@ plot.global.impact <- function(x, order=c("alphabetical", "value"), zscore = FAL
       ggplot2::ggtitle("Global Strength Impact") + ggplot2::scale_y_discrete(limits = rev(levels(df$NodeName)))
     return(g)
   }
-  
+
 }
 
 
 #' Plot "network.impact" objects
-#' 
+#'
 #' Convenience function for generating network structure impact plots
 #'
 #' @param x an output object from an impact function (class \code{network.impact})
 #' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
-#' highest to lowest impact value 
+#' highest to lowest impact value
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
 #' @param ... other plotting specifications (ggplot2)
 #'
 #' @details
 #'
-#' Inputting an object of class \code{network.impact} 
+#' Inputting an object of class \code{network.impact}
 #' will return a line plot that shows the relative network impacts of each node.
-#' 
+#'
 #' @examples
 #' out1 <- global.impact(depression)
 #' plot(out1)
@@ -228,12 +231,12 @@ plot.structure.impact <- function(x, order=c("alphabetical", "value"), zscore = 
       ggplot2::ggtitle("Network Structure Impact") + ggplot2::scale_y_discrete(limits = rev(levels(df$NodeName)))
     return(g)
   }
-  
+
 }
 
 
 #' Plot "edge.impact" objects
-#' 
+#'
 #' Convenience function for generating edge impact plots
 #'
 #' @param x an output object from an impact function (\code{edge.impact})
@@ -260,7 +263,7 @@ plot.structure.impact <- function(x, order=c("alphabetical", "value"), zscore = 
 #' plot(out1, nodes="concentration_problems")
 #' plot(out1, nodes="psychomotor_retardation",
 #'     type.edgeplot="single")
-#'     
+#'
 #' out2 <- impact(depression)
 #' plot(out2$Edge, nodes="concentration_problems")
 #'
@@ -301,38 +304,38 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
 
 
 #' Plot "expectedInf" objects
-#' 
-#' Convenience function for plotting expected influence 
+#'
+#' Convenience function for plotting expected influence
 #'
 #' @param x an output object from an \code{expectedInf} (class \code{expectedInf})
 #' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
-#' highest to lowest impact value 
+#' highest to lowest impact value
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
 #' @param ... other plotting specifications (ggplot2)
 #'
 #' @details
 #'
-#' Inputting an object of class \code{expectedInf} 
+#' Inputting an object of class \code{expectedInf}
 #' will return a line plot that shows the relative one-step and/or two-step
 #' expected influence of each node.
-#' 
+#'
 #' @examples
 #' myNetwork <- cor(depression)
 #' out1 <- expectedInf(myNetwork)
 #' summary(out1)
 #' plot(out1)
 #' plot(out1, order="value", zscore=TRUE)
-#' 
+#'
 #' igraph_obj <- igraph::graph_from_adjacency_matrix(cor(depression))
 #' ei_igraph <- expectedInf(igraph_obj)
-#' 
+#'
 #' qgraph_obj <- qgraph::qgraph(cor(depression), plot=FALSE)
 #' ei_qgraph <- expectedInf(qgraph_obj)
-#' 
+#'
 #' Ising_adj_mat <- IsingFit::IsingFit(social, plot=FALSE)$weiadj
 #' ei_Ising <- expectedInf(Ising_adj_mat)
 #' plot(ei_Ising)
-#' 
+#'
 #' @method plot expectedInf
 #' @export
 plot.expectedInf <- function(x, order=c("alphabetical", "value"), zscore = FALSE,...){
