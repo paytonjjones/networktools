@@ -1,0 +1,16 @@
+---
+title: "cran-comments"
+author: "Payton Jones"
+date: "April 13, 2017"
+output: html_document
+---
+Note: This is the first submission of for the networktools package
+
+## Test environments
+* local microsoft install, R 3.3.3
+
+## R CMD Check results
+There were no ERRORS, WARNINGS, or NOTES
+
+## Downstream dependencies
+There are currently no downstream dependencies for this package.
