@@ -9,15 +9,30 @@ vignette: >
   %\VignetteKeyword{impact}
   %\VignetteEngine{knitr::rmarkdown}
   %\SweaveUTF8
-  \usepackage[utf8](inputenc)
+  \devtools::usepackage[utf8](inputenc)
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/R/networktools package/networktools/vignettes")
 require(networktools)
 require(qgraph)
 ```
+
+## Introduction to network analysis
+
+Perhaps the most familiar type of network is a social network. A social network consists of _people_, and _connections between people_. When we draw a network, we say that the people are _nodes_ and the connections between people are _edges_. Below is a simplistic example of a social network.
+
+```{r social impact 0, echo=FALSE, fig.width = 4, fig.height = 4}
+example <- IsingFit::IsingFit(social[,1:5], plot=FALSE, progressbar=FALSE)
+par(pin=c(1,1))
+plot(example, layout="circle")
+```
+
+There are many different types of networks, but each consists of nodes (variables) and edges (connections between those variables). Networks allow us to answer many important questions.
+
+One common question about networks is: "which nodes are important?" This question can be partially answered through measures of _centrality_, which address how well-connected each node is.
+
+_Impact_ is a new statistic for network analysis. Like centrality, it aims to answer the question of "which nodes are important". Impact asks this question in a slightly different way. 
 
 ## What is impact?
 
@@ -39,10 +54,15 @@ Let's look at an example in some simulated data to get an idea of what impact ca
 
 A group of friends are members of an online social media platform. We have data on 400 social media posts on this platform. For each post, the friends decided either participated in the conversation, or they didn't. They were given a score of 1 if they engaged in group conversation regarding the post, and a score of 0 if they did not engage with the post. We can create a social network based on social engagement patterns.
 
-The data is included under the name _social_ in the _networktools_ package. We fit a network using _IsingFit_ to this data, to try and understand how different members of the group are connected in their engagement. The results can be seen below.
+The data is included under the name _social_ in the _networktools_ package. 
+
+Let's plot a network to try and understand how different members of the group are connected in their engagement. 
+
+We'll fit a network using the _IsingFit_ function from the package of the same name. The IsingFit function generates a network where the edges represent partial correlations between nodes. We will first save the results of the IsingFit as an R object named _socialq_, and then we will use the plot function to draw the network. The results can be seen below. Note that in this graph, green edges represent positive partial correlations, and red edges represent negative positive partial correlations.
 
 ```{r initial social}
-socialq <- IsingFit::IsingFit(social, plot=FALSE, progressbar=FALSE)
+require(IsingFit)
+socialq <- IsingFit(social, plot=FALSE, progressbar=FALSE)
 plot(socialq, layout="circle")
 ```
 
@@ -50,7 +70,7 @@ plot(socialq, layout="circle")
 
 We have an interesting question about our data: Kim seems to be a very polarizing individual, and we want to know how her participation affects the dynamic for rest of the group. Are the connections between friends different depending on whether or not Kim participates?
 
-Let's take a visual look by separating the "Kim absent"" conversations from the "Kim present" conversations:
+Let's take a visual look by separating the "Kim absent"" conversations from the "Kim present" conversations (we'll go over the code for this a bit later):
 
 ```{r social impact 1, echo=FALSE}
 impsocial<-impact(social, binary.data=TRUE)
@@ -61,10 +81,12 @@ These networks appear to be very different. In particular, it seems that the gro
 
 One measure of overall connectedness in a network is _global strength_. The _global strength invariance_ between two networks is the global strength of one network minus the global strength of the other. Kim's __global strength impact__ is simply the global strength invariance between the "Kim absent" network and the "Kim present" network.
 
-We can compute the global strength impact with the _global.impact_ function:
+We can compute the global strength impact with the _global.impact_ function. 
+
+The _global.impact_ function has several arguments. We enter our data in the _input_ argument. We are interested in Kim, so we'll set the _nodes_ argument to "Kim". Since our data is binary, we need to set the _binary.data_ argument to TRUE.
 
 ```{r social impact 2}
-kim_global <- global.impact(social, nodes="Kim", binary.data=TRUE)
+kim_global <- global.impact(input=social, nodes="Kim", binary.data=TRUE)
 kim_global$impact
 ```
 
@@ -88,7 +110,9 @@ rod_structure <- structure.impact(social, nodes="Rod", binary.data=TRUE)
 rod_structure$impact
 ```
 
-You might have noticed that couple of edges in particular are very different depending on Rod. Maybe we are interested in the relationship between Pat and Pam. We can test for this edge explicitly using the __edge impact__ statistic:
+You might have noticed that couple of edges in particular are very different depending on Rod. Maybe we are interested in the relationship between Pat and Pam. We can test for this edge explicitly using the __edge impact__ statistic.
+
+The object returned from the _edge impact_ function is a little different, because it returns invariances for every single edge. Instead of returning a single number for each node, _edge.impact_ returns matrices of invariances for each node. Each matrix is organized by node names, so we can look at the edge between Pat and Pam by subsetting the matrix as: _matrix["Pat", "Pam"]_. 
 
 ```{r}
 rod_edge <- edge.impact(social, nodes="Rod", binary.data=TRUE)
@@ -118,11 +142,13 @@ plot(social_impact)
 
 Let's examine impact in a different type of network. Depression can be described as a network of symptoms. I created a simulated dataset containing severity ratings for 9 symptoms of major depressive disorder in 1000 individuals. Symptom ratings are self-reported on a 100 point sliding scale.
 
-Let's take a look at the overall association network for the symptoms:
+Let's plot the overall association network for the symptoms using the _qgraph_ package.
 
 ```{r}
+require(qgraph)
 names(depression)
-qgraph(cor(depression))
+associationnet <- cor(depression)
+qgraph(associationnet)
 ```
 
 This time around, let's start out by looking at the impact statistics in the aggregate.
@@ -150,9 +176,9 @@ Let's continue forward and learn a little more about visualization of impact fun
 
 In order to be interpreted in a meaningful way, the significance (or confidence interval) of impact statistics should be explicitly tested.
 
-The _NCT_ function from the _NetworkComparisonTest_ package uses a permutation test to determine the significance of structure invariances between two networks. Because impact statistics are mathematically defined as structural invariance between two networks, _NCT_ is an appropriate method to test the significance of impact statistics. _impact.NCT_ is a nice wrapper function that combines _impact_ with _NCT_. 
+The _NCT_ function from the _NetworkComparisonTest_ package uses a permutation test to determine the significance of structure invariances between two networks. Because impact statistics are mathematically defined as structural invariance between two networks, _NCT_ is an appropriate method to test the significance of impact statistics. _impact.NCT_ is a nice wrapper function that combines _impact_ with _NCT_ in order to test the significance of impacts.
 
-_impact.NCT_ returns a list with NCT objects for each node tested. Each NCT object includes p-values for invariances (which in this case, are equivalent to impacts).
+_impact.NCT_ returns a list with an _NCT_ object for each node tested. Each _NCT_ object includes p-values for invariances (which in this case, are equivalent to impacts).
 
 The _NCT_ method is computationally intensive. For this reason, it is recommended that users test subsets of nodes using the _nodes_ argument, rather than testing all nodes simultaneously. Let's test the global strength and network structure impacts of both psychomotor retardation and sleep disturbance. Let's also test the edge impact of sleep disturbance on the edge between fatigue and worthlessness. Let's use 25 permutations for the sake of speed (in a real analysis, you'd want 1000 permutations or more).
 
@@ -162,7 +188,9 @@ NCT_depression <- impact.NCT(depression, it=25,
                              progressbar=FALSE, test.edges=TRUE, edges=list(c(5,6)))
 ```
 
-Now let's pull the relevant p-values out of that object.
+Now let's pull the relevant p-values out of that object. 
+
+You can check out the documentation for the _NCT_ function from _NetworkComparisonTest_ to learn more about the structure of _NCT_ objects. For our purposes, just remember that global strength impact = glstrinv, network structure impact = nwinv, and edge impact = einv.
 
 ```{r}
 #Global strength impact of psychomotor retardation
