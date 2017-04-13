@@ -7,7 +7,9 @@ output: html_document
 Note: This is the first submission of for the networktools package
 
 ## Test environments
-* local microsoft install, R 3.3.3
+* local windows install, R 3.3.3
+* ubuntu 12.04 (on travis-ci), R 3.3.3
+* win-builder (devel and release)
 
 ## R CMD Check results
 There were no ERRORS, WARNINGS, or NOTES
