@@ -100,9 +100,11 @@ print.expectedInf <- function(x,...){
 #' Inputting a \code{all.impact} object will return both of these plots simultaneously
 #'
 #' @examples
+#' \donttest{
 #' out1 <- impact(depression)
 #' plot(out1)
 #' plot(out1, order="value", zscore=TRUE)
+#' }
 #' @method plot all.impact
 #' @export
 plot.all.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE, abs_val=FALSE,...){
@@ -156,11 +158,13 @@ plot.all.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,
 #' will return a line plot that shows the relative global impacts of each node.
 #'
 #' @examples
+#' \donttest{
 #' out1 <- global.impact(depression)
 #' plot(out1)
 #' plot(out1, order="value", zscore=TRUE)
 #' out2 <- impact(depression)
 #' plot(out2$Global.Strength)
+#' }
 #' @method plot global.impact
 #' @export
 plot.global.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,abs_val=FALSE,...) {
@@ -205,11 +209,13 @@ plot.global.impact <- function(x, order=c("alphabetical", "value"), zscore = FAL
 #' will return a line plot that shows the relative network impacts of each node.
 #'
 #' @examples
+#' \donttest{
 #' out1 <- global.impact(depression)
 #' plot(out1)
 #' plot(out1, order="value", zscore=TRUE)
 #' out2 <- impact(depression)
 #' plot(out2$Network.Structure)
+#' }
 #' @method plot structure.impact
 #' @export
 plot.structure.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,...) {
@@ -261,6 +267,7 @@ plot.structure.impact <- function(x, order=c("alphabetical", "value"), zscore = 
 #' edge impact)
 #'
 #' @examples
+#' \donttest{
 #' out1 <- edge.impact(depression)
 #' plot(out1, nodes="concentration_problems")
 #' plot(out1, nodes="psychomotor_retardation",
@@ -268,7 +275,7 @@ plot.structure.impact <- function(x, order=c("alphabetical", "value"), zscore = 
 #'
 #' out2 <- impact(depression)
 #' plot(out2$Edge, nodes="concentration_problems")
-#'
+#'}
 #' @method plot edge.impact
 #' @export
 plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contrast","single"), title=NULL,...) {
@@ -326,6 +333,7 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
 #' out1 <- expectedInf(myNetwork)
 #' summary(out1)
 #' plot(out1)
+#' \donttest{
 #' plot(out1, order="value", zscore=TRUE)
 #'
 #' igraph_obj <- igraph::graph_from_adjacency_matrix(cor(depression))
@@ -337,7 +345,7 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
 #' Ising_adj_mat <- IsingFit::IsingFit(social, plot=FALSE)$weiadj
 #' ei_Ising <- expectedInf(Ising_adj_mat)
 #' plot(ei_Ising)
-#'
+#'}
 #' @method plot expectedInf
 #' @export
 plot.expectedInf <- function(x, order=c("alphabetical", "value"), zscore = FALSE,...){

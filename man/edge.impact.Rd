@@ -23,8 +23,8 @@ numeric vector of column numbers (e.g., c(1,2)).}
 \item{weighted}{logical. Indicates whether resultant networks preserve
 edge weights or binarize edges.}
 
-\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median), 
-"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations 
+\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median),
+"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
  to the smaller group, "quartile": uses the top and bottom quartile as groups}
 }
 \value{
@@ -58,6 +58,7 @@ The $hi and $lo output of \code{edge.impact} can also be used to quickly visuali
 the difference in network structure depending on node level (see examples).
 }
 \examples{
+\donttest{
 out1 <- edge.impact(depression)
 out2 <- edge.impact(depression, gamma=0.65,
         nodes=c("sleep_disturbance", "psychomotor_retardation"))
@@ -80,5 +81,5 @@ out1$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
 
 # Extract edge impacts of node Dan in edgelist format
 out4$edgelist$Dan
-
+}
 }

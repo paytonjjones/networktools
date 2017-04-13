@@ -30,6 +30,7 @@ myNetwork <- cor(depression)
 out1 <- expectedInf(myNetwork)
 summary(out1)
 plot(out1)
+\donttest{
 plot(out1, order="value", zscore=TRUE)
 
 igraph_obj <- igraph::graph_from_adjacency_matrix(cor(depression))
@@ -41,5 +42,5 @@ ei_qgraph <- expectedInf(qgraph_obj)
 Ising_adj_mat <- IsingFit::IsingFit(social, plot=FALSE)$weiadj
 ei_Ising <- expectedInf(Ising_adj_mat)
 plot(ei_Ising)
-
+}
 }

@@ -14,6 +14,7 @@ disorder in 1000 individuals. Symptom ratings are  assumed to be self-reported
 on a 100 point sliding scale.
 }
 \examples{
+\donttest{
 out1 <- impact(depression)
 summary(out1)
 plot(out1)
@@ -26,7 +27,7 @@ plot(out2)
 par(mfrow=c(1,2))
 qgraph::qgraph(out2$lo$psychomotor_retardation, title="Low Psychomotor Retardation")
 qgraph::qgraph(out2$hi$psychomotor_retardation, title="High Psychomotor Retardation")
-
+}
 
 }
 \keyword{datasets}

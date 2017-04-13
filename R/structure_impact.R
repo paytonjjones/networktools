@@ -31,7 +31,8 @@
 #' overall connectivity remains stable, the actual structure of those edges is unstable across groups.
 #'
 #' @examples
-#' \dontrun{out1 <- structure.impact(depression)
+#' \donttest{
+#' out1 <- structure.impact(depression)
 #' out2 <- structure.impact(depression, gamma=0.65,
 #'     nodes=c("sleep_disturbance", "psychomotor_retardation"))
 #' out3 <- structure.impact(social, binary.data=TRUE)

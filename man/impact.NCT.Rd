@@ -26,8 +26,8 @@ column numbers (e.g., c(1,2)).}
 
 \item{weighted}{logical. Indicates whether resultant networks preserve edge weights or binarize edges.}
 
-\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median), 
-"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations 
+\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median),
+"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
  to the smaller group, "quartile": uses the top and bottom quartile as groups}
 
 \item{paired}{Logical. Can be TRUE of FALSE to indicate whether the samples are dependent or not. If paired is TRUE, relabeling is performed within each pair of observations. If paired is FALSE, relabeling is not restricted to pairs of observations. Note that, currently, dependent data is assumed to entail one group measured twice.}
@@ -40,7 +40,7 @@ column numbers (e.g., c(1,2)).}
 
 \item{progressbar}{Logical. Should the pbar be plotted in order to see the progress of the estimation procedure? Defaults to TRUE.}
 
-\item{...}{additional optional arguments to be passed to the NCT function internally 
+\item{...}{additional optional arguments to be passed to the NCT function internally
 (paired, AND, test.edges, edges, progressbar)}
 }
 \value{
@@ -65,16 +65,17 @@ two networks, \code{NCT} is an appropriate method to test the significance of im
 \code{impact.NCT} returns an object of class \code{NCT}, which includes p-values for invariances.
 }
 \examples{
+\donttest{
 NCT1 <- impact.NCT(depression, it=25, nodes="psychomotor_retardation")
 NCT1$psychomotor_retardation$glstrinv.pval
-NCT1$psychomotor_retardation$nwinv.pval 
+NCT1$psychomotor_retardation$nwinv.pval
 ## Both significant
 
 NCT2 <- impact.NCT(social, it=25, nodes="Kim", binary.data=TRUE)
-NCT2$Kim$glstrinv.pval 
-NCT2$Kim$nwinv.pval 
+NCT2$Kim$glstrinv.pval
+NCT2$Kim$nwinv.pval
 ## Only global strength impact is significant
 
 ##Note: for speed, 25 permutations are iterated here; more permutations are necessary in practice
-
+}
 }

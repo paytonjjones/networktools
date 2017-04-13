@@ -26,14 +26,16 @@
 #' the global strength varies as a function of each node.
 #'
 #'@examples
-#' \dontrun{out1 <- global.impact(depression)
+#' \donttest{
+#' out1 <- global.impact(depression)
 #' out2 <- global.impact(depression, gamma=0.65,
 #'     nodes=c("sleep_disturbance", "psychomotor_retardation"))
 #' out3 <- global.impact(social, binary.data=TRUE)
 #' out4 <- global.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
 #'
 #' summary(out1)
-#' plot(out1)}
+#' plot(out1)
+#' }
 #' @return \code{global.impact()} returns a list of class "\code{global.impact}" which contains:
 #'  \item{impact}{a named vector containing the global strength impact for each node tested}
 #'  \item{lo}{a named vector containing the global strength estimate for the lower half}

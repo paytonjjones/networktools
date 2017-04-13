@@ -34,7 +34,8 @@
 #' the difference in network structure depending on node level (see examples).
 #'
 #' @examples
-#' \dontrun{out1 <- edge.impact(depression)
+#' \donttest{
+#' out1 <- edge.impact(depression)
 #' out2 <- edge.impact(depression, gamma=0.65,
 #'         nodes=c("sleep_disturbance", "psychomotor_retardation"))
 #' out3 <- edge.impact(social, binary.data=TRUE)

@@ -28,11 +28,11 @@
 #'
 #' @examples
 #' out1 <- expectedInf(cor(depression))
-#'
-#' plot(out1)
-#' plot(out1, order="value", zscore=TRUE)
 #' out1$step1
 #' out1$step2
+#'\donttest{
+#' plot(out1)
+#' plot(out1, order="value", zscore=TRUE)
 #'
 #' igraph_obj <- igraph::graph_from_adjacency_matrix(cor(depression))
 #' out_igraph <- expectedInf(igraph_obj)
@@ -43,7 +43,7 @@
 #' Ising_adj_mat <- IsingFit::IsingFit(social, plot=FALSE)$weiadj
 #' out_Ising <- expectedInf(Ising_adj_mat)
 #' plot(out_Ising)
-#'
+#'}
 #' @references
 #' Robinaugh, D. J., Millner, A. J., & McNally, R. J. (2016). Identifying highly influential nodes in the complicated grief network. \emph{Journal of abnormal psychology}, 125, 747.
 #'

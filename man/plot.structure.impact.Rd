@@ -25,9 +25,11 @@ Inputting an object of class \code{network.impact}
 will return a line plot that shows the relative network impacts of each node.
 }
 \examples{
+\donttest{
 out1 <- global.impact(depression)
 plot(out1)
 plot(out1, order="value", zscore=TRUE)
 out2 <- impact(depression)
 plot(out2$Network.Structure)
+}
 }

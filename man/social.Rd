@@ -14,6 +14,7 @@ on a group forum, individuals were given a score of 1 if they engaged in group c
 and a score of 0 if they did not engage with the post.
 }
 \examples{
+\donttest{
 out1 <- impact(social, binary.data=TRUE)
 summary(out1)
 plot(out1)
@@ -34,6 +35,6 @@ par(mfrow=c(1,2))
 qgraph::qgraph(out1$Edge$lo$Don, title="Don Absent")
 qgraph::qgraph(out1$Edge$hi$Don, title="Don Present")
 
-
+}
 }
 \keyword{datasets}

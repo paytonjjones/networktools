@@ -38,7 +38,8 @@
 #' \code{impact.NCT} returns an object of class \code{NCT}, which includes p-values for invariances.
 #'
 #' @examples
-#' \dontrun{NCT1 <- impact.NCT(depression, it=25, nodes="psychomotor_retardation")
+#' \donttest{
+#' NCT1 <- impact.NCT(depression, it=25, nodes="psychomotor_retardation")
 #' NCT1$psychomotor_retardation$glstrinv.pval
 #' NCT1$psychomotor_retardation$nwinv.pval
 #' ## Both significant

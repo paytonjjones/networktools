@@ -22,8 +22,8 @@ column numbers (e.g., c(1,2)).}
 
 \item{weighted}{logical. Indicates whether resultant networks preserve edge weights or binarize edges.}
 
-\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median), 
-"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations 
+\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median),
+"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
  to the smaller group, "quartile": uses the top and bottom quartile as groups}
 }
 \value{
@@ -45,12 +45,14 @@ sum of edges not accounting for absolute values). Global strength impact measure
 the global strength varies as a function of each node.
 }
 \examples{
+\donttest{
 out1 <- global.impact(depression)
-out2 <- global.impact(depression, gamma=0.65, 
+out2 <- global.impact(depression, gamma=0.65,
     nodes=c("sleep_disturbance", "psychomotor_retardation"))
 out3 <- global.impact(social, binary.data=TRUE)
 out4 <- global.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
 
 summary(out1)
 plot(out1)
+}
 }

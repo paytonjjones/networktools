@@ -11,21 +11,21 @@ structure.impact(input, gamma, nodes = c("all"), binary.data = FALSE,
 \item{input}{a matrix or data frame of observations (not a network/edgelist).
 See included example datasets \code{\link{depression}} and \code{\link{social}}.}
 
-\item{gamma}{the sparsity parameter used in generating networks. Defaults to 0.5 
+\item{gamma}{the sparsity parameter used in generating networks. Defaults to 0.5
 for interval data and 0.25 for binary data}
 
 \item{nodes}{indicates which nodes should be tested. Can be given
-as a character string of desired nodes (e.g., c("node1","node2")) or as a numeric 
+as a character string of desired nodes (e.g., c("node1","node2")) or as a numeric
 vector of column numbers (e.g., c(1,2)).}
 
 \item{binary.data}{logical. Indicates whether the input data is binary}
 
-\item{weighted}{logical. Indicates whether resultant networks preserve edge weights 
-or binarize edges. Note: unweighted networks will always result in a network 
+\item{weighted}{logical. Indicates whether resultant networks preserve edge weights
+or binarize edges. Note: unweighted networks will always result in a network
 structure impact of 0 or 1.}
 
-\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median), 
-"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations 
+\item{split}{method by which to split network given non-binary data. "median": median split (excluding the median),
+"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
  to the smaller group, "quartile": uses the top and bottom quartile as groups}
 }
 \value{
@@ -36,8 +36,8 @@ structure impact of 0 or 1.}
  \item{hi}{a named vector containing the edge estimate for the upper half of the most strongly impacted edge}
 }
 \description{
-Generates the network structure impact of each specified node. Network structure 
-impact can be interpreted as the degree to which the level of a node causes change 
+Generates the network structure impact of each specified node. Network structure
+impact can be interpreted as the degree to which the level of a node causes change
 in the network structure
 }
 \details{
@@ -51,8 +51,9 @@ strength invariance coupled with a high network structure invariance would mean 
 overall connectivity remains stable, the actual structure of those edges is unstable across groups.
 }
 \examples{
+\donttest{
 out1 <- structure.impact(depression)
-out2 <- structure.impact(depression, gamma=0.65, 
+out2 <- structure.impact(depression, gamma=0.65,
     nodes=c("sleep_disturbance", "psychomotor_retardation"))
 out3 <- structure.impact(social, binary.data=TRUE)
 out4 <- structure.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
@@ -62,5 +63,5 @@ plot(out1)
 
 #Determine which edge drove network structure impact of "sadness"
 out1$edge$sadness
-
+}
 }
