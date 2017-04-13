@@ -69,6 +69,7 @@ The median split excludes observations that fall exactly on the median. In the c
 by level rather than by median.
 }
 \examples{
+out <- impact(depression[,1:3])
 \donttest{
 out1 <- impact(depression)
 out2 <- impact(depression, gamma=0.65, nodes=c("sleep_disturbance", "psychomotor_retardation"))

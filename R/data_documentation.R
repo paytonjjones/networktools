@@ -13,6 +13,7 @@
 #' @keywords datasets
 #'
 #' @examples
+#' head(depression)
 #' \donttest{
 #' out1 <- impact(depression)
 #' summary(out1)
@@ -46,6 +47,7 @@
 #' @keywords datasets
 #'
 #' @examples
+#' head(social)
 #' \donttest{
 #' out1 <- impact(social, binary.data=TRUE)
 #' summary(out1)

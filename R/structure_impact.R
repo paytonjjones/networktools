@@ -31,6 +31,7 @@
 #' overall connectivity remains stable, the actual structure of those edges is unstable across groups.
 #'
 #' @examples
+#' out <- structure.impact(depression[,1:3])
 #' \donttest{
 #' out1 <- structure.impact(depression)
 #' out2 <- structure.impact(depression, gamma=0.65,

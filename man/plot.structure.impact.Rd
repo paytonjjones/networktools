@@ -2,13 +2,13 @@
 % Please edit documentation in R/summary_print_plot.R
 \name{plot.structure.impact}
 \alias{plot.structure.impact}
-\title{Plot "network.impact" objects}
+\title{Plot "structure.impact" objects}
 \usage{
 \method{plot}{structure.impact}(x, order = c("alphabetical", "value"),
   zscore = FALSE, ...)
 }
 \arguments{
-\item{x}{an output object from an impact function (class \code{network.impact})}
+\item{x}{an output object from an impact function (class \code{structure.impact})}
 
 \item{order}{"alphabetical" orders nodes alphabetically, "value" orders nodes from
 highest to lowest impact value}
@@ -25,8 +25,10 @@ Inputting an object of class \code{network.impact}
 will return a line plot that shows the relative network impacts of each node.
 }
 \examples{
+out <- structure.impact(depression[,1:5])
+plot(out)
 \donttest{
-out1 <- global.impact(depression)
+out1 <- structure.impact(depression)
 plot(out1)
 plot(out1, order="value", zscore=TRUE)
 out2 <- impact(depression)

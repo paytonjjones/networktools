@@ -45,6 +45,7 @@ sum of edges not accounting for absolute values). Global strength impact measure
 the global strength varies as a function of each node.
 }
 \examples{
+out <- global.impact(depression[,1:3])
 \donttest{
 out1 <- global.impact(depression)
 out2 <- global.impact(depression, gamma=0.65,

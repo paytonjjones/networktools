@@ -65,6 +65,7 @@ two networks, \code{NCT} is an appropriate method to test the significance of im
 \code{impact.NCT} returns an object of class \code{NCT}, which includes p-values for invariances.
 }
 \examples{
+out <- impact.NCT(depression[,1:5], it=5, nodes="psychomotor_retardation")
 \donttest{
 NCT1 <- impact.NCT(depression, it=25, nodes="psychomotor_retardation")
 NCT1$psychomotor_retardation$glstrinv.pval

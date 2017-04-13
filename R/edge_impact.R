@@ -34,6 +34,7 @@
 #' the difference in network structure depending on node level (see examples).
 #'
 #' @examples
+#' out <- edge.impact(depression[,1:3], nodes="anhedonia")
 #' \donttest{
 #' out1 <- edge.impact(depression)
 #' out2 <- edge.impact(depression, gamma=0.65,

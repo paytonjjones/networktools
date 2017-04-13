@@ -27,6 +27,8 @@ Inputting an object of class \code{global.impact}
 will return a line plot that shows the relative global impacts of each node.
 }
 \examples{
+out <- global.impact(depression[,1:5])
+plot(out)
 \donttest{
 out1 <- global.impact(depression)
 plot(out1)

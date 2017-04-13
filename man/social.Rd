@@ -14,6 +14,7 @@ on a group forum, individuals were given a score of 1 if they engaged in group c
 and a score of 0 if they did not engage with the post.
 }
 \examples{
+head(social)
 \donttest{
 out1 <- impact(social, binary.data=TRUE)
 summary(out1)

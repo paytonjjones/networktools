@@ -14,6 +14,7 @@ disorder in 1000 individuals. Symptom ratings are  assumed to be self-reported
 on a 100 point sliding scale.
 }
 \examples{
+head(depression)
 \donttest{
 out1 <- impact(depression)
 summary(out1)
