@@ -38,7 +38,7 @@ out1 <- edge.impact(depression)
 plot(out1, nodes="concentration_problems")
 plot(out1, nodes="psychomotor_retardation",
     type.edgeplot="single")
-    
+
 out2 <- impact(depression)
 plot(out2$Edge, nodes="concentration_problems")
 

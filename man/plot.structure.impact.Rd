@@ -21,7 +21,7 @@ highest to lowest impact value}
 Convenience function for generating network structure impact plots
 }
 \details{
-Inputting an object of class \code{network.impact} 
+Inputting an object of class \code{network.impact}
 will return a line plot that shows the relative network impacts of each node.
 }
 \examples{

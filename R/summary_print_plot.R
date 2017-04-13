@@ -146,6 +146,8 @@ plot.all.impact <- function(x, order=c("alphabetical", "value"), zscore = FALSE,
 #' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
 #' highest to lowest impact value
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
+#' @param abs_val logical. Plot absolute values of global strength impacts
+
 #' @param ... other plotting specifications (ggplot2)
 #'
 #' @details

@@ -21,7 +21,7 @@ highest to lowest impact value}
 Convenience function for plotting expected influence
 }
 \details{
-Inputting an object of class \code{expectedInf} 
+Inputting an object of class \code{expectedInf}
 will return a line plot that shows the relative one-step and/or two-step
 expected influence of each node.
 }

@@ -5,7 +5,7 @@
 \title{Plot "global.impact" objects}
 \usage{
 \method{plot}{global.impact}(x, order = c("alphabetical", "value"),
-  zscore = FALSE, ...)
+  zscore = FALSE, abs_val = FALSE, ...)
 }
 \arguments{
 \item{x}{an output object from an impact function (class \code{global.impact})}
@@ -15,13 +15,15 @@ highest to lowest impact value}
 
 \item{zscore}{logical. Converts raw impact statistics to z-scores for plotting}
 
+\item{abs_val}{logical. Plot absolute values of global strength impacts}
+
 \item{...}{other plotting specifications (ggplot2)}
 }
 \description{
 Convenience function for generating global strength impact plots
 }
 \details{
-Inputting an object of class \code{global.impact} 
+Inputting an object of class \code{global.impact}
 will return a line plot that shows the relative global impacts of each node.
 }
 \examples{
