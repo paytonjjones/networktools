@@ -45,7 +45,7 @@
 #' @keywords datasets
 #'
 #' @examples
-#' out1 <- impact(social, binary.data=TRUE)
+#' \dontrun{out1 <- impact(social, binary.data=TRUE)
 #' summary(out1)
 #' plot(out1)
 #'
@@ -65,5 +65,5 @@
 #' qgraph::qgraph(out1$Edge$lo$Don, title="Don Absent")
 #' qgraph::qgraph(out1$Edge$hi$Don, title="Don Present")
 #'
-#'
+#'}
 "social"

@@ -14,8 +14,8 @@
 #' column numbers (e.g., c(1,2)).
 #' @param binary.data logical. Indicates whether the input data is binary
 #' @param weighted logical. Indicates whether resultant networks preserve edge weights or binarize edges.
-#' @param split method by which to split network given non-binary data. "median": median split (excluding the median), 
-#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations 
+#' @param split method by which to split network given non-binary data. "median": median split (excluding the median),
+#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
 #'  to the smaller group, "quartile": uses the top and bottom quartile as groups
 #'
 #' @details
@@ -44,7 +44,7 @@
 #' by level rather than by median.
 #'
 #' @examples
-#' out1 <- impact(depression)
+#' \dontrun{out1 <- impact(depression)
 #' out2 <- impact(depression, gamma=0.65, nodes=c("sleep_disturbance", "psychomotor_retardation"))
 #' out3 <- impact(social, binary.data=TRUE)
 #' out4 <- impact(social, nodes=c(1:6, 9), binary.data=TRUE)
@@ -55,7 +55,7 @@
 #'# Extract the impact of psychomotor_retardation on the
 #'# edge that runs between worthlessness and fatigue
 #' out1$Edge$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
-#'
+#'}
 #' @return \code{\link{impact}} returns a list of class "\code{all.impact}" which contains:
 #'
 #' 1. A list of class "global.impact"
@@ -69,7 +69,7 @@
 #'
 #'
 #' @export
-impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE, 
+impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
                    split=c("median","mean", "forceEqual", "quartiles")) {
   if (missing(gamma)){
     if (binary.data){
@@ -105,7 +105,7 @@ for(i in 1:length(nodesTested)) {
       lo <- input[input[,j] < stats::median(input[,j]),][,-j] ## This takes the "lower" half of the participants, on column i. It also cuts out column i itself
     }
     if(match.arg(split)=="mean"){
-      hi <- input[input[,j]> mean(input[,j]),][,-j] 
+      hi <- input[input[,j]> mean(input[,j]),][,-j]
       lo <- input[input[,j] < mean(input[,j]),][,-j]
     }
     if(match.arg(split)=="forceEqual"){
@@ -118,15 +118,15 @@ for(i in 1:length(nodesTested)) {
       }
       if(dim(hi)[1]>dim(lo)[1]){
       lo <- input[input[,j]<= stats::median(input[,j]),]
-      lo <- lo[order(lo[,j]),] 
+      lo <- lo[order(lo[,j]),]
       lo <- utils::head(lo, -(dim(lo)[1]-dim(hi)[1]))
       }
       hi <- hi[,-j]
       lo <- lo[,-j]
     }
     if(match.arg(split)=="quartile"){
-      hi <- input[input[,j]>= stats::quantile(input[,j],probs=.75),][,-j] 
-      lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j] 
+      hi <- input[input[,j]>= stats::quantile(input[,j],probs=.75),][,-j]
+      lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j]
     }
   if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after median split is >10% of total sample")}
     catch1 <- try(qgraph::EBICglasso(stats::cor(hi),nrow(hi),gamma=gamma), silent = FALSE)

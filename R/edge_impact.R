@@ -14,8 +14,8 @@
 #' @param binary.data logical. Indicates whether the input data is binary
 #' @param weighted logical. Indicates whether resultant networks preserve
 #' edge weights or binarize edges.
-#' @param split method by which to split network given non-binary data. "median": median split (excluding the median), 
-#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations 
+#' @param split method by which to split network given non-binary data. "median": median split (excluding the median),
+#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
 #'  to the smaller group, "quartile": uses the top and bottom quartile as groups
 #'
 #' @details
@@ -34,7 +34,7 @@
 #' the difference in network structure depending on node level (see examples).
 #'
 #' @examples
-#' out1 <- edge.impact(depression)
+#' \dontrun{out1 <- edge.impact(depression)
 #' out2 <- edge.impact(depression, gamma=0.65,
 #'         nodes=c("sleep_disturbance", "psychomotor_retardation"))
 #' out3 <- edge.impact(social, binary.data=TRUE)
@@ -56,7 +56,7 @@
 #'
 #' # Extract edge impacts of node Dan in edgelist format
 #' out4$edgelist$Dan
-#'
+#'}
 #' @return \code{edge.impact()} returns a list of class "\code{edge.impact}" which contains:
 #'  \item{impact}{a list of matrices. Each symmetric matrix contains the edge
 #'  impacts for the given node}
@@ -104,7 +104,7 @@ edge.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, wei
         lo <- input[input[,j] < stats::median(input[,j]),][,-j] ## This takes the "lower" half of the participants, on column i. It also cuts out column i itself
       }
       if(match.arg(split)=="mean"){
-        hi <- input[input[,j]> mean(input[,j]),][,-j] 
+        hi <- input[input[,j]> mean(input[,j]),][,-j]
         lo <- input[input[,j] < mean(input[,j]),][,-j]
       }
       if(match.arg(split)=="forceEqual"){
@@ -117,15 +117,15 @@ edge.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, wei
         }
         if(dim(hi)[1]>dim(lo)[1]){
           lo <- input[input[,j]<= stats::median(input[,j]),]
-          lo <- lo[order(lo[,j]),] 
+          lo <- lo[order(lo[,j]),]
           lo <- utils::head(lo, -(dim(lo)[1]-dim(hi)[1]))
         }
         hi <- hi[,-j]
         lo <- lo[,-j]
       }
       if(match.arg(split)=="quartile"){
-        hi <- input[input[,j]>= stats::quantile(input[,j],probs=.75),][,-j] 
-        lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j] 
+        hi <- input[input[,j]>= stats::quantile(input[,j],probs=.75),][,-j]
+        lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j]
       }
       if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after median split is >10% of total sample")}
       catch1 <- try(qgraph::EBICglasso(stats::cor(hi),nrow(hi),gamma=gamma), silent = FALSE)

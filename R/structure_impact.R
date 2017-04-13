@@ -1,22 +1,22 @@
 #' Network Structure Impact
 #'
-#' Generates the network structure impact of each specified node. Network structure 
-#' impact can be interpreted as the degree to which the level of a node causes change 
+#' Generates the network structure impact of each specified node. Network structure
+#' impact can be interpreted as the degree to which the level of a node causes change
 #' in the network structure
 #'
 #' @param input a matrix or data frame of observations (not a network/edgelist).
 #' See included example datasets \code{\link{depression}} and \code{\link{social}}.
-#' @param gamma the sparsity parameter used in generating networks. Defaults to 0.5 
+#' @param gamma the sparsity parameter used in generating networks. Defaults to 0.5
 #' for interval data and 0.25 for binary data
 #' @param nodes indicates which nodes should be tested. Can be given
-#' as a character string of desired nodes (e.g., c("node1","node2")) or as a numeric 
+#' as a character string of desired nodes (e.g., c("node1","node2")) or as a numeric
 #' vector of column numbers (e.g., c(1,2)).
 #' @param binary.data logical. Indicates whether the input data is binary
-#' @param weighted logical. Indicates whether resultant networks preserve edge weights 
-#' or binarize edges. Note: unweighted networks will always result in a network 
+#' @param weighted logical. Indicates whether resultant networks preserve edge weights
+#' or binarize edges. Note: unweighted networks will always result in a network
 #' structure impact of 0 or 1.
-#' @param split method by which to split network given non-binary data. "median": median split (excluding the median), 
-#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations 
+#' @param split method by which to split network given non-binary data. "median": median split (excluding the median),
+#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
 #'  to the smaller group, "quartile": uses the top and bottom quartile as groups
 #'
 #' @details
@@ -31,8 +31,8 @@
 #' overall connectivity remains stable, the actual structure of those edges is unstable across groups.
 #'
 #' @examples
-#' out1 <- structure.impact(depression)
-#' out2 <- structure.impact(depression, gamma=0.65, 
+#' \dontrun{out1 <- structure.impact(depression)
+#' out2 <- structure.impact(depression, gamma=0.65,
 #'     nodes=c("sleep_disturbance", "psychomotor_retardation"))
 #' out3 <- structure.impact(social, binary.data=TRUE)
 #' out4 <- structure.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
@@ -42,7 +42,7 @@
 #'
 #' #Determine which edge drove network structure impact of "sadness"
 #' out1$edge$sadness
-#'
+#'}
 #' @return \code{structure.impact()} returns a list of class "\code{structure.impact}" which contains:
 #'  \item{impact}{a named vector containing the network structure impact for each node tested. Network structure impacts are given as absolute values}
 #'  \item{edge}{a list of vectors. Each vector contains a the edge impact of the most strongly impacted edge (e.g., the network structure impact)}
@@ -86,7 +86,7 @@ structure.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE
         lo <- input[input[,j] < stats::median(input[,j]),][,-j] ## This takes the "lower" half of the participants, on column i. It also cuts out column i itself
       }
       if(match.arg(split)=="mean"){
-        hi <- input[input[,j]> mean(input[,j]),][,-j] 
+        hi <- input[input[,j]> mean(input[,j]),][,-j]
         lo <- input[input[,j] < mean(input[,j]),][,-j]
       }
       if(match.arg(split)=="forceEqual"){
@@ -99,15 +99,15 @@ structure.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE
         }
         if(dim(hi)[1]>dim(lo)[1]){
           lo <- input[input[,j]<= stats::median(input[,j]),]
-          lo <- lo[order(lo[,j]),] 
+          lo <- lo[order(lo[,j]),]
           lo <- utils::head(lo, -(dim(lo)[1]-dim(hi)[1]))
         }
         hi <- hi[,-j]
         lo <- lo[,-j]
       }
       if(match.arg(split)=="quartile"){
-        hi <- input[input[,j]>= stats::quantile(input[,j],probs=.75),][,-j] 
-        lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j] 
+        hi <- input[input[,j]>= stats::quantile(input[,j],probs=.75),][,-j]
+        lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j]
       }
       if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after median split is >10% of total sample")}
       catch1 <- try(qgraph::EBICglasso(stats::cor(hi),nrow(hi),gamma=gamma), silent = FALSE)
