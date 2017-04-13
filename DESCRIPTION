@@ -3,7 +3,7 @@ Title: Assorted Tools for Network Analysis
 Version: 1.0.0
 Authors@R: person("Payton", "Jones", email = "payton_jones@g.harvard.edu", role = c("aut", "cre"))
 Description: Includes tools for calculating and visualizing impact 
-    (global strength impact, network structure impact, edge impact).
+    (global strength impact, network structure impact, edge impact), and expected influence.
 Depends: R (>= 3.0.0)
 License:  GPL-3
 Encoding: UTF-8
