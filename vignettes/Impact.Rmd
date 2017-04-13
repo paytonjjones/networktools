@@ -36,15 +36,15 @@ _Impact_ is a new statistic for network analysis. Like centrality, it aims to an
 
 ## What is impact?
 
+> __Impact statistics measure the degree to which nodes impact network structure.__
+
 The structures of a networks are meaningful. A well connected network means something different than a sparsely connected network. And even if two networks have the same overall level of connectivity, changes in the structure indicate meaningful differences.
 
 The structures of networks sometimes vary as a function of external variables. For instance, Pe et al. (2015) found that the structure of negative mood networks varied as a function of whether or not individuals had been diagnosed with major depression. You can see this clearly in the figure from the paper presented below: people who have been diagnosed with major depressive disorder have much thicker edges between their negative emotions.
 
 ![](figures/pe_figure.png)
 
-The structures of networks may also vary as a function of __internal__ variables; that is to say, as a function of each node. Imagine, for instance, that instead of separating people into networks by "depressed" and "nondepressed", we had separated them by their reported level of sadness in the node "sad". Would structural differences exist between the two networks? This is the question that impact statistics aim to answer!
-
-> __Impact statistics measure the degree to which nodes impact network structure.__
+The structures of networks may also vary as a function of _internal_ variables; that is to say, as a function of each _node_. Imagine, for instance, that instead of separating people into networks by "depressed" and "nondepressed", we had separated them by their reported level of sadness in the node "sad". Would structural differences exist between the two networks? This is the question that impact statistics aim to answer!
 
 Let's look at an example in some simulated data to get an idea of what impact can do.
 
@@ -58,7 +58,7 @@ The data is included under the name _social_ in the _networktools_ package.
 
 Let's plot a network to try and understand how different members of the group are connected in their engagement. 
 
-We'll fit a network using the _IsingFit_ function from the package of the same name. The IsingFit function generates a network where the edges represent partial correlations between nodes. We will first save the results of the IsingFit as an R object named _socialq_, and then we will use the plot function to draw the network. The results can be seen below. Note that in this graph, green edges represent positive partial correlations, and red edges represent negative positive partial correlations.
+We'll fit a network using the _IsingFit_ function from the package of the same name. The IsingFit function generates a network where the edges represent partial correlations between nodes. We will first save the results of the IsingFit as an R object named _socialq_, and then we will use the plot function to draw the network. The results can be seen below. Note that in this graph, green edges represent positive partial correlations, and red edges represent negative partial correlations.
 
 ```{r initial social}
 require(IsingFit)
@@ -97,6 +97,7 @@ You might have noticed that Kim doesn't appear in these impact plots. When we sp
 ### What is Rod's impact?
 
 We also have some theories about Rod. Let's take a look:
+
 ```{r, echo=FALSE}
 plot(impsocial$Edge, nodes="Rod", title=c("Rod absent", "Rod present"))
 ```
@@ -146,9 +147,9 @@ Let's plot the overall association network for the symptoms using the _qgraph_ p
 
 ```{r}
 require(qgraph)
-names(depression)
 associationnet <- cor(depression)
 qgraph(associationnet)
+names(depression)
 ```
 
 This time around, let's start out by looking at the impact statistics in the aggregate.
@@ -168,7 +169,7 @@ When data is continuous, the default for computing impact is to use a median spl
 
 But wait a second...didn't I hear somewhere that median splits are evil and should never be used? 
 
-Well, admittedly, median splits are occasionally quite evil. That's because when you perform a median split, you lose variance-- something statisticians strive never to do. Generally, instead of a median split, you can use regression to look at the values from each individual observation without losing variance. Unfortunately, network structure is not a property of an individual observation-- it is a property of a sample. That means that we'll have to split our sample up into chunks somehow. I experimented with several methods to keep things in a regression context (random sampling, semi-random sampling, deciles), but found that these methods are highly unreliable unless you have an incredibly large sample. The median split, while slightly less sensitive to subtle changes, is reliable. You can also experiment with different kinds of splits using the _split_ argument.
+Well, admittedly, median splits are occasionally quite evil. That's because when you perform a median split, you lose variance-- something statisticians strive never to do. Generally, instead of a median split, you can use regression to look at the values from each individual observation without losing variance. Unfortunately, network structure is not a property of an individual observation, it is a property of a sample. That means that we'll have to split our sample up into chunks somehow. I experimented with several methods to keep things in a regression context (random sampling, semi-random sampling, deciles), but found that these methods are highly unreliable unless you have an incredibly large sample. The median split, while slightly less sensitive to subtle changes, is reliable. You can also experiment with different kinds of splits using the _split_ argument.
 
 Let's continue forward and learn a little more about visualization of impact functions.
 
@@ -225,7 +226,13 @@ plot(impact_depression, order="value", zscores=TRUE)
 
 ```
 
-Now let's visualize the impact of sleep disturbance. We can visualize sleep disturbance by looking at two separate networks (the "low" and "high" networks). This type of plot is specified with _type="contrast"_
+Let's take a closer look at the global strength impact. We can look exclusively at global strength by subsetting the impact object like this: _object$Global.Strength_. This time around, let's look at the absolute values of global strength impact using the _abs_val_ argument.
+
+```{r}
+plot(impact_depression$Global.Strength, order="value", abs_val=TRUE)
+```
+
+Now let's visualize the impact of sleep disturbance. We can visualize sleep disturbance by looking at two separate networks (the "low" and "high" networks). If you want to plot networks, use the _edge.impact_ object. It contains all of the information about each edge (which we need in order to plot a network!). To plot the "low" vs. "high" networks, specify _type="contrast"_
 
 ```{r}
 plot(impact_depression$Edge, nodes="sleep_disturbance", type="contrast")
