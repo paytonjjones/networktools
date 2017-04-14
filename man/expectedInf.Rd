@@ -36,10 +36,10 @@ the initial node and each "second step" node.
 See citations in the references section for further details.
 }
 \examples{
-out1 <- expectedInf(cor(depression))
+out1 <- expectedInf(cor(depression[,1:5]))
+\donttest{
 out1$step1
 out1$step2
-\donttest{
 plot(out1)
 plot(out1, order="value", zscore=TRUE)
 

@@ -1,12 +1,11 @@
 Package: networktools
-Title: Assorted Tools for Network Analysis (Impact, Expected Influence)
+Title: Assorted Tools for Identifying Important Nodes in Networks (Impact, Expected Influence)
 Version: 1.0.0
 Authors@R: person("Payton", "Jones", email = "payton_jones@g.harvard.edu", role = c("aut", "cre"))
 Description: Includes assorted tools for network analysis. Specifically, includes functions for 
     calculating impact statistics, which aim to identify how each node impacts 
-    the overall network structure (global strength impact, network structure impact, edge impact). 
-    Also includes functions for calculating and visualizing the expected influence
-    of each node. 
+    the overall network structure (global strength impact, network structure impact, edge impact), 
+    and for calculating and visualizing expected influence.  
 Depends: R (>= 3.0.0)
 License:  GPL-3
 Encoding: UTF-8

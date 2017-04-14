@@ -273,7 +273,7 @@ plot.structure.impact <- function(x, order=c("alphabetical", "value"), zscore = 
 #' edge impact)
 #'
 #' @examples
-#' out <- edge.impact(depression[,1:3])
+#' out <- edge.impact(depression[450:550,1:3])
 #' plot(out, nodes="anhedonia", type.edgeplot="single")
 #' \donttest{
 #' out1 <- edge.impact(depression)
@@ -337,10 +337,9 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
 #' expected influence of each node.
 #'
 #' @examples
-#' myNetwork <- cor(depression)
+#' \dontshow{myNetwork <- cor(depression[,1:5])}
 #' out1 <- expectedInf(myNetwork)
-#' summary(out1)
-#' plot(out1)
+#' plot(out1$step1)
 #' \donttest{
 #' plot(out1, order="value", zscore=TRUE)
 #'

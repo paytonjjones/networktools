@@ -26,10 +26,9 @@ will return a line plot that shows the relative one-step and/or two-step
 expected influence of each node.
 }
 \examples{
-myNetwork <- cor(depression)
+\dontshow{myNetwork <- cor(depression[,1:5])}
 out1 <- expectedInf(myNetwork)
-summary(out1)
-plot(out1)
+plot(out1$step1)
 \donttest{
 plot(out1, order="value", zscore=TRUE)
 

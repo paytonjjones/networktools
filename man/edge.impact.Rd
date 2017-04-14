@@ -58,13 +58,12 @@ The $hi and $lo output of \code{edge.impact} can also be used to quickly visuali
 the difference in network structure depending on node level (see examples).
 }
 \examples{
-out <- edge.impact(depression[,1:3], nodes="anhedonia")
+out <- edge.impact(depression[450:550,1:3], nodes="anhedonia")
 \donttest{
 out1 <- edge.impact(depression)
 out2 <- edge.impact(depression, gamma=0.65,
         nodes=c("sleep_disturbance", "psychomotor_retardation"))
-out3 <- edge.impact(social, binary.data=TRUE)
-out4 <- edge.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
+out3 <- edge.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
 
 summary(out1)
 plot(out1, nodes="concentration_problems")
@@ -81,6 +80,7 @@ plot(out1, nodes="psychomotor_retardation", type.edgeplot="contrast")
 out1$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
 
 # Extract edge impacts of node Dan in edgelist format
-out4$edgelist$Dan
+out3$edgelist$Dan
 }
+
 }
