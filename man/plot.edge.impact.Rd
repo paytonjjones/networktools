@@ -34,7 +34,7 @@ impacts for the selected node (e.g., thick positive edges represent a strong pos
 edge impact)
 }
 \examples{
-out <- edge.impact(depression[,1:3])
+out <- edge.impact(depression[450:550,1:3])
 plot(out, nodes="anhedonia", type.edgeplot="single")
 \donttest{
 out1 <- edge.impact(depression)

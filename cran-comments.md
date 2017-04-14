@@ -24,4 +24,4 @@ There are currently no downstream dependencies for this package.
 
 ---
 
-* Note: This is the first submission of for the networktools package
+* Note: This is the first submission of the networktools package
