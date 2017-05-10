@@ -52,7 +52,7 @@ Let's look at an example in some simulated data to get an idea of what impact ca
 
 ### The _social_ dataset
 
-A group of friends are members of an online social media platform. We have data on 400 social media posts on this platform. For each post, the friends decided either participated in the conversation, or they didn't. They were given a score of 1 if they engaged in group conversation regarding the post, and a score of 0 if they did not engage with the post. We can create a social network based on social engagement patterns.
+A group of friends are members of an online social media platform. We have data on 400 social media posts on this platform. For each post, the friends decided either participated in the conversation, or they didn't. They were given a score of 1 if they participated in group conversation regarding the post, and a score of 0 if they did not engage with the post. We can create a social network based on social engagement patterns.
 
 The data is included under the name _social_ in the _networktools_ package. 
 
@@ -70,16 +70,16 @@ plot(socialq, layout="circle")
 
 We have an interesting question about our data: Kim seems to be a very polarizing individual, and we want to know how her participation affects the dynamic for rest of the group. Are the connections between friends different depending on whether or not Kim participates?
 
-Let's take a visual look by separating the "Kim absent"" conversations from the "Kim present" conversations (we'll go over the code for this a bit later):
+Let's take a visual look by separating the conversations in which "Kim participated" from the conversations in which "Kim didn't particpate" (we'll go over the code for visualization a bit later). Internally, we are separating all of the conversations into two groups: conversations where Kim participated, and conversations where she didn't. Then, we are computing a network for each group.
 
 ```{r social impact 1, echo=FALSE}
 impsocial<-impact(social, binary.data=TRUE)
-plot(impsocial$Edge, nodes="Kim", title=c("Kim absent", "Kim present"))
+plot(impsocial$Edge, nodes="Kim", title=c("Kim participated", "Kim didn't particpate"))
 ```
 
-These networks appear to be very different. In particular, it seems that the group is much less connected overall when Kim is present. But can we quantify this?
+These networks appear to be very different. In particular, it seems that the group is much less connected overall when Kim particpated. But can we quantify this?
 
-One measure of overall connectedness in a network is _global strength_. The _global strength invariance_ between two networks is the global strength of one network minus the global strength of the other. Kim's __global strength impact__ is simply the global strength invariance between the "Kim absent" network and the "Kim present" network.
+One measure of overall connectedness in a network is _global strength_. The _global strength invariance_ between two networks is the global strength of one network minus the global strength of the other. Kim's __global strength impact__ is simply the global strength invariance between the "Kim didn't participate" network and the "Kim participated" network.
 
 We can compute the global strength impact with the _global.impact_ function. 
 
@@ -90,13 +90,13 @@ kim_global <- global.impact(input=social, nodes="Kim", binary.data=TRUE)
 kim_global$impact
 ```
 
-Kim has a global strength impact of -14.05, meaning that the global strength of the entire network goes down by 14.05 when Kim is involved. 
+Kim has a global strength impact of -14.05, meaning that the global strength of the entire network goes down by 14.05 when Kim participates in a conversation.
 
-You might have noticed that Kim doesn't appear in these impact plots. When we split the network according to Kim's data, we are restricting the variance on the node "Kim". This causes all kinds of statistical problems and confounds. To avoid these problems, we temporarily exclude the node of interest when computing impact. 
+You might have noticed that the node representing Kim doesn't appear in either of these impact plots. When we split the network according to Kim's data, we are restricting the variance on the node "Kim". This causes all kinds of statistical problems and confounds. To avoid these problems, we temporarily exclude the node of interest when computing impact. 
 
 ### What is Rod's impact?
 
-We also have some theories about Rod. Let's take a look:
+Let's get back to the social dataset. We also have some theories about Rod. Let's take a look:
 
 ```{r, echo=FALSE}
 plot(impsocial$Edge, nodes="Rod", title=c("Rod absent", "Rod present"))
@@ -138,6 +138,12 @@ So far we've looked at the impacts of specific nodes, based on our hypotheses. B
 ```{r}
 plot(social_impact)
 ```
+
+### A note on the _input_ argument
+
+Impact is a property of networks, so when you move to analyzing your own data, you may be tempted to input a network (such as an adjacency matrix, edgelist, _qgraph_, or _igraph_ object) into the impact functions. This will not work! To calculate impact, the algorithm needs the individual observations in your _raw data_. This also means that impact only makes sense for analytically derived networks (networks where the edges represent some type of correlation). The _social_ and _depression_ datasets included in the package are examples of what appropriate data might look like.
+
+So just remember: __input your raw data, not a network object__!
 
 ## Impact in the _depression_ dataset
 
@@ -181,9 +187,10 @@ The _NCT_ function from the _NetworkComparisonTest_ package uses a permutation t
 
 _impact.NCT_ returns a list with an _NCT_ object for each node tested. Each _NCT_ object includes p-values for invariances (which in this case, are equivalent to impacts).
 
-The _NCT_ method is computationally intensive. For this reason, it is recommended that users test subsets of nodes using the _nodes_ argument, rather than testing all nodes simultaneously. Let's test the global strength and network structure impacts of both psychomotor retardation and sleep disturbance. Let's also test the edge impact of sleep disturbance on the edge between fatigue and worthlessness. Let's use 25 permutations for the sake of speed (in a real analysis, you'd want 1000 permutations or more).
+The _NCT_ method is computationally intensive. For this reason, it is recommended that users test subsets of nodes using the _nodes_ argument, rather than testing all nodes simultaneously. Let's test the global strength and network structure impacts of both psychomotor retardation and sleep disturbance. Let's also test the edge impact of sleep disturbance on the edge between fatigue and worthlessness. Let's use 25 permutations for the sake of speed (in a real analysis, you'd want 1000 permutations or more). Because the permutations have an element of randomness, I'll set a seed.
 
 ```{r}
+set.seed(1)
 NCT_depression <- impact.NCT(depression, it=25, 
                              nodes=c("psychomotor_retardation", "sleep_disturbance"), 
                              progressbar=FALSE, test.edges=TRUE, edges=list(c(5,6)))
@@ -258,19 +265,23 @@ qgraph(impact_depression$Edge$lo$psychomotor_retardation,
 
 ## Common problems and fixes
 
-When calculating impact statistics on your data, you might stumble upon the following warning:
+1. Perhaps the most common mistake in using _impact_ is placing a network object in the _input_ argument. Because impact statistics are characteristics of networks, it seems logical that the input would be a network object. Unfortunately, to calculate impact, the algorithm needs the information from each observation in your raw, pre-network data.
+
+ _Do not place an adjacency matrix, edgelist, qgraph, or igraph object in the input argument_. Instead, input your _raw observational data_. You can look at the ?depression or ?social dataset for an example of what that raw data might look like.
+
+2. When calculating impact statistics on your data, you might stumble upon the following warning:
 
 ```{r}
-#: Sample size difference after split is >10% of total sample}
+#: Sample size difference after split is >10% of total sample
 ```
 
-Essentially, this warning indicates that when splitting your data in two, the resulting halves have differing sample sizes. This can occur if your data has limited variance (read: lots of observations that fall on the median), your sample size is small overall, or you have floor/ceiling effects. 
+ Essentially, this warning indicates that when splitting your data in two, the resulting halves have differing sample sizes. This can occur if your data has limited variance (e.g., lots of observations that fall on the median), your sample size is small overall, or if you have floor/ceiling effects. 
 
-Why is this a problem? The sparcity of networks computed via graphical LASSO depends on the sample size. Comparing two networks of different sample sizes can result in false positives for network invariance.
+ Why is this a problem? The sparcity of networks computed via graphical LASSO depends on the sample size. Comparing two networks of different sample sizes can result in false positives for impact.
 
-So what can you do to fix it? One way to fix this problem (if you have continuous data) is to force the sample sizes to be equal. You can do this by setting the _split_ argument to "forceEqual". Another way to address this problem is to set the _gamma_ argument to 0, so that you are comparing association networks (which are less influenced by sample size than LASSOs).
+ So what can you do to fix it? One way to fix this problem (if you have continuous data) is to force the sample sizes to be equal. You can do this by setting the _split_ argument to "forceEqual". This will put some observations that fall exactly on the median into the half with a smaller number of observations, such that both halves contain equal sample sizes. This process might weaken your impact value, but doesn't result in overestimation of impact (e.g, may increase Type 2 error, but will not increase Type 1 error).
 
-Another problem inherent in network analysis in general is sample size. You need a big sample to compute a network! This problem is compounded in impact, where you must temporarily cut your sample in half. There aren't any magic fixes to this problem, and it is up to the user to be careful about this issue.
+3. Another problem inherent in network analysis in general is sample size. If you are receiving multiple errors or warnings when you run _impact_, there is a good chance that it is due to a small sample size or insufficient variance in your data. You need a big sample to compute a network! This problem is compounded in impact, where you must temporarily cut your sample in half. There aren't any magic fixes to this problem, so stay on the lookout for this limitation.
 
 ## What questions can __impact__ answer? 
 

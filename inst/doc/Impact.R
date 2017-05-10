@@ -1,11 +1,16 @@
 ## ----setup, include=FALSE------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
-setwd("~/R/networktools package/networktools/vignettes")
-devtools::document()
+require(networktools)
 require(qgraph)
 
+## ----social impact 0, echo=FALSE, fig.width = 4, fig.height = 4----------
+example <- IsingFit::IsingFit(social[,1:5], plot=FALSE, progressbar=FALSE)
+par(pin=c(1,1))
+plot(example, layout="circle")
+
 ## ----initial social------------------------------------------------------
-socialq <- IsingFit::IsingFit(social, plot=FALSE, progressbar=FALSE)
+require(IsingFit)
+socialq <- IsingFit(social, plot=FALSE, progressbar=FALSE)
 plot(socialq, layout="circle")
 
 ## ----social impact 1, echo=FALSE-----------------------------------------
@@ -13,11 +18,11 @@ impsocial<-impact(social, binary.data=TRUE)
 plot(impsocial$Edge, nodes="Kim", title=c("Kim absent", "Kim present"))
 
 ## ----social impact 2-----------------------------------------------------
-kim_global <- global.impact(social, nodes="Kim", binary.data=TRUE)
+kim_global <- global.impact(input=social, nodes="Kim", binary.data=TRUE)
 kim_global$impact
 
-## ------------------------------------------------------------------------
-plot(impsocial$Edge, nodes="Rod")
+## ---- echo=FALSE---------------------------------------------------------
+plot(impsocial$Edge, nodes="Rod", title=c("Rod absent", "Rod present"))
 
 ## ------------------------------------------------------------------------
 rod_structure <- structure.impact(social, nodes="Rod", binary.data=TRUE)
@@ -34,15 +39,20 @@ social_impact <- impact(social, binary.data=TRUE)
 plot(social_impact)
 
 ## ------------------------------------------------------------------------
+require(qgraph)
+associationnet <- cor(depression)
+qgraph(associationnet)
 names(depression)
-qgraph(cor(depression))
 
 ## ------------------------------------------------------------------------
 impact_depression <- impact(depression)
 plot(impact_depression)
 
 ## ------------------------------------------------------------------------
-NCT_depression <- impact.NCT(depression, it=25, nodes=c("psychomotor_retardation", "sleep_disturbance"), progressbar=FALSE, test.edges=TRUE, edges=list(c(5,6)))
+set.seed(1)
+NCT_depression <- impact.NCT(depression, it=25, 
+                             nodes=c("psychomotor_retardation", "sleep_disturbance"), 
+                             progressbar=FALSE, test.edges=TRUE, edges=list(c(5,6)))
 
 ## ------------------------------------------------------------------------
 #Global strength impact of psychomotor retardation
@@ -67,17 +77,23 @@ plot(impact_depression, order="value", zscores=TRUE)
 
 
 ## ------------------------------------------------------------------------
+plot(impact_depression$Global.Strength, order="value", abs_val=TRUE)
+
+## ------------------------------------------------------------------------
 plot(impact_depression$Edge, nodes="sleep_disturbance", type="contrast")
 
 ## ------------------------------------------------------------------------
 
-plot(impact_depression$Edge, nodes="sleep_disturbance", type="single", title="Single impact graph: Edge impact visualized as edges")
+plot(impact_depression$Edge, nodes="sleep_disturbance", type="single", 
+     title="Single impact graph: Edge impact visualized as edges")
 
 ## ------------------------------------------------------------------------
 par(mfrow=c(1,2))
-qgraph(impact_depression$Edge$hi$psychomotor_retardation, title="High Psychomotor Retardation", layout="spring", color="lightblue")
-qgraph(impact_depression$Edge$lo$psychomotor_retardation, title="Low Psychomotor Retardation", layout="spring", color="lightgreen")
+qgraph(impact_depression$Edge$hi$psychomotor_retardation, 
+       title="High Psychomotor Retardation", layout="spring", color="lightblue")
+qgraph(impact_depression$Edge$lo$psychomotor_retardation, 
+       title="Low Psychomotor Retardation", layout="spring", color="lightgreen")
 
 ## ------------------------------------------------------------------------
-#: Sample size difference after split is >10% of total sample}
+#: Sample size difference after split is >10% of total sample
 
