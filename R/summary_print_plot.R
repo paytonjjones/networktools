@@ -296,6 +296,8 @@ plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zs
 #' given node, and one for high values. "single" returns a network where edges represent
 #' the edge impact of the given node.
 #' @param title if not otherwise specified, title is automatically generated
+#' @param maximum sets a maximum for edge thickness (see maximum argument in ?qgraph).
+#' "auto" uses the maximum edge from the collective two networks.
 #' @param ... other plotting specifications (qgraph)
 #'
 #' @details
@@ -321,7 +323,7 @@ plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zs
 #'}
 #' @method plot edge.impact
 #' @export
-plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contrast","single"), title=NULL,...) {
+plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contrast","single"), title=NULL, maximum="auto",...) {
   if(nodes[1]=="first"){
     nodesTested <- 1
   } else if(nodes[1]=="all") {
@@ -337,9 +339,11 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
         title1 <- paste("Low values of", names(x$lo)[i])
         title2 <- paste("High values of", names(x$hi)[i])
       } else{title1 <- title[1]; title2 <- title[2]}
+      if(maximum=="auto"){max <- max(max(x$lo[[i]]), max(x$hi[[i]]))
+      }else {max <- maximum}
       op <- graphics::par(mfrow=c(length(nodesTested),2))
-      qgraph::qgraph(x$lo[[i]], title = title1,...)
-      qgraph::qgraph(x$hi[[i]], title = title2,...)
+      qgraph::qgraph(x$lo[[i]], title = title1,maximum=max,...)
+      qgraph::qgraph(x$hi[[i]], title = title2,maximum=max,...)
       graphics::par(op)
     }
   }
