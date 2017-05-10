@@ -4,8 +4,8 @@
 \alias{plot.global.impact}
 \title{Plot "global.impact" objects}
 \usage{
-\method{plot}{global.impact}(x, order = c("alphabetical", "value"),
-  zscore = FALSE, abs_val = FALSE, ...)
+\method{plot}{global.impact}(x, order = c("given", "value", "alphabetical"),
+  zscore = TRUE, abs_val = FALSE, ...)
 }
 \arguments{
 \item{x}{an output object from an impact function (class \code{global.impact})}
@@ -15,7 +15,8 @@ highest to lowest impact value}
 
 \item{zscore}{logical. Converts raw impact statistics to z-scores for plotting}
 
-\item{abs_val}{logical. Plot absolute values of global strength impacts}
+\item{abs_val}{logical. Plot absolute values of global strength impacts.
+If both abs_val=TRUE and zscore=TRUE, plots the absolute value of the z-scores.}
 
 \item{...}{other plotting specifications (ggplot2)}
 }
@@ -32,7 +33,7 @@ plot(out)
 \donttest{
 out1 <- global.impact(depression)
 plot(out1)
-plot(out1, order="value", zscore=TRUE)
+plot(out1, order="value", zscore=FALSE)
 out2 <- impact(depression)
 plot(out2$Global.Strength)
 }
