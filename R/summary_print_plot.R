@@ -106,11 +106,11 @@ print.expectedInf <- function(x,...){
 #' \donttest{
 #' out1 <- impact(depression)
 #' plot(out1)
-#' plot(out1, order="value", zscore=FALSE)
+#' plot(out1, order="value", zscore=TRUE)
 #' }
 #' @method plot all.impact
 #' @export
-plot.all.impact <- function(x, order=c("given","value", "alphabetical"), zscore=TRUE, abs_val=FALSE,...){
+plot.all.impact <- function(x, order=c("given","value", "alphabetical"), zscore=FALSE, abs_val=FALSE,...){
   df <- data.frame(names(x$Global.Strength$impact), x$Global.Strength$impact, x$Network.Structure$impact)
   colnames(df) <- c("NodeName", "Global Strength Impact", "Network Structure Impact")
   if(zscore) {df$`Global Strength Impact` <- scale(df$`Global Strength Impact`)
@@ -182,13 +182,13 @@ plot.all.impact <- function(x, order=c("given","value", "alphabetical"), zscore=
 #' \donttest{
 #' out1 <- global.impact(depression)
 #' plot(out1)
-#' plot(out1, order="value", zscore=FALSE)
+#' plot(out1, order="value", zscore=TRUE)
 #' out2 <- impact(depression)
 #' plot(out2$Global.Strength)
 #' }
 #' @method plot global.impact
 #' @export
-plot.global.impact <- function(x, order=c("given","value","alphabetical"), zscore=TRUE,abs_val=FALSE,...) {
+plot.global.impact <- function(x, order=c("given","value","alphabetical"), zscore=FALSE,abs_val=FALSE,...) {
   df <- data.frame(names(x$impact), x$impact)
   colnames(df) <- c("NodeName", "ImpValue")
   NodeName <- df[,1]; ImpValue <- df[,2]
@@ -245,13 +245,13 @@ plot.global.impact <- function(x, order=c("given","value","alphabetical"), zscor
 #' \donttest{
 #' out1 <- structure.impact(depression)
 #' plot(out1)
-#' plot(out1, order="value", zscore=FALSE)
+#' plot(out1, order="value", zscore=TRUE)
 #' out2 <- impact(depression)
 #' plot(out2$Network.Structure)
 #' }
 #' @method plot structure.impact
 #' @export
-plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zscore=TRUE,abs_val=FALSE,...) {
+plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zscore=FALSE,abs_val=FALSE,...) {
   df <- data.frame(names(x$impact), x$impact)
   colnames(df) <- c("NodeName", "ImpValue")
   NodeName <- df[,1]; ImpValue <- df[,2]
@@ -394,7 +394,7 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
 #'}
 #' @method plot expectedInf
 #' @export
-plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore = TRUE,...){
+plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore=TRUE,...){
   if(is.list(x)){
   class(x$step1) <- class(x$step2) <- NULL
   df <- data.frame(names(x$step1), x$step1, x$step2)

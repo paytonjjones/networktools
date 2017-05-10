@@ -5,7 +5,8 @@
 \title{Plot "edge.impact" objects}
 \usage{
 \method{plot}{edge.impact}(x, nodes = c("first", "all"),
-  type.edgeplot = c("contrast", "single"), title = NULL, ...)
+  type.edgeplot = c("contrast", "single"), title = NULL, maximum = "auto",
+  ...)
 }
 \arguments{
 \item{x}{an output object from an impact function (\code{edge.impact})}
@@ -19,6 +20,9 @@ given node, and one for high values. "single" returns a network where edges repr
 the edge impact of the given node.}
 
 \item{title}{if not otherwise specified, title is automatically generated}
+
+\item{maximum}{sets a maximum for edge thickness (see maximum argument in ?qgraph).
+"auto" uses the maximum edge from the collective two networks.}
 
 \item{...}{other plotting specifications (qgraph)}
 }
