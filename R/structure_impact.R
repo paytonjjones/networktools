@@ -66,6 +66,11 @@ structure.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE
   nwinv.lo<-nwinv.hi<-nwinv.real<-glstr.lo <- glstr.hi <- glstrinv.real <- vector()
   edges.hi<-edges.lo<-nwinv.edge<-diffedges.edgelist<-diffedges.real<-list()
 
+  ## Check to make sure input is not a network object
+  if("qgraph" %in% class(input)| "igraph" %in% class(input) | "bootnetResult" %in% class(input)) {
+    stop("Network object detected as input. Input must contain observational data. See included datasets ?depression and ?social for examples")
+  }
+
   ## Put data into dataframe format
   input <- data.frame(input)
 

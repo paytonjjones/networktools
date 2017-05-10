@@ -68,6 +68,12 @@ impact.NCT <- function(input, it, gamma, nodes = c("all"), binary.data = FALSE, 
 
   ## Set up empty list
 res <- list()
+
+  ## Check to make sure input is not a network object
+  if("qgraph" %in% class(input)| "igraph" %in% class(input) | "bootnetResult" %in% class(input)) {
+    stop("Network object detected as input. Input must contain observational data. See included datasets ?depression and ?social for examples")
+  }
+
   ## Put data into dataframe format
   input <- data.frame(input)
 
