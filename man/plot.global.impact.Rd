@@ -5,7 +5,7 @@
 \title{Plot "global.impact" objects}
 \usage{
 \method{plot}{global.impact}(x, order = c("given", "value", "alphabetical"),
-  zscore = TRUE, abs_val = FALSE, ...)
+  zscore = FALSE, abs_val = FALSE, ...)
 }
 \arguments{
 \item{x}{an output object from an impact function (class \code{global.impact})}
@@ -33,7 +33,7 @@ plot(out)
 \donttest{
 out1 <- global.impact(depression)
 plot(out1)
-plot(out1, order="value", zscore=FALSE)
+plot(out1, order="value", zscore=TRUE)
 out2 <- impact(depression)
 plot(out2$Global.Strength)
 }

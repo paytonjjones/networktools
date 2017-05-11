@@ -5,7 +5,7 @@
 \title{Plot "structure.impact" objects}
 \usage{
 \method{plot}{structure.impact}(x, order = c("given", "alphabetical",
-  "value"), zscore = TRUE, abs_val = FALSE, ...)
+  "value"), zscore = FALSE, abs_val = FALSE, ...)
 }
 \arguments{
 \item{x}{an output object from an impact function (class \code{structure.impact})}
@@ -33,7 +33,7 @@ plot(out)
 \donttest{
 out1 <- structure.impact(depression)
 plot(out1)
-plot(out1, order="value", zscore=FALSE)
+plot(out1, order="value", zscore=TRUE)
 out2 <- impact(depression)
 plot(out2$Network.Structure)
 }

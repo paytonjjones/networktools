@@ -16,8 +16,9 @@
 #' or binarize edges. Note: unweighted networks will always result in a network
 #' structure impact of 0 or 1.
 #' @param split method by which to split network given non-binary data. "median": median split (excluding the median),
-#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
-#'  to the smaller group, "quartile": uses the top and bottom quartile as groups
+#' "mean": mean split, "forceEqual": creates equally sized groups by partitioning random median observations
+#'  to the smaller group, "cutEqual": creates equally sized groups by deleting random values
+#'  from the bigger group,"quartile": uses the top and bottom quartile as groups
 #'
 #' @details
 #'
@@ -52,7 +53,7 @@
 #'  \item{hi}{a named vector containing the edge estimate for the upper half of the most strongly impacted edge}
 #' @export
 structure.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
-                             split=c("median","mean", "forceEqual", "quartiles")) {
+                             split=c("median","mean", "forceEqual", "cutEqual", "quartiles")) {
 
   if (missing(gamma)){
     if (binary.data){
@@ -99,24 +100,24 @@ structure.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE
       if(match.arg(split)=="forceEqual"){
         hi <- input[input[,j] > stats::median(input[,j]),]
         lo <- input[input[,j] < stats::median(input[,j]),]
-        if(dim(hi)[1]<dim(lo)[1]){
-          hi <- input[input[,j]>= stats::median(input[,j]),]
-          hi <- hi[order(-hi[,j]),]
-          hi <- utils::head(hi, -(dim(hi)[1]-dim(lo)[1]))
-        }
-        if(dim(hi)[1]>dim(lo)[1]){
-          lo <- input[input[,j]<= stats::median(input[,j]),]
-          lo <- lo[order(lo[,j]),]
-          lo <- utils::head(lo, -(dim(lo)[1]-dim(hi)[1]))
-        }
+        med <- input[input[,j] == stats::median(input[,j]),]
+        random_sample_med <- med[sample(1:dim(med)[1], abs(dim(hi)[1]-dim(lo)[1])),]
+        if(dim(hi)[1]<dim(lo)[1]){hi <- rbind(hi, random_sample_med)}
+        if(dim(hi)[1]>dim(lo)[1]){lo <- rbind(lo, random_sample_med)}
         hi <- hi[,-j]
         lo <- lo[,-j]
+      }
+      if(match.arg(split)=="cutEqual"){
+        hi <- input[input[,j] > stats::median(input[,j]),]
+        lo <- input[input[,j] < stats::median(input[,j]),]
+        if(dim(hi)[1]<dim(lo)[1]){lo <- lo[-sample(1:dim(lo)[1], abs(dim(hi)[1]-dim(lo)[1])),-j]}
+        if(dim(hi)[1]>dim(lo)[1]){hi <- hi[-sample(1:dim(hi)[1], abs(dim(hi)[1]-dim(lo)[1])),-j]}
       }
       if(match.arg(split)=="quartile"){
         hi <- input[input[,j]>= stats::quantile(input[,j],probs=.75),][,-j]
         lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j]
       }
-      if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after median split is >10% of total sample")}
+      if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after median split is >10% of total sample, try using split=\"forceEqual\"")}
       catch1 <- try(qgraph::EBICglasso(stats::cor(hi),nrow(hi),gamma=gamma), silent = FALSE)
       catch2 <- try(qgraph::EBICglasso(stats::cor(lo),nrow(lo),gamma=gamma), silent = FALSE)
       if(inherits(catch1, "try-error") | inherits(catch2, "try-error")) { }
@@ -134,7 +135,11 @@ structure.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE
     if(binary.data==TRUE)  { ## If the data is binary, an Ising model is used. Data is split by 0s and 1s
       hi <- input[input[,j]==1,][,-j] ## This takes the "upper" half of the participants, on column i. It also cuts out column i itself
       lo <- input[input[,j]==0,][,-j] ## This takes the "lower" half of the participants, on column i. It also cuts out column i itself
-      if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after split is >10% of total sample")}
+      if(match.arg(split)=="cutEqual"){
+        if(dim(hi)[1]<dim(lo)[1]){lo <- lo[-sample(1:dim(lo)[1], abs(dim(hi)[1]-dim(lo)[1])),]}
+        if(dim(hi)[1]>dim(lo)[1]){hi <- hi[-sample(1:dim(hi)[1], abs(dim(hi)[1]-dim(lo)[1])),]}
+      }
+      if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after split is >10% of total sample, try using split=\"cutEqual\"")}
       catch1 <- try({IsingFit::IsingFit(hi, gamma=gamma, plot=FALSE, progressbar=FALSE)}, silent = FALSE)
       catch2 <- try({IsingFit::IsingFit(lo, gamma=gamma, plot=FALSE, progressbar=FALSE)}, silent= FALSE)
       if(inherits(catch1, "try-error") | inherits(catch2, "try-error")) { }

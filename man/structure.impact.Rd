@@ -5,7 +5,8 @@
 \title{Network Structure Impact}
 \usage{
 structure.impact(input, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual", "quartiles"))
+  weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
+  "quartiles"))
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).
@@ -25,8 +26,9 @@ or binarize edges. Note: unweighted networks will always result in a network
 structure impact of 0 or 1.}
 
 \item{split}{method by which to split network given non-binary data. "median": median split (excluding the median),
-"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
- to the smaller group, "quartile": uses the top and bottom quartile as groups}
+"mean": mean split, "forceEqual": creates equally sized groups by partitioning random median observations
+ to the smaller group, "cutEqual": creates equally sized groups by deleting random values
+ from the bigger group,"quartile": uses the top and bottom quartile as groups}
 }
 \value{
 \code{structure.impact()} returns a list of class "\code{structure.impact}" which contains:

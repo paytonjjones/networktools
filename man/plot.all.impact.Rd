@@ -5,7 +5,7 @@
 \title{Plot "all.impact" objects}
 \usage{
 \method{plot}{all.impact}(x, order = c("given", "value", "alphabetical"),
-  zscore = TRUE, abs_val = FALSE, ...)
+  zscore = FALSE, abs_val = FALSE, ...)
 }
 \arguments{
 \item{x}{an output object from an impact function (class \code{all.impact})}
@@ -34,6 +34,6 @@ plot(out)
 \donttest{
 out1 <- impact(depression)
 plot(out1)
-plot(out1, order="value", zscore=FALSE)
+plot(out1, order="value", zscore=TRUE)
 }
 }

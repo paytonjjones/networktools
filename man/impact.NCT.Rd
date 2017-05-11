@@ -5,8 +5,8 @@
 \title{Network Comparison Test for Impact Statistics}
 \usage{
 impact.NCT(input, it, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual", "quartiles"),
-  paired = FALSE, AND = TRUE, test.edges = FALSE, edges,
+  weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
+  "quartiles"), paired = FALSE, AND = TRUE, test.edges = FALSE, edges,
   progressbar = TRUE)
 }
 \arguments{
@@ -27,8 +27,9 @@ column numbers (e.g., c(1,2)).}
 \item{weighted}{logical. Indicates whether resultant networks preserve edge weights or binarize edges.}
 
 \item{split}{method by which to split network given non-binary data. "median": median split (excluding the median),
-"mean": mean split, "forceEqual": creates equally sized groups by partitioning median observations
- to the smaller group, "quartile": uses the top and bottom quartile as groups}
+"mean": mean split, "forceEqual": creates equally sized groups by partitioning random median observations
+ to the smaller group, "cutEqual": creates equally sized groups by deleting random values
+ from the bigger group,"quartile": uses the top and bottom quartile as groups}
 
 \item{paired}{Logical. Can be TRUE of FALSE to indicate whether the samples are dependent or not. If paired is TRUE, relabeling is performed within each pair of observations. If paired is FALSE, relabeling is not restricted to pairs of observations. Note that, currently, dependent data is assumed to entail one group measured twice.}
 
