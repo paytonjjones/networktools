@@ -36,7 +36,7 @@
 #'
 #' ##Note: for speed, 25 boots are used here; more are necessary in practice
 #' }
-#' @return \code{\link{impact}} returns a list where each element is an object of class \code{NCT}
+#' @return \code{\link{impact.boot}} returns a list of class "impact.boot"
 #'
 #' @export
 impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
@@ -81,13 +81,13 @@ impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALS
 
   ## Global strength
   glstr.est <- apply(glob, 2, median)
-  glstr.conf.lo <- apply(glob, 2, quantile, probs=0.05)
-  glstr.conf.hi <- apply(glob, 2, quantile, probs=0.95)
+  glstr.conf.lo <- apply(glob, 2, quantile, probs=0.025)
+  glstr.conf.hi <- apply(glob, 2, quantile, probs=0.975)
 
   ## Network structure
   nwinv.est <- apply(struc, 2, median)
-  nwinv.conf.lo <- apply(struc, 2, quantile, probs=0.05)
-  nwinv.conf.hi <- apply(struc, 2, quantile, probs=0.95)
+  nwinv.conf.lo <- apply(struc, 2, quantile, probs=0.025)
+  nwinv.conf.hi <- apply(struc, 2, quantile, probs=0.975)
 
   ## Edge
   ## edge.est: list, contains a matrix of medians for each node tested (much like edge.impact)
@@ -99,8 +99,8 @@ impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALS
   for(colmat in 1:(numNodes-1)) {
       sampl_dist <- as.numeric(lapply(edge, function(x) x[[node]][rowmat,colmat]))
       edge.est[[node]][rowmat,colmat] <- median(sampl_dist)
-      edge.conf.lo[[node]][rowmat,colmat] <- quantile(sampl_dist, probs=0.05)
-      edge.conf.hi[[node]][rowmat,colmat] <- quantile(sampl_dist, probs=0.95)
+      edge.conf.lo[[node]][rowmat,colmat] <- quantile(sampl_dist, probs=0.025)
+      edge.conf.hi[[node]][rowmat,colmat] <- quantile(sampl_dist, probs=0.975)
       colnames(edge.est[[node]]) <- rownames(edge.est[[node]]) <- colnames(edge.conf.lo[[node]]) <- rownames(edge.conf.lo[[node]]) <- colnames(edge.conf.hi[[node]]) <- rownames(edge.conf.hi[[node]]) <- colnames(edge[[1]][[node]])
     }}}
   names(edge.est) <- names(edge.conf.lo) <- names(edge.conf.hi) <- names(edge[[1]])
