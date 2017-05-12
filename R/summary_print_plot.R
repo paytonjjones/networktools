@@ -72,9 +72,9 @@ print.all.impact <- function(x,...){
 print.expectedInf <- function(x,...){
   if(is.list(x)){
   class(x$step1) <- class(x$step2) <- NULL
-  cat("$out1 \n")
+  cat("$step1 \n")
   print(x$step1)
-  cat("$out2 \n")
+  cat("$step2 \n")
   print(x$step2)
   } else{
     class(x) <- NULL
@@ -397,6 +397,7 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
 plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore=TRUE,...){
   if(is.list(x)){
   class(x$step1) <- class(x$step2) <- NULL
+  if(is.null(names(x$step1))) {names(x$step1) <- 1:length(x$step1)}
   df <- data.frame(names(x$step1), x$step1, x$step2)
   colnames(df) <- c("NodeName", "One-step Expected Influence", "Two-step Expected Influence")
   if(zscore) {df$`One-step Expected Influence` <- scale(df$`One-step Expected Influence`)
