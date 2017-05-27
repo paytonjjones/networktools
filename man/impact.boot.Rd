@@ -33,7 +33,7 @@ column numbers (e.g., c(1,2)).}
 \item{progressbar}{Logical. Should the pbar be plotted in order to see the progress of the estimation procedure? Defaults to TRUE.}
 }
 \value{
-\code{\link{impact}} returns a list where each element is an object of class \code{NCT}
+\code{\link{impact.boot}} returns a list of class "impact.boot"
 }
 \description{
 impact.boot is BETA software. Please report any bugs. Plotting/printing/summary will be added soon.
