@@ -79,7 +79,7 @@ coerce_to_adjacency <- function(input, directed=NULL) {
     if(!directed){
      mat <- mat + t(mat) }
     } else {
-    mat <- matrix(input)
+    mat <- as.matrix(input)
     if(is.null(directed)) {
       directed <- !isSymmetric(unname(input))
     }
