@@ -35,6 +35,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
     if(is.null(nodes)){
       nodes <- colnames(input)
     }
+    colnames(input) <- rownames(input) <- nodes
     edgelist <- reshape2::melt(input)
     edgelist <- edgelist[edgelist$value != 0,]
   }

@@ -507,7 +507,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' plot(b, order="value", zscore=TRUE)
 #' plot(b, include=c("Bridge Strength", "Bridge Betweenness"))
 #'
-#' @method plot expectedInf
+#' @method plot bridge
 #' @export
 plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, ...){
   attr(x, "class") <- NULL
