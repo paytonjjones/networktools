@@ -13,15 +13,17 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
       nodes <- names(igraph::V(input))
     }
   } else if(class(input)=="qgraph"){
-    col1 <- names(input$graphAttributes$Nodes$names)[input$Edgelist$from]
-    col3 <- names(input$graphAttributes$Nodes$names)[input$Edgelist$to]
+    if(is.null(nodes)){
+      if(is.null(input$graphAttributes$Nodes$names)) {
+        nodes <- 1:length(unique(c(input$Edgelist$from, input$Edgelist$to)))
+      } else {nodes <- input$graphAttributes$Nodes$names}
+    }
+    col1 <- nodes[input$Edgelist$from]
+    col3 <- nodes[input$Edgelist$to]
     edgelist <- as.data.frame(cbind(col1, col3, input$Edgelist$weight))
     if(is.null(directed)){
       if(TRUE %in% input$Edgelist$directed){
         directed <-TRUE} else {directed <- FALSE}
-    }
-    if(is.null(nodes)){
-      nodes <- names(input$graphAttributes$Nodes$names)
     }
   } else if (class(input)=="matrix") {
     if(is.null(directed)){
@@ -52,6 +54,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
   return(edgelist)
 }
 
+#' @export
 coerce_to_adjacency <- function(input, directed=NULL) {
   if(class(input)=="igraph"){
     mat <- as.matrix(igraph::get.adjacency(input, type="both"))
@@ -62,7 +65,9 @@ coerce_to_adjacency <- function(input, directed=NULL) {
     col1 <- input$Edgelist$from
     col3 <- input$Edgelist$to
     edgelist <- as.data.frame(cbind(col1, col3, input$Edgelist$weight))
-    nodes <- names(input$graphAttributes$Nodes$names)
+    if(is.null(input$graphAttributes$Nodes$names)) {
+      nodes <- 1:length(unique(c(col1, col3)))
+    } else {nodes <- input$graphAttributes$Nodes$names}
     mat <- matrix(0, length(nodes), length(nodes))
     colnames(mat) <- rownames(mat) <- nodes
     mat[as.matrix(edgelist)[,1:2]] <- edgelist[,3]
@@ -74,6 +79,9 @@ coerce_to_adjacency <- function(input, directed=NULL) {
      mat <- mat + t(mat) }
     } else {
     mat <- input
+    if(is.null(directed)) {
+      directed <- !isSymmetric(input)
+    }
     }
     attr(mat, "directed") <- directed
     return(mat)

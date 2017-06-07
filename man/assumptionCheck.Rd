@@ -23,7 +23,7 @@ Checks some basic assumptions about the suitability of network analysis on
 your data
 }
 \details{
-This function is in BETA. Please report any errors
+This function is in BETA. Please report any errors.
 
 
 

@@ -42,6 +42,12 @@ summary.expectedInf <- function(object,...){
 }
 
 #' @export
+summary.bridge <- function(object,...){
+    class(object) <- NULL
+    print(data.frame(object))
+}
+
+#' @export
 print.global.impact <- function(x,...){
   print(x[1:3])
 }
@@ -80,6 +86,12 @@ print.expectedInf <- function(x,...){
     class(x) <- NULL
     print(x)
   }
+}
+
+#' @export
+print.bridge <- function(object,...){
+  class(object) <- NULL
+  print(object)
 }
 
 #' Plot "all.impact" objects
@@ -470,4 +482,81 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
       return(g)
   }}
 }
+
+#' Plot "bridge" objects
+#'
+#' Convenience function for plotting bridge centrality
+#'
+#' @param x an output object from \code{bridge} (class \code{bridge})
+#' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
+#' highest to lowest centrality values
+#' @param zscore logical. Converts raw impact statistics to z-scores for plotting
+#' @param include a vector of centrality measures to include, if missing all measures available will be included
+#' @param ... other plotting specifications in ggplot2 (aes)
+#'
+#' @details
+#'
+#' Inputting an object of class \code{bridge}
+#' will return a line plot that shows the bridge centrality
+#' values of each node
+#'
+#' @examples
+#'
+#' b <- bridge(cor(depression))
+#' plot(b)
+#' plot(b, order="value", zscore=TRUE)
+#' plot(b, include=c("Bridge Strength", "Bridge Betweenness"))
+#'
+#' @method plot expectedInf
+#' @export
+plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, ...){
+  attr(x, "class") <- NULL
+  nodes <- names(x[[1]])
+  if(zscore) {
+    scalenoatt <- function(y){
+      y <- scale(y)
+      attr(y, "scaled:center") <- NULL
+      attr(y, "scaled:scale") <- NULL
+      return(y)
+    }
+    x <- sapply(x, scalenoatt)
+  }
+  Long <- melt(x); colnames(Long)[2] <- "measure"
+  Long$type <- rep(NA, nrow(Long))
+  Long$node <- rep(nodes, length(unique(Long$measure)))
+  if (missing(include)) {
+    include <- unique(Long$measure[Long$measure != "communities"])
+  }
+  Long <- subset(Long, measure %in% include)
+  if(order[1]=="given"){
+    Long$node <- factor(as.character(Long$node), levels = rev(unique(as.character(Long$node))))
+    g <- ggplot(Long, aes(x = value, y = node, group = type, ...))
+    g <- g + geom_path() + xlab("") + ylab("") + geom_point()
+    g <- g + facet_grid(~measure, scales = "free")
+  } else if(order[1]=="alphabetical"){
+    Long <- Long[with(Long, order(Long$node)),]
+    Long$node <- factor(as.character(Long$node), levels = unique(as.character(Long$node)[order(Long$node)]))
+    g <- ggplot(Long, aes(x=value, y=node, group=type, ...))
+    g <- g + ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
+      ggplot2::facet_grid(~measure, scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node)))
+  } else if(order[1]=="value") {
+    glist <- list()
+    for(i in 1:length(include)) {
+      temp_Long <- Long[Long$measure==include[i],]
+      temp_Long <- temp_Long[with(temp_Long, order(temp_Long$value)),]
+      temp_Long$node <- factor(as.character(temp_Long$node), levels = unique(as.character(temp_Long$node)[order(temp_Long$value)]))
+      glist[[i]] <- ggplot2::ggplot(temp_Long, aes(x=value, y=node, group=type,...)) +
+        geom_path() + geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
+        facet_grid(~measure, scales="free")
+    }
+    if(length(include)==1){g <- glist[[1]]
+    } else if(length(include)==2){g <- grid.arrange(glist[[1]],glist[[2]], ncol=2)
+    } else if(length(include)==3){g <- grid.arrange(glist[[1]],glist[[2]],glist[[3]], ncol=3)
+    } else if(length(include)==4){g <- grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]], ncol=4)
+    } else if(length(include)==5){g <- grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]],glist[[5]], ncol=5)
+    }
+  }
+  return(plot(g))
+}
+
 
