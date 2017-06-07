@@ -27,7 +27,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
     }
   } else if (class(input)=="matrix") {
     if(is.null(directed)){
-      directed <- !isSymmetric.matrix(unname(input))
+      directed <- !isSymmetric(unname(as.matrix(input)))
     }
     if(!directed){
       input[upper.tri(input, diag=TRUE)] <- 0
@@ -81,7 +81,7 @@ coerce_to_adjacency <- function(input, directed=NULL) {
     } else {
     mat <- as.matrix(input)
     if(is.null(directed)) {
-      directed <- !isSymmetric(unname(input))
+      directed <- !isSymmetric(unname(mat))
     }
     }
     attr(mat, "directed") <- directed
