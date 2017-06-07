@@ -5,7 +5,7 @@
 \title{Bridge Strength (inter-community strength)}
 \usage{
 bridge(network, communities = NULL, useCommunities = "all",
-  directed = NULL, nodes = NULL, normalize = FALSE)
+  directed = NULL, nodes = NULL)
 }
 \arguments{
 \item{network}{a network of class "igraph", "qgraph", or an adjacency matrix representing
