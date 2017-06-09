@@ -40,7 +40,7 @@
 #'
 #' @export
 impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
-                       split=c("median","mean", "forceEqual", "cutEqual", "quartiles")) {
+                       split=c("median","mean", "forceEqual", "cutEqual", "quartiles"), progressbar=TRUE) {
   if (missing(gamma)){
     if (binary.data){
       gamma <- 0.25
@@ -65,7 +65,9 @@ impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALS
   struc <- matrix(rep(NA, boots*numNodesTested), boots, numNodesTested)
 
   # create progress bar
-  pb <- txtProgressBar(min = 0, max = boots, style = 3)
+  pb <- utils::txtProgressBar(min = 0, max = boots, style = 3)
+
+  # resample
   for(i in 1:boots){
     resamp <- input[sample(1:dim(input)[1], dim(input)[1], replace=TRUE),]
     imp <- impact(input=resamp, gamma=gamma, nodes=nodes, binary.data=binary.data,
@@ -73,21 +75,23 @@ impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALS
     edge[[i]] <- imp$Edge$impact
     glob[i,] <- imp$Global.Strength$impact
     struc[i,] <- imp$Network.Structure$impact
-    setTxtProgressBar(pb, i)
+    if(progressbar){
+      utils::setTxtProgressBar(pb, i)
+    }
   }
-  close(pb)
+  if(progressbar){close(pb)}
 
   ## Extract medians and confidence intervals
 
   ## Global strength
-  glstr.est <- apply(glob, 2, median)
-  glstr.conf.lo <- apply(glob, 2, quantile, probs=0.025)
-  glstr.conf.hi <- apply(glob, 2, quantile, probs=0.975)
+  glstr.est <- apply(glob, 2, stats::median)
+  glstr.conf.lo <- apply(glob, 2, stats::quantile, probs=0.025)
+  glstr.conf.hi <- apply(glob, 2, stats::quantile, probs=0.975)
 
   ## Network structure
-  nwinv.est <- apply(struc, 2, median)
-  nwinv.conf.lo <- apply(struc, 2, quantile, probs=0.025)
-  nwinv.conf.hi <- apply(struc, 2, quantile, probs=0.975)
+  nwinv.est <- apply(struc, 2, stats::median)
+  nwinv.conf.lo <- apply(struc, 2, stats::quantile, probs=0.025)
+  nwinv.conf.hi <- apply(struc, 2, stats::quantile, probs=0.975)
 
   ## Edge
   ## edge.est: list, contains a matrix of medians for each node tested (much like edge.impact)
@@ -98,9 +102,9 @@ impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALS
   for(rowmat in 1:(numNodes-1)) {
   for(colmat in 1:(numNodes-1)) {
       sampl_dist <- as.numeric(lapply(edge, function(x) x[[node]][rowmat,colmat]))
-      edge.est[[node]][rowmat,colmat] <- median(sampl_dist)
-      edge.conf.lo[[node]][rowmat,colmat] <- quantile(sampl_dist, probs=0.025)
-      edge.conf.hi[[node]][rowmat,colmat] <- quantile(sampl_dist, probs=0.975)
+      edge.est[[node]][rowmat,colmat] <- stats::median(sampl_dist)
+      edge.conf.lo[[node]][rowmat,colmat] <- stats::quantile(sampl_dist, probs=0.025)
+      edge.conf.hi[[node]][rowmat,colmat] <- stats::quantile(sampl_dist, probs=0.975)
       colnames(edge.est[[node]]) <- rownames(edge.est[[node]]) <- colnames(edge.conf.lo[[node]]) <- rownames(edge.conf.lo[[node]]) <- colnames(edge.conf.hi[[node]]) <- rownames(edge.conf.hi[[node]]) <- colnames(edge[[1]][[node]])
     }}}
   names(edge.est) <- names(edge.conf.lo) <- names(edge.conf.hi) <- names(edge[[1]])

@@ -52,24 +52,25 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   if(is.null(directed)) {directed<-attr(adj,"directed")}
   # get igraph of complete network
   if(directed) {
-    g <- graph.adjacency(adj, mode="directed", diag=FALSE, weighted= TRUE)
+    g <- igraph::graph_from_adjacency_matrix(adj, mode="directed", diag=FALSE, weighted= TRUE)
   } else {
-    g <- graph.adjacency(adj, mode="upper", diag=FALSE, weighted= TRUE)
+    g <- igraph::graph_from_adjacency_matrix(adj, mode="upper", diag=FALSE, weighted= TRUE)
   }
 
   #if communities not supplied, use spinglass default settings to detect
   if(is.null(communities) | class(communities)=="function"){
-    communities <- try(spinglass.community(g, spins=3))
+    communities <- try(igraph::spinglass.community(g, spins=3))
     if(class(communities)=="try-error") {stop("Automatic community detection failed. Please prespecify communities")}
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
   }
 
-  #prepare relevant data forms
   #take inverse of weight (igraph's length functions view small edges as closer)
-  E(g)$weight <- 1/E(g)$weight
+  igraph::E(g)$weight <- 1/igraph::E(g)$weight
+
   if(is.null(nodes)){nodes <- colnames(adj)}
   if(class(communities)=="communities") {communities <- communities$membership}
 
+  #create igraph that only includes edges which cross communities
   comm_edgelist <- coerce_to_comm_edgelist(network, communities=communities, directed=directed, nodes=nodes)
   bridge_edgelist <- extract_bridge_edgelist(comm_edgelist)
   bridge_igraph <- comm_edgelist_to_igraph(bridge_edgelist, directed=attr(bridge_edgelist, "directed"))
@@ -77,15 +78,15 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   # make a copy
   g2 <- g
 
-  # Delete negative edges in the copy
-  if(min(E(g2)$weight)<0) {
-    g2 <- delete.edges(g2, which(E(g2)$weight < 0))
+  # Delete negative edges in the copy (if they exist)
+  if(min(igraph::E(g2)$weight)<0) {
+    g2 <- igraph::delete.edges(g2, which(igraph::E(g2)$weight < 0))
     warning("Negative edges ignored in calculation of bridge betweenness")
   }
 
   ## Bridge strength
   igraph::E(bridge_igraph)$weight <- abs(igraph::E(bridge_igraph)$weight)
-  in_degree <- igraph::strength(bridge_igraph, vids = V(bridge_igraph), mode="in")
+  in_degree <- igraph::strength(bridge_igraph, vids = igraph::V(bridge_igraph), mode="in")
   out_degree <- igraph::strength(bridge_igraph, mode="out")
   total_strength <- igraph::strength(bridge_igraph, mode="all")
   ## add in nodes with 0 strength (they get removed when converting to edgelist)
@@ -108,7 +109,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   delete.ends <- function(x) {return(nodes[tail(head(as.vector(x), -1),-1)])}
   short.bridge.mid.paths <- function(x) {
     # Note: mode argument ignored in undirected graphs
-    b <- suppressWarnings(get.all.shortest.paths(g2, from=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]],mode="out"))
+    b <- suppressWarnings(igraph::get.all.shortest.paths(g2, from=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]],mode="out"))
     # turn those paths into vectors, deleting "starts" and "ends", and unify into a single vector
     c <- unlist(sapply(b$res, delete.ends))
     return(c)
@@ -122,7 +123,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   ## Bridge closeness
   b.close <- function(x) {
     # note: mode="all", so it will take the shortest path either in or out, whichever is closer
-    b <- distances(g, v=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]], mode="all")
+    b <- igraph::distances(g, v=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]], mode="all")
     c <- 1/mean(b[is.finite(b)])
     return(c)
   }
@@ -130,7 +131,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   if(class(closeness)=="try-error") {
     b.close2 <- function(x) {
       # note: mode="all", so it will take the shortest path either in or out, whichever is closer
-      b <- distances(g2, v=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]], mode="all")
+      b <- igraph::distances(g2, v=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]], mode="all")
       c <- 1/mean(b[is.finite(b)])
       return(c)
     }
@@ -148,6 +149,3 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   class(res) <- "bridge"
   return(res)
 }
-
-## Input to "communities" can be either a "communities" class object or a vector of community titles that corresponds to nodes
-

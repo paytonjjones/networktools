@@ -89,9 +89,9 @@ print.expectedInf <- function(x,...){
 }
 
 #' @export
-print.bridge <- function(object,...){
-  class(object) <- NULL
-  print(object)
+print.bridge <- function(x,...){
+  class(x) <- NULL
+  print(x)
 }
 
 #' Plot "all.impact" objects
@@ -521,7 +521,7 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
     }
     x <- sapply(x, scalenoatt)
   }
-  Long <- melt(x); colnames(Long)[2] <- "measure"
+  Long <- reshape2::melt(x); colnames(Long)[2] <- "measure"
   Long$type <- rep(NA, nrow(Long))
   Long$node <- rep(nodes, length(unique(Long$measure)))
   if (missing(include)) {
@@ -536,7 +536,7 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
   } else if(order[1]=="alphabetical"){
     Long <- Long[with(Long, order(Long$node)),]
     Long$node <- factor(as.character(Long$node), levels = unique(as.character(Long$node)[order(Long$node)]))
-    g <- ggplot(Long, aes(x=value, y=node, group=type, ...))
+    g <- ggplot2::ggplot(Long, ggplot2::aes(x=value, y=node, group=type, ...))
     g <- g + ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
       ggplot2::facet_grid(~measure, scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node)))
   } else if(order[1]=="value") {
@@ -545,15 +545,15 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
       temp_Long <- Long[Long$measure==include[i],]
       temp_Long <- temp_Long[with(temp_Long, order(temp_Long$value)),]
       temp_Long$node <- factor(as.character(temp_Long$node), levels = unique(as.character(temp_Long$node)[order(temp_Long$value)]))
-      glist[[i]] <- ggplot2::ggplot(temp_Long, aes(x=value, y=node, group=type,...)) +
-        geom_path() + geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
-        facet_grid(~measure, scales="free")
+      glist[[i]] <- ggplot2::ggplot(temp_Long, ggplot2::aes(x=value, y=node, group=type,...)) +
+        ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
+        ggplot2::facet_grid(~measure, scales="free")
     }
     if(length(include)==1){g <- glist[[1]]
-    } else if(length(include)==2){g <- grid.arrange(glist[[1]],glist[[2]], ncol=2)
-    } else if(length(include)==3){g <- grid.arrange(glist[[1]],glist[[2]],glist[[3]], ncol=3)
-    } else if(length(include)==4){g <- grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]], ncol=4)
-    } else if(length(include)==5){g <- grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]],glist[[5]], ncol=5)
+    } else if(length(include)==2){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]], ncol=2)
+    } else if(length(include)==3){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]],glist[[3]], ncol=3)
+    } else if(length(include)==4){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]], ncol=4)
+    } else if(length(include)==5){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]],glist[[5]], ncol=5)
     }
   }
   return(plot(g))

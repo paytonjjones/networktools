@@ -55,6 +55,14 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
   return(edgelist)
 }
 
+#' Coerce to adjacency matrix
+#'
+#' Takes an object of type "qgraph", "igraph", or a matrix and outputs an adjacency matrix
+#'
+#' @param input a network of class "igraph", "qgraph", or an adjacency matrix representing
+#' a network
+#' @param directed logical. is the network directed? If set to NULL, auto-detection is used
+#'
 #' @export
 coerce_to_adjacency <- function(input, directed=NULL) {
   if(class(input)=="igraph"){

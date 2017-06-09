@@ -6,7 +6,7 @@
 \usage{
 impact.boot(input, boots, gamma, nodes = c("all"), binary.data = FALSE,
   weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
-  "quartiles"))
+  "quartiles"), progressbar = TRUE)
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).

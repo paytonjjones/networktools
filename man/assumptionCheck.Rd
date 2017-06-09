@@ -17,6 +17,12 @@ network analysis in general. "impact" tests the suitability for analyzing impact
 \item{percent}{percent difference from grand mean that is acceptable when comparing variances.}
 
 \item{split}{if type="impact", specifies the type of split to utilize}
+
+\item{plot}{logical. Should histograms each variable be plotted?}
+
+\item{binary.data}{logical. Defaults to FALSE}
+
+\item{na.rm}{logical. Should missing values be removed?}
 }
 \description{
 Checks some basic assumptions about the suitability of network analysis on
@@ -39,9 +45,6 @@ This function is not intended as a substitute for careful data visualization
 and independent assumption checks.
 
 See citations in the references section for further details.
-}
-\examples{
-
 }
 \references{
 Terluin, B., de Boer, M. R., & de Vet, H. C. W. (2016). Differences in Connection Strength between Mental Symptoms Might Be Explained by Differences in Variance: Reanalysis of Network Data Did Not Confirm Staging. PLOS ONE, 11(11), e0155205. Retrieved from https://doi.org/10.1371/journal.pone.0155205
