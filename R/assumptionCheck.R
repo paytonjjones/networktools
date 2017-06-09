@@ -26,8 +26,6 @@
 #'
 #' See citations in the references section for further details.
 #'
-#' @examples
-#'
 #' @references
 #'
 #' Terluin, B., de Boer, M. R., & de Vet, H. C. W. (2016). Differences in Connection Strength between Mental Symptoms Might Be Explained by Differences in Variance: Reanalysis of Network Data Did Not Confirm Staging. PLOS ONE, 11(11), e0155205. Retrieved from https://doi.org/10.1371/journal.pone.0155205
@@ -37,8 +35,8 @@ assumptionCheck <- function(data, type=c("network", "impact"), percent=20,
                             split=c("median","mean", "forceEqual", "cutEqual", "quartiles"),
                             plot=FALSE, binary.data=FALSE, na.rm=TRUE) {
 if(match.arg(type)=="network"){
-  varNodes <- apply(data, 2, var, na.rm=na.rm)
-  normNodes <- apply(data, 2, shapiro.test)
+  varNodes <- apply(data, 2, stats::var, na.rm=na.rm)
+  normNodes <- apply(data, 2, stats::shapiro.test)
   normNodes <- as.numeric(sapply(normNodes,`[`,2))
   varviolNodes <- vector()
   normviolNodes <- vector()
@@ -49,8 +47,8 @@ if(match.arg(type)=="network"){
     if(abs((varNodes[i]/grandMean)-1)>(percent/100)) {varviolNodes[i] <- names(varNodes[i])}
     if(normNodes[i]<0.01) {normviolNodes[i] <- names(varNodes[i])}
   }
-  varviolNodes <- na.omit(varviolNodes)
-  normviolNodes <- na.omit(normviolNodes)
+  varviolNodes <- stats::na.omit(varviolNodes)
+  normviolNodes <- stats::na.omit(normviolNodes)
   if(length(varviolNodes != 0)) {message("Equal node variance violation: variance of the following nodes differs more than ",
                                 percent, "% from grand mean: \n", paste0(varviolNodes, sep=" "), "\n")}
   if(length(normviolNodes != 0)) {message("Shapiro-Wilk violation (p<0.01): Visually check normality of nodes: \n",
@@ -61,9 +59,9 @@ if(match.arg(type)=="network"){
   cat("\n Shapiro-Wilk Normality (p) \n")
   print(normNodes)
   if(plot){
-  op <- par(mfrow=c(round((dim(data)[2]/3)+.5), 3))
-  for(i in 1:dim(data)[2]) {hist(data[,i], main=NULL, xlab=colnames(data)[i], ylab=NULL)}
-  par(op)}
+  op <- graphics::par(mfrow=c(round((dim(data)[2]/3)+.5), 3))
+  for(i in 1:dim(data)[2]) {graphics::hist(data[,i], main=NULL, xlab=colnames(data)[i], ylab=NULL)}
+  graphics::par(op)}
 }
 if(match.arg(type)=="impact"){
   input <- na.omit(data)
@@ -107,8 +105,8 @@ if(match.arg(type)=="impact"){
         if(dim(hi)[1]>dim(lo)[1]){hi <- hi[-sample(1:dim(hi)[1], abs(dim(hi)[1]-dim(lo)[1])),]}
       }
     }
-    table[j,1] <- sum(diag(var(lo)))
-    table[j,2] <- sum(diag(var(hi)))
+    table[j,1] <- sum(diag(stats::var(lo)))
+    table[j,2] <- sum(diag(stats::var(hi)))
     if(abs((table[j,1]/table[j,2])-1)>(percent/100)) {message("Equal network variances violation: difference in variance between halves on node \"",
                                                          colnames(data)[j], "\" is greater than ", percent)}
   }
