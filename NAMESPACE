@@ -28,3 +28,8 @@ export(impact)
 export(impact.NCT)
 export(impact.boot)
 export(structure.impact)
+importFrom("graphics", "hist", "par", "plot")
+importFrom("stats", "median", "na.omit", "quantile", "shapiro.test",
+             "var")
+importFrom("utils", "head", "setTxtProgressBar", "tail",
+             "txtProgressBar")
