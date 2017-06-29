@@ -66,11 +66,8 @@ impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALS
 
   # create progress bar
   pb <- utils::txtProgressBar(min = 0, max = boots, style = 3)
-<<<<<<< HEAD
 
   # resample
-=======
->>>>>>> d30c25c1af1fcacd648bae6c54ba733e93452796
   for(i in 1:boots){
     resamp <- input[sample(1:dim(input)[1], dim(input)[1], replace=TRUE),]
     imp <- impact(input=resamp, gamma=gamma, nodes=nodes, binary.data=binary.data,
@@ -78,13 +75,9 @@ impact.boot <-function(input, boots, gamma, nodes = c("all"), binary.data = FALS
     edge[[i]] <- imp$Edge$impact
     glob[i,] <- imp$Global.Strength$impact
     struc[i,] <- imp$Network.Structure$impact
-<<<<<<< HEAD
     if(progressbar){
       utils::setTxtProgressBar(pb, i)
     }
-=======
-    utils::setTxtProgressBar(pb, i)
->>>>>>> d30c25c1af1fcacd648bae6c54ba733e93452796
   }
   if(progressbar){close(pb)}
 

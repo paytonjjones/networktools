@@ -32,13 +32,14 @@
 #' Functions to compute bridge betweenness and bridge closeness are in development.
 #'
 #' @examples
+#' \donttest{
 #' graph1 <- qgraph::EBICglasso(cor(depression), n=dim(depression)[1])
 #' graph2 <- IsingFit::IsingFit(social)$weiadj
 #'
 #' bridge(graph1, communities=c(1, 1, 2, 2, 2, 2, 1, 2, 1))
 #' bridge(graph2, communities=c(rep(1,8), rep(2,8)))
 #'
-#'
+#'}
 #' @return \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
 #'
 #'
