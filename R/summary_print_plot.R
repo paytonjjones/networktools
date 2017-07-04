@@ -491,7 +491,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
 #' highest to lowest centrality values
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
-#' @param include a vector of centrality measures to include, if missing all measures available will be included
+#' @param include a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", or "Bridge Closeness"), if missing all measures available will be included.
 #' @param ... other plotting specifications in ggplot2 (aes)
 #'
 #' @details
@@ -501,12 +501,12 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' values of each node
 #'
 #' @examples
-#'
+#'\donttest{
 #' b <- bridge(cor(depression))
 #' plot(b)
 #' plot(b, order="value", zscore=TRUE)
 #' plot(b, include=c("Bridge Strength", "Bridge Betweenness"))
-#'
+#'}
 #' @method plot bridge
 #' @export
 plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, ...){
@@ -527,36 +527,38 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
   if (missing(include)) {
     include <- unique(Long$measure[Long$measure != "communities"])
   }
-  Long <- subset(Long, measure %in% include)
+  Long <- subset(Long, Long$measure %in% include)
   if(order[1]=="given"){
     Long$node <- factor(as.character(Long$node), levels = rev(unique(as.character(Long$node))))
-    g <- ggplot(Long, aes(x = value, y = node, group = type, ...))
-    g <- g + geom_path() + xlab("") + ylab("") + geom_point()
-    g <- g + facet_grid(~measure, scales = "free")
+    g <- ggplot2::ggplot(Long, ggplot2::aes_string(x = 'value', y = 'node', group = 'type', ...))
+    g <- g + ggplot2::geom_path() + ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::geom_point()
+    g <- g + ggplot2::facet_grid('~measure', scales = "free")
   } else if(order[1]=="alphabetical"){
     Long <- Long[with(Long, order(Long$node)),]
     Long$node <- factor(as.character(Long$node), levels = unique(as.character(Long$node)[order(Long$node)]))
-    g <- ggplot2::ggplot(Long, ggplot2::aes(x=value, y=node, group=type, ...))
+    g <- ggplot2::ggplot(Long, ggplot2::aes_string(x='value', y='node', group='type', ...))
     g <- g + ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
-      ggplot2::facet_grid(~measure, scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node)))
+      ggplot2::facet_grid('~measure', scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node)))
   } else if(order[1]=="value") {
     glist <- list()
     for(i in 1:length(include)) {
       temp_Long <- Long[Long$measure==include[i],]
       temp_Long <- temp_Long[with(temp_Long, order(temp_Long$value)),]
       temp_Long$node <- factor(as.character(temp_Long$node), levels = unique(as.character(temp_Long$node)[order(temp_Long$value)]))
-      glist[[i]] <- ggplot2::ggplot(temp_Long, ggplot2::aes(x=value, y=node, group=type,...)) +
+      glist[[i]] <- ggplot2::ggplot(temp_Long, ggplot2::aes_string(x='value', y='node', group='type',...)) +
         ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
-        ggplot2::facet_grid(~measure, scales="free")
+        ggplot2::facet_grid('~measure', scales="free")
     }
     if(length(include)==1){g <- glist[[1]]
-    } else if(length(include)==2){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]], ncol=2)
-    } else if(length(include)==3){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]],glist[[3]], ncol=3)
-    } else if(length(include)==4){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]], ncol=4)
-    } else if(length(include)==5){g <- ggplot2::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]],glist[[5]], ncol=5)
+    } else if(length(include)==2){gridExtra::grid.arrange(glist[[1]],glist[[2]], ncol=2)
+    } else if(length(include)==3){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]], ncol=3)
+    } else if(length(include)==4){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]], ncol=4)
+    } else if(length(include)==5){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]],glist[[5]], ncol=5)
     }
   }
-  return(plot(g))
+  if(order[1]!="value") { # if "value", plotting is already done with gridExtra (552-557)
+      return(g)
+    }
 }
 
 

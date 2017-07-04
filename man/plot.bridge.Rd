@@ -15,7 +15,7 @@ highest to lowest centrality values}
 
 \item{zscore}{logical. Converts raw impact statistics to z-scores for plotting}
 
-\item{include}{a vector of centrality measures to include, if missing all measures available will be included}
+\item{include}{a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", or "Bridge Closeness"), if missing all measures available will be included.}
 
 \item{...}{other plotting specifications in ggplot2 (aes)}
 }
@@ -28,10 +28,10 @@ will return a line plot that shows the bridge centrality
 values of each node
 }
 \examples{
-
+\donttest{
 b <- bridge(cor(depression))
 plot(b)
 plot(b, order="value", zscore=TRUE)
 plot(b, include=c("Bridge Strength", "Bridge Betweenness"))
-
+}
 }

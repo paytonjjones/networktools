@@ -107,7 +107,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
 
   ## Bridge betweenness
 
-  delete.ends <- function(x) {return(nodes[tail(head(as.vector(x), -1),-1)])}
+  delete.ends <- function(x) {return(nodes[utils::tail(utils::head(as.vector(x), -1),-1)])}
   short.bridge.mid.paths <- function(x) {
     # Note: mode argument ignored in undirected graphs
     b <- suppressWarnings(igraph::get.all.shortest.paths(g2, from=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]],mode="out"))

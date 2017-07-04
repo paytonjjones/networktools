@@ -67,7 +67,7 @@ if(match.arg(type)=="network"){
   graphics::par(op)}
 }
 if(match.arg(type)=="impact"){
-  input <- na.omit(data)
+  input <- stats::na.omit(data)
   table <- as.data.frame(matrix(rep(NA, 2*dim(data)[2]), dim(data)[2], 2))
   for(j in 1:dim(data)[2]) {
     if(binary.data==FALSE) {
