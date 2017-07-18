@@ -127,3 +127,5 @@ comm_edgelist_to_igraph <- function(edgelist, directed) {
   igraph::E(g)$weight <- as.numeric(edgelist[,3])
   return(g)
 }
+
+

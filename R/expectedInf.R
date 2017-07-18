@@ -54,11 +54,14 @@ expectedInf <- function(network, step=c("both", 1, 2), directed=FALSE) {
     diag(adjmat) <- 0
   }
   ei1<-apply(adjmat, 1, sum)
-  if(step[1]=="both"|step[1]==2){
-  ei2.wns <-sweep(adjmat, MARGIN=2, ei1, "*")
-  ei2.aei<- apply(ei2.wns, 1, sum)
-  ei2<-ei1+ei2.aei}
-  class(ei1) <- class(ei2) <-"expectedInf"
+  if(step[1]=="both" | step[1]==2){
+    # multiplies 1-step EI (of each node) by each edge in the network
+    ei2.wns <-sweep(adjmat, MARGIN=2, ei1, "*")
+    ei2.aei<- apply(ei2.wns, 1, sum)
+    ei2<-ei1+ei2.aei
+    class(ei2) <-"expectedInf"
+  }
+  class(ei1)  <-"expectedInf"
   if(step[1]=="both"){res <- list(step1=ei1, step2=ei2)}
   if(step[1]==1){res <- list(step1=ei1)}
   if(step[1]==2){res <- list(step2=ei2)}
