@@ -89,7 +89,7 @@ bridge_expectedInf <- function(network, communities=NULL, useCommunities="all", 
     ## Bridge expectedInf (step2)
     influence_on_comm1 <- function(node_of_interest, network, nodes, communities) {
       names(communities) <- nodes
-      included_nodes <- c(node_of_interest, names(communities[communities==1]))
+      included_nodes <- unique(c(node_of_interest, names(communities[communities==1])))
       new_net <- network[included_nodes, included_nodes]
       ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
       return(ei1_node)
@@ -99,7 +99,7 @@ bridge_expectedInf <- function(network, communities=NULL, useCommunities="all", 
 
     influence_on_comm2 <- function(node_of_interest, network, nodes, communities) {
       names(communities) <- nodes
-      included_nodes <- c(node_of_interest, names(communities[communities==2]))
+      included_nodes <- unique(c(node_of_interest, names(communities[communities==2])))
       new_net <- network[included_nodes, included_nodes]
       ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
       return(ei1_node)
