@@ -76,12 +76,16 @@ print.all.impact <- function(x,...){
 
 #' @export
 print.expectedInf <- function(x,...){
-  if(is.list(x)){
+  if(length(x)==2){
   class(x$step1) <- class(x$step2) <- NULL
   cat("$step1 \n")
   print(x$step1)
   cat("$step2 \n")
   print(x$step2)
+  } else if (is.list(x)) {
+    class(x$step1) <- NULL
+    cat("$step1 \n")
+    print(x$step1)
   } else{
     class(x) <- NULL
     print(x)
@@ -491,7 +495,9 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
 #' highest to lowest centrality values
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
-#' @param include a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", or "Bridge Closeness"), if missing all measures available will be included.
+#' @param include a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", "Bridge Closeness",
+#' "Bridge Expected Influence (1-step)", "Bridge Expected Influence (2-step)"),
+#' if missing all available measures will be plotted
 #' @param ... other plotting specifications in ggplot2 (aes)
 #'
 #' @details

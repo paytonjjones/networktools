@@ -25,9 +25,27 @@
 #' can be calculated across all communities, or between a specific subset of coumminities (as
 #' identified by the \code{useCommunities} argument)
 #'
+#' The bridge() function currently returns 5 centrality metrics: 1) bridge strength,
+#' 2) bridge betweenness, 3) bridge closeness, 4) bridge expected influence (1-step), and
+#' 5) bridge expected influence (2-step)
+#'
 #' Bridge strength is defined as the sum of the absolute value of all edges that exist between a
 #' given node and all nodes outside its own community. In a directed network, bridge strength is
 #' separated into bridge in-degree and bridge out-degree.
+#'
+#' Bridge betweenness is defined as the number of times a node B lies on the shortest path between
+#' nodes A and C, where nodes A and C come from different communities.
+#'
+#' Bridge closeness is defined as the average length of the path from a node A to all nodes that are
+#' not in the same community as node A
+#'
+#' Bridge expected influence (1-step) is defined as the sum of the value (NOT absolute value) of all edges that
+#' exist between a given node and all nodes outside its own community. In a directed network, expected influence
+#' only considers edges extending from the given node (e.g., out-degree)
+#'
+#' Bridge expected influence (2-step) is similar to 1-step, but also considers the indirect effect that a node may have
+#' on other communities through other nodes. Indirect effects are weighted by the edge weight between the node of interest
+#' and indirect nodes, and then added to the 1-step expected influence
 #'
 #' Functions to compute bridge betweenness and bridge closeness are in development.
 #'
@@ -65,7 +83,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
   }
 
-  #take inverse of weight (igraph's length functions view small edges as closer)
+  #take inverse of weight for igraph object only (igraph's length functions view small edges as closer)
   igraph::E(g)$weight <- 1/igraph::E(g)$weight
 
   if(is.null(nodes)){nodes <- colnames(adj)}
@@ -140,11 +158,67 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     warning("Negative cycles present: negative edges ignored in calculation of bridge closeness")
   }
   names(closeness) <- nodes
+
+  ## Bridge expected influence (1 step)
+  adjmat <- adj
+  if(attr(adjmat, "directed")==FALSE){
+    diag(adjmat) <- 0
+  }
+  expectedInfBridge <- function(node_of_interest, network, nodes, communities) {
+    names(communities) <- nodes
+    comm_int <- communities[match(node_of_interest, nodes)] # finds the community of the node_of_interest
+    other_comm <- nodes[communities != comm_int] # creates a vector of all nodes not in the community of node_of_interest
+    included_nodes <- c(node_of_interest, other_comm)
+    new_net <- network[included_nodes, included_nodes]
+    ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
+    return(ei1_node)
+  }
+
+    ## apply to all nodes
+  ei1 <- sapply(nodes, FUN= expectedInfBridge, network=adjmat, nodes=nodes, communities=communities)
+  names(ei1) <- nodes
+
+  ## Bridge expected influence (2 step)
+    ## This function finds the influence of a node on the jth unique community
+    influence_on_comm_j <- function(node_of_interest, network, nodes, communities, j) {
+      names(communities) <- nodes
+      included_nodes <- unique(c(node_of_interest, names(communities[communities==unique(communities)[j]])))
+      new_net <- network[included_nodes, included_nodes]
+      ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
+      return(ei1_node)
+    }
+    ## This loop creates a list of j vectors
+    ## Each vector contains the influence of each node on the jth community
+    infcomm <- list()
+    for(j in 1:length(unique(communities))){
+      infcomm[[j]] <- sapply(nodes, FUN=influence_on_comm_j, network=adjmat, nodes=nodes,
+                             communities=communities, j=j)
+      names(infcomm[[j]]) <- nodes
+    }
+    ei2func <- function(node_of_interest, network, nodes, communities) {
+      names(communities) <- nodes
+      comm_int <- communities[match(node_of_interest, nodes)] # finds the community of the node of interest
+      non_comm_vec <- unique(communities)[unique(communities) != comm_int] #vector of all communities OTHER than comm_int
+      ei2_vec <- vector()
+      for(i in 1:length(non_comm_vec)) {
+        ei2.wns <-sweep(adjmat, MARGIN=2, infcomm[[which(unique(communities)==non_comm_vec[i])]], "*") ## sweep by influence on community i
+        ei2_vec[i]<- sum(ei2.wns[node_of_interest,]) # influence of node of interest on non_comm[i]
+      }
+      ei2 <- sum(ei2_vec) + ei1[node_of_interest] # sums the influence on all OTHER communities, plus ei1
+      return(ei2)
+    }
+    ei2 <- sapply(nodes, FUN=ei2func, network=adjmat, nodes=nodes, communities=communities)
+    names(ei2) <- nodes
+
+
   if(attr(bridge_edgelist, "directed")){
     res <- list("Bridge Indegree"=in_degree, "Bridge Outdegree"=out_degree, "Bridge Strength"=total_strength,
-                "Bridge Betweenness"=betweenness, "Bridge Closeness"=closeness, communities=communities)
+                "Bridge Betweenness"=betweenness, "Bridge Closeness"=closeness,
+                "Bridge Expected Influence (1-step)"=ei1, "Bridge Expected Influence (2-step)"=ei2,
+                communities=communities)
   }else{
     res <- list("Bridge Strength"=total_strength, "Bridge Betweenness"=betweenness, "Bridge Closeness"=closeness,
+                "Bridge Expected Influence (1-step)"=ei1, "Bridge Expected Influence (2-step)"=ei2,
                 communities=communities)
   }
   class(res) <- "bridge"

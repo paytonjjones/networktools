@@ -44,9 +44,27 @@ Bridge centrality statistics aim to identify bridge nodes. Bridge centralities
 can be calculated across all communities, or between a specific subset of coumminities (as
 identified by the \code{useCommunities} argument)
 
+The bridge() function currently returns 5 centrality metrics: 1) bridge strength,
+2) bridge betweenness, 3) bridge closeness, 4) bridge expected influence (1-step), and
+5) bridge expected influence (2-step)
+
 Bridge strength is defined as the sum of the absolute value of all edges that exist between a
 given node and all nodes outside its own community. In a directed network, bridge strength is
 separated into bridge in-degree and bridge out-degree.
+
+Bridge betweenness is defined as the number of times a node B lies on the shortest path between
+nodes A and C, where nodes A and C come from different communities.
+
+Bridge closeness is defined as the average length of the path from a node A to all nodes that are
+not in the same community as node A
+
+Bridge expected influence (1-step) is defined as the sum of the value (NOT absolute value) of all edges that
+exist between a given node and all nodes outside its own community. In a directed network, expected influence
+only considers edges extending from the given node (e.g., out-degree)
+
+Bridge expected influence (2-step) is similar to 1-step, but also considers the indirect effect that a node may have
+on other communities through other nodes. Indirect effects are weighted by the edge weight between the node of interest
+and indirect nodes, and then added to the 1-step expected influence
 
 Functions to compute bridge betweenness and bridge closeness are in development.
 }

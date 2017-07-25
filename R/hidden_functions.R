@@ -122,8 +122,9 @@ extract_intra_edgelist <- function(edgelist, useCommunities="all"){
 comm_edgelist_to_igraph <- function(edgelist, directed) {
   edgelist[,1]<-as.character(edgelist[,1])
   edgelist[,2]<-as.character(edgelist[,2])
-  edgelist<-as.matrix(edgelist)
-  g<-igraph::graph_from_edgelist(edgelist[,1:2],directed=directed)
+  edgelist_1_2 <- as.matrix(edgelist[,1:2])
+  #if(dim(edgelist)[1]==1) {edgelist_1_2 <- t(edgelist_1_2)}
+  g<-igraph::graph_from_edgelist(edgelist_1_2,directed=directed)
   igraph::E(g)$weight <- as.numeric(edgelist[,3])
   return(g)
 }
