@@ -28,16 +28,20 @@ summary.all.impact <- function(object,...){
 
 #' @export
 summary.expectedInf <- function(object,...){
-  if(is.list(object)){
+  if(length(object)==2){
     class(object$step1) <- class(object$step2) <- NULL
     cat("One-step Expected Influence \n\n")
     print(object$step1)
     cat("\nTwo-step Expected Influence \n\n")
     print(object$step2)
+  } else if (names(object)[1]=="step1") {
+    class(object$step1) <- NULL
+    cat("One-step Expected Influence \n\n")
+    print(object$step1)
   } else{
-    class(object) <- NULL
-    cat("Expected Influence \n\n")
-    print(object)
+    class(object$step2) <- NULL
+    cat("Two-step Expected Influence \n\n")
+    print(object$step2)
   }
 }
 
@@ -82,13 +86,14 @@ print.expectedInf <- function(x,...){
   print(x$step1)
   cat("$step2 \n")
   print(x$step2)
-  } else if (is.list(x)) {
+  } else if (names(x)[1]=="step1") {
     class(x$step1) <- NULL
     cat("$step1 \n")
     print(x$step1)
   } else{
-    class(x) <- NULL
-    print(x)
+    class(x$step2) <- NULL
+    cat("$step2 \n")
+    print(x$step2)
   }
 }
 
@@ -518,6 +523,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, ...){
   attr(x, "class") <- NULL
   nodes <- names(x[[1]])
+  x$communities <- NULL
   if(zscore) {
     scalenoatt <- function(y){
       y <- scale(y)

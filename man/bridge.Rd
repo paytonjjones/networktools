@@ -2,26 +2,26 @@
 % Please edit documentation in R/bridge.R
 \name{bridge}
 \alias{bridge}
-\title{Bridge Strength (inter-community strength)}
+\title{Bridge Centrality}
 \usage{
 bridge(network, communities = NULL, useCommunities = "all",
-  directed = NULL, nodes = NULL)
+  directed = NULL, nodes = NULL, plot = TRUE)
 }
 \arguments{
 \item{network}{a network of class "igraph", "qgraph", or an adjacency matrix representing
 a network}
 
 \item{communities}{an object of class "communities" (igraph) OR a characcter vector of
-community  assignments for each node. The ordering of this vector should correspond
-to the vector from argument "nodes"}
+community  assignments for each node (e.g., c("Comm1", "Comm1", "Comm2", "Comm2)).
+The ordering of this vector should correspond to the vector from argument "nodes"}
 
-\item{useCommunities}{character vector specifying which communities should be included}
+\item{useCommunities}{character vector specifying which communities should be included. Default set to "all"}
 
 \item{directed}{logical. Directedness is automatically detected if set to "NULL" (the default).
 Symmetric adjacency matrices will be undirected, unsymmetric matrices will be directed}
 
 \item{nodes}{a vector containing the names of the nodes. If set to "NULL", this vector will
-be automatically detected in the order given in "network"}
+be automatically detected in the order extracted}
 }
 \value{
 \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
@@ -31,11 +31,15 @@ See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link
 details on each list
 }
 \description{
-Calculates bridge strength
+Calculates bridge centrality metrics (bridge strength, bridge betweenness, bridge closeness, and bridge expected influence)
 given a network and a prespecified set of communities.
 }
 \details{
-Centrality metrics (betweenness, closeness, etc.) illuminate how nodes are interconnected
+To plot the results, first save as an object, and then use plot() (see ?plot.bridge)
+
+
+
+Centrality metrics (strength, betweenness, etc.) illuminate how nodes are interconnected
 among the entire network. However, sometimes we are interested in the connectivity
 \emph{between specific communities} in a larger network. Nodes that are important in communication
 between communities can be conceptualized as bridge nodes.
@@ -49,7 +53,7 @@ The bridge() function currently returns 5 centrality metrics: 1) bridge strength
 5) bridge expected influence (2-step)
 
 Bridge strength is defined as the sum of the absolute value of all edges that exist between a
-given node and all nodes outside its own community. In a directed network, bridge strength is
+node A and all nodes that are not in the same community as node A. In a directed network, bridge strength can be
 separated into bridge in-degree and bridge out-degree.
 
 Bridge betweenness is defined as the number of times a node B lies on the shortest path between
@@ -58,23 +62,29 @@ nodes A and C, where nodes A and C come from different communities.
 Bridge closeness is defined as the average length of the path from a node A to all nodes that are
 not in the same community as node A
 
-Bridge expected influence (1-step) is defined as the sum of the value (NOT absolute value) of all edges that
-exist between a given node and all nodes outside its own community. In a directed network, expected influence
+Bridge expected influence (1-step) is defined as the sum of the value (+ or -) of all edges that
+exist between a node A and all nodes that are not in the same community as node A. In a directed network, expected influence
 only considers edges extending from the given node (e.g., out-degree)
 
-Bridge expected influence (2-step) is similar to 1-step, but also considers the indirect effect that a node may have
-on other communities through other nodes. Indirect effects are weighted by the edge weight between the node of interest
-and indirect nodes, and then added to the 1-step expected influence
+Bridge expected influence (2-step) is similar to 1-step, but also considers the indirect effect that a node A may have
+through other nodes (e.g, an indirect effect on node C as in A -> B -> C).
+Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence
 
-Functions to compute bridge betweenness and bridge closeness are in development.
+If negative edges exist, bridge expected influence should be used. Any negative edges are currently ignored in the
+algorithms to compute bridge betweenness and bridge closeness.
 }
 \examples{
 \donttest{
 graph1 <- qgraph::EBICglasso(cor(depression), n=dim(depression)[1])
 graph2 <- IsingFit::IsingFit(social)$weiadj
 
-bridge(graph1, communities=c(1, 1, 2, 2, 2, 2, 1, 2, 1))
-bridge(graph2, communities=c(rep(1,8), rep(2,8)))
+b <- bridge(graph1, communities=c('1','1','2','2','2','2','1','2','1'))
+b
+b2 <- bridge(graph2, communities=c(rep('1',8), rep('2',8)))
+b2
+
+plot(b)
+plot(b2, order="value", zscore=TRUE, include=c("Bridge Strength", "Bridge Betweenness"))
 
 }
 }

@@ -15,7 +15,7 @@ plot(socialq, layout="circle")
 
 ## ----social impact 1, echo=FALSE-----------------------------------------
 impsocial<-impact(social, binary.data=TRUE)
-plot(impsocial$Edge, nodes="Kim", title=c("Kim absent", "Kim present"))
+plot(impsocial$Edge, nodes="Kim", title=c("Kim participated", "Kim didn't particpate"))
 
 ## ----social impact 2-----------------------------------------------------
 kim_global <- global.impact(input=social, nodes="Kim", binary.data=TRUE)

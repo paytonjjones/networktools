@@ -61,8 +61,7 @@ expectedInf <- function(network, step=c("both", 1, 2), directed=FALSE) {
     ei2<-ei1+ei2.aei
     class(ei2) <-"expectedInf"
   }
-  class(ei1)  <-"expectedInf"
-  if(step[1]=="both"){res <- list(step1=ei1, step2=ei2)}
+  if(step[1]=="both"){class(ei1)  <-"expectedInf"; res <- list(step1=ei1, step2=ei2)}
   if(step[1]==1){res <- list(step1=ei1)}
   if(step[1]==2){res <- list(step2=ei2)}
   class(res) <- "expectedInf"
