@@ -73,7 +73,7 @@
 #' details on each list
 #'
 #'@export
-bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL, plot=TRUE) {
+bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL) {
   adj <- coerce_to_adjacency(network)
   adjmat <- adj
   #coerce_to_adjacency includes auto-detection of directedness
