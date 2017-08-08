@@ -1,12 +1,10 @@
 Package: networktools
 Title: Tools for Identifying Important Nodes in Networks
-Version: 1.0.1
+Version: 1.1.0
 Date: 2017-4-16
 Authors@R: person("Payton", "Jones", email = "payton_jones@g.harvard.edu", role = c("aut", "cre"))
-Description: Includes assorted tools for network analysis. Specifically, includes functions for 
-    calculating impact statistics, which aim to identify how each node impacts 
-    the overall network structure (global strength impact, network structure impact, edge impact), 
-    and for calculating and visualizing expected influence.  
+Description: Includes assorted tools for network analysis. Useful for 
+    calculating and plotting expected influence, bridge centrality, and impact statistics. 
 Depends: R (>= 3.0.0)
 License:  GPL-3
 Encoding: UTF-8
@@ -16,5 +14,5 @@ RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://cran.r-project.org/web/packages/networktools/
+URL: https://CRAN.R-project.org/package=networktools
 BugReports: http://github.com/paytonjjones/networktools/issues
