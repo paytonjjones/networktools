@@ -80,21 +80,9 @@ print.all.impact <- function(x,...){
 
 #' @export
 print.expectedInf <- function(x,...){
-  if(length(x)==2){
-  class(x$step1) <- class(x$step2) <- NULL
-  cat("$step1 \n")
-  print(x$step1)
-  cat("$step2 \n")
-  print(x$step2)
-  } else if (names(x)[1]=="step1") {
-    class(x$step1) <- NULL
-    cat("$step1 \n")
-    print(x$step1)
-  } else{
-    class(x$step2) <- NULL
-    cat("$step2 \n")
-    print(x$step2)
-  }
+  x1 <- x
+  class(x1) <- NULL
+  print(x1)
 }
 
 #' @export
