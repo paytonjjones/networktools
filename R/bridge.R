@@ -39,7 +39,7 @@
 #' nodes A and C, where nodes A and C come from different communities.
 #'
 #' Bridge closeness is defined as the average length of the path from a node A to all nodes that are
-#' not in the same community as node A
+#' not in the same community as node A.
 #'
 #' Bridge expected influence (1-step) is defined as the sum of the value (+ or -) of all edges that
 #' exist between a node A and all nodes that are not in the same community as node A. In a directed network, expected influence
@@ -49,8 +49,9 @@
 #' through other nodes (e.g, an indirect effect on node C as in A -> B -> C).
 #' Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence
 #'
-#' If negative edges exist, bridge expected influence should be used. Any negative edges are currently ignored in the
-#' algorithms to compute bridge betweenness and bridge closeness.
+#' If negative edges exist, bridge expected influence should be used. Bridge closeness and bridge betweenness are only defined
+#' for positive edge weights, thus negative edges, if present, are deleted in the calculation of these metrics. Bridge strength 
+#' uses the absolute value of edge weights.
 #'
 #' @examples
 #' \donttest{
@@ -123,7 +124,6 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   # Delete negative edges in the copy (if they exist)
   if(min(igraph::E(g2)$weight)<0) {
     g2 <- igraph::delete.edges(g2, which(igraph::E(g2)$weight < 0))
-    warning("Negative edges ignored in calculation of bridge betweenness")
   }
 
   delete.ends <- function(x) {return(nodes[utils::tail(utils::head(as.vector(x), -1),-1)])}
@@ -156,7 +156,6 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
       return(c)
     }
     closeness <- sapply(1:length(nodes), b.close2)
-    warning("Negative cycles present: negative edges ignored in calculation of bridge closeness")
   }
   names(closeness) <- nodes
 
