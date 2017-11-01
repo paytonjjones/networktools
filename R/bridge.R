@@ -107,8 +107,8 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   ## Bridge strength
   out_degree <- in_degree <- total_strength <- vector()
   for(i in 1:length(communities)){
-    out_degree[i] <- sum(adj[communities != communities[i],i])
-    in_degree[i] <- sum(adj[i, communities != communities[i]])
+    out_degree[i] <- sum(adj[i, communities != communities[i]]) # from=row, to=col
+    in_degree[i] <- sum(adj[communities != communities[i],i]) 
     total_strength[i] <- sum(out_degree[i], in_degree[i])
   }
   if(!directed){total_strength <- out_degree}
@@ -169,6 +169,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     other_comm <- nodes[communities != comm_int] # creates a vector of all nodes not in the community of node_of_interest
     included_nodes <- c(node_of_interest, other_comm)
     new_net <- network[included_nodes, included_nodes]
+    new_net[node_of_interest, node_of_interest] <- 0 # a self loop isn't a bridge
     ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
     return(ei1_node)
   }
@@ -183,6 +184,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     names(communities) <- nodes
     included_nodes <- unique(c(node_of_interest, names(communities[communities==unique(communities)[j]])))
     new_net <- network[included_nodes, included_nodes]
+    new_net[node_of_interest, node_of_interest] <- 0 # a self loop isn't a bridge
     ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
     return(ei1_node)
   }
@@ -194,13 +196,14 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
                            communities=communities, j=j)
     names(infcomm[[j]]) <- nodes
   }
+  
   ei2func <- function(node_of_interest, network, nodes, communities) {
     names(communities) <- nodes
     comm_int <- communities[match(node_of_interest, nodes)] # finds the community of the node of interest
     non_comm_vec <- unique(communities)[unique(communities) != comm_int] #vector of all communities OTHER than comm_int
     ei2_vec <- vector()
     for(i in 1:length(non_comm_vec)) {
-      ei2.wns <-sweep(adjmat, MARGIN=2, infcomm[[which(unique(communities)==non_comm_vec[i])]], "*") ## sweep by influence on community i
+      ei2.wns <-sweep(adjmat, MARGIN=2, infcomm[[which(unique(communities)==non_comm_vec[i])]], "*") ## sweep by influence on community i (same as j above)
       ei2_vec[i]<- sum(ei2.wns[node_of_interest,]) # influence of node of interest on non_comm[i]
     }
     ei2 <- sum(ei2_vec) + ei1[node_of_interest] # sums the influence on all OTHER communities, plus ei1
