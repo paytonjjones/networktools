@@ -50,7 +50,7 @@
 #' Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence
 #'
 #' If negative edges exist, bridge expected influence should be used. Bridge closeness and bridge betweenness are only defined
-#' for positive edge weights, thus negative edges, if present, are deleted in the calculation of these metrics. Bridge strength 
+#' for positive edge weights, thus negative edges, if present, are deleted in the calculation of these metrics. Bridge strength
 #' uses the absolute value of edge weights.
 #'
 #' @examples
@@ -69,9 +69,13 @@
 #'}
 #' @return \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
 #'
+#'$'Bridge Strength'
+#'$'Bridge Betweenness'
+#'$'Bridge Closeness'
+#'$'Bridge Expected Influence (1-step)'
+#'$'Bridge Expected Influence (2-step)'
 #'
-#' See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}} for
-#' details on each list
+#'Each contains a vector of named centrality values
 #'
 #'@export
 bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL) {
@@ -108,7 +112,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   out_degree <- in_degree <- total_strength <- vector()
   for(i in 1:length(communities)){
     out_degree[i] <- sum(adj[i, communities != communities[i]]) # from=row, to=col
-    in_degree[i] <- sum(adj[communities != communities[i],i]) 
+    in_degree[i] <- sum(adj[communities != communities[i],i])
     total_strength[i] <- sum(out_degree[i], in_degree[i])
   }
   if(!directed){total_strength <- out_degree}
@@ -196,7 +200,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
                            communities=communities, j=j)
     names(infcomm[[j]]) <- nodes
   }
-  
+
   ei2func <- function(node_of_interest, network, nodes, communities) {
     names(communities) <- nodes
     comm_int <- communities[match(node_of_interest, nodes)] # finds the community of the node of interest
