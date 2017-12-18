@@ -91,6 +91,12 @@ print.bridge <- function(x,...){
   print(x)
 }
 
+#' @export
+print.goldbricker <- function(x,...){
+  cat("Suggested reductions: Less than", x$threshold*100, "% of correlations are significantly different for the following pairs: \n")
+  print(x$suggested_reductions)
+}
+
 #' Plot "all.impact" objects
 #'
 #' Convenience function for generating impact plots
@@ -549,7 +555,7 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
         ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
         ggplot2::facet_grid('~measure', scales="free")
     }
-    if(length(include)==1){g <- glist[[1]]
+    if(length(include)==1){g <- gridExtra::grid.arrange(glist[[1]])
     } else if(length(include)==2){gridExtra::grid.arrange(glist[[1]],glist[[2]], ncol=2)
     } else if(length(include)==3){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]], ncol=3)
     } else if(length(include)==4){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]], ncol=4)
@@ -559,6 +565,21 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
   if(order[1]!="value") { # if "value", plotting is already done with gridExtra (552-557)
       return(g)
     }
+}
+
+#' @export
+plot.goldbricker <- function(x,...){
+  mat <- x$proportion_matrix
+  #xd <- seq(0,1, length.out=nrow(mat))
+  #yd <- seq(0,1, length.out=nrow(mat))
+  xd <- yd<-  colnames(mat)
+  data <- expand.grid(X=xd, Y=yd)
+  data$Proportion_Unqiue <- as.vector(mat)
+  heatmap(mat, Rowv=NA, Colv=NA, main= "Proportion of Unique Correlations", col= colorRampPalette(RColorBrewer::brewer.pal(8, "Blues"))(25))
+  ggplot(data, aes(X, Y, z= Proportion_Unqiue)) + geom_tile(aes(fill = Proportion_Unqiue)) + 
+    theme_bw() + 
+    scale_fill_gradient(low="red", high="white") +
+    ggtitle("Proportion of Unique Correlations")
 }
 
 
