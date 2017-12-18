@@ -26,9 +26,13 @@ be automatically detected in the order extracted}
 \value{
 \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
 
+$'Bridge Strength'
+$'Bridge Betweenness'
+$'Bridge Closeness'
+$'Bridge Expected Influence (1-step)'
+$'Bridge Expected Influence (2-step)'
 
-See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}} for
-details on each list
+Each contains a vector of named centrality values
 }
 \description{
 Calculates bridge centrality metrics (bridge strength, bridge betweenness, bridge closeness, and bridge expected influence)
@@ -60,7 +64,7 @@ Bridge betweenness is defined as the number of times a node B lies on the shorte
 nodes A and C, where nodes A and C come from different communities.
 
 Bridge closeness is defined as the average length of the path from a node A to all nodes that are
-not in the same community as node A
+not in the same community as node A.
 
 Bridge expected influence (1-step) is defined as the sum of the value (+ or -) of all edges that
 exist between a node A and all nodes that are not in the same community as node A. In a directed network, expected influence
@@ -70,8 +74,9 @@ Bridge expected influence (2-step) is similar to 1-step, but also considers the 
 through other nodes (e.g, an indirect effect on node C as in A -> B -> C).
 Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence
 
-If negative edges exist, bridge expected influence should be used. Any negative edges are currently ignored in the
-algorithms to compute bridge betweenness and bridge closeness.
+If negative edges exist, bridge expected influence should be used. Bridge closeness and bridge betweenness are only defined
+for positive edge weights, thus negative edges, if present, are deleted in the calculation of these metrics. Bridge strength
+uses the absolute value of edge weights.
 }
 \examples{
 \donttest{

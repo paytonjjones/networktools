@@ -13,5 +13,5 @@ a network}
 \item{directed}{logical. is the network directed? If set to NULL, auto-detection is used}
 }
 \description{
-Takes an object of type "qgraph", "igraph", or a matrix and outputs an adjacency matrix
+Takes an object of type "qgraph", "igraph", or an adjacency matrix (or data.frame) and outputs an adjacency matrix
 }

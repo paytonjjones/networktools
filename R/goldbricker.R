@@ -51,7 +51,7 @@
 #'@export
 goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, progressbar=TRUE) {
   if(class(data)!="goldbricker"){
-    cormat <- cor_auto(data)
+    cormat <- qgraph::cor_auto(data)
     n <- nrow(data)
     d <- dim(cormat)[1]
     if (progressbar==TRUE) pb <- txtProgressBar(max=d, style = 3)

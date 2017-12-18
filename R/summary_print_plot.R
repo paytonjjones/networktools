@@ -570,16 +570,13 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
 #' @export
 plot.goldbricker <- function(x,...){
   mat <- x$proportion_matrix
-  #xd <- seq(0,1, length.out=nrow(mat))
-  #yd <- seq(0,1, length.out=nrow(mat))
   xd <- yd<-  colnames(mat)
   data <- expand.grid(X=xd, Y=yd)
   data$Proportion_Unqiue <- as.vector(mat)
-  heatmap(mat, Rowv=NA, Colv=NA, main= "Proportion of Unique Correlations", col= colorRampPalette(RColorBrewer::brewer.pal(8, "Blues"))(25))
-  ggplot(data, aes(X, Y, z= Proportion_Unqiue)) + geom_tile(aes(fill = Proportion_Unqiue)) +
-    theme_bw() +
-    scale_fill_gradient(low="red", high="white") +
-    ggtitle("Proportion of Unique Correlations")
+  ggplot2::ggplot(data, ggplot2::aes(X, Y, z= Proportion_Unqiue)) + ggplot2::geom_tile(ggplot2::aes(fill = Proportion_Unqiue)) +
+    ggplot2::theme_bw() +
+    ggplot2::scale_fill_gradient(low="red", high="white") +
+    ggplot2::ggtitle("Proportion of Unique Correlations")
 }
 
 
