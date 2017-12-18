@@ -69,13 +69,9 @@
 #'}
 #' @return \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
 #'
-#' $'Bridge Strength' (also 'Bridge Outdegree' and 'Bridge Indegree' if directed=TRUE)
-#' $'Bridge Betweenness'
-#' $'Bridge Closeness'
-#' $'Bridge Expected Influence (1-step)'
-#' $'Bridge Expected Influence (2-step)
-#' 
-#' Each is a named vector of bridge centrality values.
+#'
+#' See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}} for
+#' details on each list
 #'
 #'@export
 bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL) {
