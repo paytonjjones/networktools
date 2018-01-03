@@ -64,6 +64,9 @@ net_reduce <- function(data, badpairs, method=c("PCA","best_goldbricker")){
     }
     for(i in 1:nrow(bp)){
       newcols[,i] <- prcomp(data[,bp[i,1:2]], scale.=TRUE, rank.=1)$x
+      if(cor(newcols[,i], data[,bp[i,1]]) < 0 & cor(newcols[,i], data[,bp[i,2]]) < 0){ 
+        newcols[,i] <- -newcols[,i] # flip direction of pc if backwards
+      }
     }
     bp_colnames <- paste("PCA", bp[,1], bp[,2], sep=".")
     colnames(newcols) <- bp_colnames

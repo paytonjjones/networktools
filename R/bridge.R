@@ -87,6 +87,17 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   adjmat <- adj
   #coerce_to_adjacency includes auto-detection of directedness
   if(is.null(directed)) {directed<-attr(adj,"directed")}
+  
+  #useCommunities
+  if(useCommunities[1]!="all"){
+    if(is.null(communities) | class(communities)=="function"){
+      stop("Communities must be prespecified to utilize the useCommunities argument")
+    }
+    innodes <- communities %in% useCommunities
+    communities <- communities[innodes]
+    adj <- adjmat <- adj[innodes,innodes]
+  }
+  
   # get igraph of complete network
   if(directed) {
     g <- igraph::graph_from_adjacency_matrix(adj, mode="directed", diag=FALSE, weighted= TRUE)
@@ -100,12 +111,13 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     if(class(communities)=="try-error") {stop("Automatic community detection failed. Please prespecify communities")}
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
   }
+  
+  if(is.null(nodes)){nodes <- colnames(adj)}
+  if(class(communities)=="communities") {communities <- communities$membership}
+
 
   #take inverse of weight for igraph object "g" only (igraph's length functions view small edges as closer)
   igraph::E(g)$weight <- 1/igraph::E(g)$weight
-
-  if(is.null(nodes)){nodes <- colnames(adj)}
-  if(class(communities)=="communities") {communities <- communities$membership}
 
 
   ## Bridge strength
