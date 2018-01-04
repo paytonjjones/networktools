@@ -123,8 +123,8 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   ## Bridge strength
   out_degree <- in_degree <- total_strength <- vector()
   for(i in 1:length(communities)){
-    out_degree[i] <- sum(adj[i, communities != communities[i]]) # from=row, to=col
-    in_degree[i] <- sum(adj[communities != communities[i],i])
+    out_degree[i] <- sum(abs(adj[i, communities != communities[i]])) # from=row, to=col
+    in_degree[i] <- sum(abs(adj[communities != communities[i],i]))
     total_strength[i] <- sum(out_degree[i], in_degree[i])
   }
   if(!directed){total_strength <- out_degree}
