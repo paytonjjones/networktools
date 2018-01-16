@@ -69,16 +69,21 @@ net_reduce <- function(data, badpairs, method=c("PCA","best_goldbricker")){
       }
     }
     bp_colnames <- paste("PCA", bp[,1], bp[,2], sep=".")
-    colnames(newcols) <- bp_colnames
   } else if (method[1]=="best_goldbricker") {
     if(class(badpairs)!="goldbricker"){stop("Argument badpairs must be of class goldbricker to use method best_goldbricker")}
+    bp_colnames <- vector()
     for(i in 1:nrow(bp)){
       if(mean(na.omit(badpairs$proportion_matrix[,bp[i,1]])) >= mean(na.omit(badpairs$proportion_matrix[,bp[i,2]]))){
         newcols[,i] <- data[,bp[i,1]]
-      } else {newcols[,i] <- data[,bp[i,2]]}
+        bp_colnames[i] <- bp[i,1]
+      } else {newcols[,i] <- data[,bp[i,2]]
+        bp_colnames[i] <- bp[i,2]
+      }
     }
   }
+  colnames(newcols) <- bp_colnames
   data_stripped <- data[,!colnames(data)%in%as.vector(bp)]
   newdata <- cbind(data_stripped, newcols)
+  if(is.vector(data_stripped)){colnames(newdata)[1] <- colnames(data)[!colnames(data)%in%as.vector(bp)]}
   return(newdata)
 }

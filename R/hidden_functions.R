@@ -99,7 +99,7 @@ coerce_to_adjacency <- function(input, directed=NULL) {
     col1 <- input$Edgelist$from
     col3 <- input$Edgelist$to
     edgelist <- as.data.frame(cbind(col1, col3, input$Edgelist$weight))
-    if(is.null(input$graphAttributes$Nodes$names)) {
+    if(is.null(input$graphAttributes$Nodes$names) | input$graphAttributes$Nodes$names[1] == TRUE) {
       nodes <- 1:length(unique(c(col1, col3)))
     } else {nodes <- input$graphAttributes$Nodes$names}
     mat <- matrix(0, length(nodes), length(nodes))
