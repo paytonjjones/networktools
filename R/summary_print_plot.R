@@ -569,11 +569,12 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
 
 #' @export
 plot.goldbricker <- function(x,...){
+  X <- Y <- Proportion_Unique <- NULL
   mat <- x$proportion_matrix
-  xd <- yd<-  colnames(mat)
+  xd <- yd <-  colnames(mat)
   data <- expand.grid(X=xd, Y=yd)
-  data$Proportion_Unqiue <- as.vector(mat)
-  ggplot2::ggplot(data, ggplot2::aes(X, Y, z= Proportion_Unqiue)) + ggplot2::geom_tile(ggplot2::aes(fill = Proportion_Unqiue)) +
+  data$Proportion_Unique <- as.vector(mat)
+  ggplot2::ggplot(data, ggplot2::aes(X, Y, z= Proportion_Unique)) + ggplot2::geom_tile(ggplot2::aes(fill = Proportion_Unique)) +
     ggplot2::theme_bw() +
     ggplot2::scale_fill_gradient(low="red", high="white") +
     ggplot2::ggtitle("Proportion of Unique Correlations")

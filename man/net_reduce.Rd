@@ -34,3 +34,14 @@ reduced by combining them, or by eliminating one of them. net_reduce automates t
 If the same variable appears in multiple "bad pairs" (e.g., "x" and "y" is a bad pair, and so is "x" and "z"), only the first
 of these pairs which appears in the badpairs argument will be reduced by the function.
 }
+\examples{
+\donttest{
+gb_depression <- goldbricker(depression, threshold=0.5)
+
+reduced_depression_PCA <- net_reduce(data=depression, badpairs=gb_depression)
+reduced_depression_best <- net_reduce(data=depression,
+                           badpairs=gb_depression, method="best_goldbricker")
+
+}
+
+}

@@ -26,9 +26,11 @@
 #' gb_depression <- goldbricker(depression, threshold=0.5)
 #'
 #' reduced_depression_PCA <- net_reduce(data=depression, badpairs=gb_depression)
-#' reduced_depression_best <- net_reduce(data=depression, badpairs=gb_depression, method="best_goldbricker)
+#' reduced_depression_best <- net_reduce(data=depression,
+#'                            badpairs=gb_depression, method="best_goldbricker")
 #'
 #'}
+#'
 #' @return \code{\link{goldbricker}} returns a dataframe of n rows (participants) and j - x columns,
 #' where j is the number of variables in the original dataframe, and x is the number of bad pairs to reduce.
 #'
@@ -64,7 +66,7 @@ net_reduce <- function(data, badpairs, method=c("PCA","best_goldbricker")){
     }
     for(i in 1:nrow(bp)){
       newcols[,i] <- prcomp(data[,bp[i,1:2]], scale.=TRUE, rank.=1)$x
-      if(cor(newcols[,i], data[,bp[i,1]]) < 0 & cor(newcols[,i], data[,bp[i,2]]) < 0){ 
+      if(cor(newcols[,i], data[,bp[i,1]]) < 0 & cor(newcols[,i], data[,bp[i,2]]) < 0){
         newcols[,i] <- -newcols[,i] # flip direction of pc if backwards
       }
     }
