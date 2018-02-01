@@ -7,12 +7,12 @@
 #'
 #' @param network a network of class "igraph", "qgraph", or an adjacency matrix representing
 #' a network
-#' @param communities an object of class "communities" (igraph) OR a characcter vector of
+#' @param communities an object of class "communities" (igraph) OR a character vector of
 #' community  assignments for each node (e.g., c("Comm1", "Comm1", "Comm2", "Comm2)).
 #' The ordering of this vector should correspond to the vector from argument "nodes"
 #' @param useCommunities character vector specifying which communities should be included. Default set to "all"
 #' @param directed logical. Directedness is automatically detected if set to "NULL" (the default).
-#' Symmetric adjacency matrices will be undirected, unsymmetric matrices will be directed
+#' Symmetric adjacency matrices will be undirected, asymmetric matrices will be directed
 #' @param nodes a vector containing the names of the nodes. If set to "NULL", this vector will
 #' be automatically detected in the order extracted
 #'
@@ -24,7 +24,7 @@
 #' between communities can be conceptualized as bridge nodes.
 #'
 #' Bridge centrality statistics aim to identify bridge nodes. Bridge centralities
-#' can be calculated across all communities, or between a specific subset of coumminities (as
+#' can be calculated across all communities, or between a specific subset of communities (as
 #' identified by the \code{useCommunities} argument)
 #'
 #' The bridge() function currently returns 5 centrality metrics: 1) bridge strength,
@@ -87,7 +87,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   adjmat <- adj
   #coerce_to_adjacency includes auto-detection of directedness
   if(is.null(directed)) {directed<-attr(adj,"directed")}
-  
+
   #useCommunities
   if(useCommunities[1]!="all"){
     if(is.null(communities) | class(communities)=="function"){
@@ -97,7 +97,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     communities <- communities[innodes]
     adj <- adjmat <- adj[innodes,innodes]
   }
-  
+
   # get igraph of complete network
   if(directed) {
     g <- igraph::graph_from_adjacency_matrix(adj, mode="directed", diag=FALSE, weighted= TRUE)
@@ -111,7 +111,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     if(class(communities)=="try-error") {stop("Automatic community detection failed. Please prespecify communities")}
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
   }
-  
+
   if(is.null(nodes)){nodes <- colnames(adj)}
   if(class(communities)=="communities") {communities <- communities$membership}
 
