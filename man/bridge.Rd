@@ -11,14 +11,14 @@ bridge(network, communities = NULL, useCommunities = "all",
 \item{network}{a network of class "igraph", "qgraph", or an adjacency matrix representing
 a network}
 
-\item{communities}{an object of class "communities" (igraph) OR a characcter vector of
+\item{communities}{an object of class "communities" (igraph) OR a character vector of
 community  assignments for each node (e.g., c("Comm1", "Comm1", "Comm2", "Comm2)).
 The ordering of this vector should correspond to the vector from argument "nodes"}
 
 \item{useCommunities}{character vector specifying which communities should be included. Default set to "all"}
 
 \item{directed}{logical. Directedness is automatically detected if set to "NULL" (the default).
-Symmetric adjacency matrices will be undirected, unsymmetric matrices will be directed}
+Symmetric adjacency matrices will be undirected, asymmetric matrices will be directed}
 
 \item{nodes}{a vector containing the names of the nodes. If set to "NULL", this vector will
 be automatically detected in the order extracted}
@@ -49,7 +49,7 @@ among the entire network. However, sometimes we are interested in the connectivi
 between communities can be conceptualized as bridge nodes.
 
 Bridge centrality statistics aim to identify bridge nodes. Bridge centralities
-can be calculated across all communities, or between a specific subset of coumminities (as
+can be calculated across all communities, or between a specific subset of communities (as
 identified by the \code{useCommunities} argument)
 
 The bridge() function currently returns 5 centrality metrics: 1) bridge strength,
