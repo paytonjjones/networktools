@@ -497,6 +497,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' @param include a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", "Bridge Closeness",
 #' "Bridge Expected Influence (1-step)", "Bridge Expected Influence (2-step)"),
 #' if missing all available measures will be plotted
+#' @param RColorBrewer A palette name from RColorBrewer, for coloring of axis labels
 #' @param ... other plotting specifications in ggplot2 (aes)
 #'
 #' @details
@@ -514,9 +515,12 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #'}
 #' @method plot bridge
 #' @export
-plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, ...){
+plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, RColorBrewer="Dark2", ...){
   attr(x, "class") <- NULL
   nodes <- names(x[[1]])
+  comm <- x$communities; commcol <- vector()
+  for(i in 1:length(unique(comm))){commcol[i] <- brewer.pal(max(length(unique(comm)), 3), RColorBrewer)[i]}
+  cols <- commcol[match(comm, unique(comm))]
   x$communities <- NULL
   if(zscore) {
     scalenoatt <- function(y){
@@ -538,13 +542,15 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
     Long$node <- factor(as.character(Long$node), levels = rev(unique(as.character(Long$node))))
     g <- ggplot2::ggplot(Long, ggplot2::aes_string(x = 'value', y = 'node', group = 'type', ...))
     g <- g + ggplot2::geom_path() + ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::geom_point()
-    g <- g + ggplot2::facet_grid('~measure', scales = "free")
+    g <- g + ggplot2::facet_grid('~measure', scales = "free") +
+      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols))
   } else if(order[1]=="alphabetical"){
     Long <- Long[with(Long, order(Long$node)),]
     Long$node <- factor(as.character(Long$node), levels = unique(as.character(Long$node)[order(Long$node)]))
     g <- ggplot2::ggplot(Long, ggplot2::aes_string(x='value', y='node', group='type', ...))
     g <- g + ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
-      ggplot2::facet_grid('~measure', scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node)))
+      ggplot2::facet_grid('~measure', scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node))) +
+      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(nodes)]))
   } else if(order[1]=="value") {
     glist <- list()
     for(i in 1:length(include)) {
@@ -553,7 +559,8 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
       temp_Long$node <- factor(as.character(temp_Long$node), levels = unique(as.character(temp_Long$node)[order(temp_Long$value)]))
       glist[[i]] <- ggplot2::ggplot(temp_Long, ggplot2::aes_string(x='value', y='node', group='type',...)) +
         ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
-        ggplot2::facet_grid('~measure', scales="free")
+        ggplot2::facet_grid('~measure', scales="free") +
+        ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(temp_Long$value)]))
     }
     if(length(include)==1){g <- gridExtra::grid.arrange(glist[[1]])
     } else if(length(include)==2){gridExtra::grid.arrange(glist[[1]],glist[[2]], ncol=2)

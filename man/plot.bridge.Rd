@@ -5,7 +5,7 @@
 \title{Plot "bridge" objects}
 \usage{
 \method{plot}{bridge}(x, order = c("given", "alphabetical", "value"),
-  zscore = FALSE, include, ...)
+  zscore = FALSE, include, RColorBrewer = "Dark2", ...)
 }
 \arguments{
 \item{x}{an output object from \code{bridge} (class \code{bridge})}
@@ -18,6 +18,8 @@ highest to lowest centrality values}
 \item{include}{a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", "Bridge Closeness",
 "Bridge Expected Influence (1-step)", "Bridge Expected Influence (2-step)"),
 if missing all available measures will be plotted}
+
+\item{RColorBrewer}{A palette name from RColorBrewer, for coloring of axis labels}
 
 \item{...}{other plotting specifications in ggplot2 (aes)}
 }
