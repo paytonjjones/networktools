@@ -518,8 +518,8 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, RColorBrewer="Dark2", ...){
   attr(x, "class") <- NULL
   nodes <- names(x[[1]])
-  comm <- x$communities; commcol <- vector()
-  for(i in 1:length(unique(comm))){commcol[i] <- brewer.pal(max(length(unique(comm)), 3), RColorBrewer)[i]}
+  comm <- x$communities; commcol <- vector(); pal <- brewer.pal(max(length(unique(comm)), 3), RColorBrewer)
+  for(i in 1:length(unique(comm))){commcol[i] <- pal[i]}
   cols <- commcol[match(comm, unique(comm))]
   x$communities <- NULL
   if(zscore) {
@@ -543,14 +543,14 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
     g <- ggplot2::ggplot(Long, ggplot2::aes_string(x = 'value', y = 'node', group = 'type', ...))
     g <- g + ggplot2::geom_path() + ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::geom_point()
     g <- g + ggplot2::facet_grid('~measure', scales = "free") +
-      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols))
+      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=rev(cols)))
   } else if(order[1]=="alphabetical"){
     Long <- Long[with(Long, order(Long$node)),]
     Long$node <- factor(as.character(Long$node), levels = unique(as.character(Long$node)[order(Long$node)]))
     g <- ggplot2::ggplot(Long, ggplot2::aes_string(x='value', y='node', group='type', ...))
     g <- g + ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
       ggplot2::facet_grid('~measure', scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node))) +
-      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(nodes)]))
+      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(nodes, decreasing=T)]))
   } else if(order[1]=="value") {
     glist <- list()
     for(i in 1:length(include)) {
@@ -560,7 +560,7 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
       glist[[i]] <- ggplot2::ggplot(temp_Long, ggplot2::aes_string(x='value', y='node', group='type',...)) +
         ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
         ggplot2::facet_grid('~measure', scales="free") +
-        ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(temp_Long$value)]))
+        ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(temp_Long$value, decreasing=T)]))
     }
     if(length(include)==1){g <- gridExtra::grid.arrange(glist[[1]])
     } else if(length(include)==2){gridExtra::grid.arrange(glist[[1]],glist[[2]], ncol=2)

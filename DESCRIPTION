@@ -11,8 +11,7 @@ Encoding: UTF-8
 LazyData: true
 Imports: qgraph,igraph,IsingFit,reshape2,nnet,ggplot2,gridExtra,stats,graphics,utils,NetworkComparisonTest,devtools,cocor,RColorBrewer
 RoxygenNote: 6.0.1
-Suggests: knitr,
-    rmarkdown
-VignetteBuilder: knitr
+Suggests: R.rsp
+VignetteBuilder: R.rsp
 URL: https://CRAN.R-project.org/package=networktools
 BugReports: http://github.com/paytonjjones/networktools/issues

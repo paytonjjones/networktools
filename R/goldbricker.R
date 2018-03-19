@@ -8,6 +8,8 @@
 #' @param method method for comparing correlations. See ?cocor.dep.groups.overlap for a full list
 #' @param threshold variable pairs which have less than the threshold proportion of significantly different
 #' correlations will be considered "bad pairs"
+#' @param corMin the minimum zero-order correlation between two items to be considered "bad pairs". Items
+#' that are uncorrelated are unlikely to represent the same underlying construct
 #' @param progressbar logical. prints a progress bar in the console
 #'
 #' @details
@@ -49,7 +51,7 @@
 #'
 #'
 #'@export
-goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, progressbar=TRUE) {
+goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, corMin=0.5, progressbar=TRUE) {
   if(class(data)!="goldbricker"){
     cormat <- qgraph::cor_auto(data)
     n <- nrow(data)
@@ -88,8 +90,9 @@ goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, prog
     combnames[i,j] <- paste(colnames(perc_reject)[i], colnames(perc_reject)[j], sep=" & ")
   }}
   lower <- perc_reject[lower.tri(perc_reject)]
-  names(lower) <- combnames[lower.tri(combnames)]
-  suggested_reductions <- lower[lower<threshold][order(lower[lower<threshold])]
+  lower_cor <- cormat[lower.tri(cormat)]
+  names(lower) <- names(lower_cor) <- combnames[lower.tri(combnames)]
+  suggested_reductions <- lower[lower<threshold&lower_cor>corMin][order(lower[lower<threshold&lower_cor>corMin])]
   if(length(suggested_reductions)==0){suggested_reductions <- "No suggested reductions"}
   res <- list(proportion_matrix=perc_reject,
               suggested_reductions=suggested_reductions,
