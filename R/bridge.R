@@ -88,16 +88,6 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   #coerce_to_adjacency includes auto-detection of directedness
   if(is.null(directed)) {directed<-attr(adj,"directed")}
 
-  #useCommunities
-  if(useCommunities[1]!="all"){
-    if(is.null(communities) | class(communities)=="function"){
-      stop("Communities must be prespecified to utilize the useCommunities argument")
-    }
-    innodes <- communities %in% useCommunities
-    communities <- communities[innodes]
-    adj <- adjmat <- adj[innodes,innodes]
-  }
-
   # get igraph of complete network
   if(directed) {
     g <- igraph::graph_from_adjacency_matrix(adj, mode="directed", diag=FALSE, weighted= TRUE)
@@ -107,6 +97,9 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
 
   #if communities not supplied, use spinglass default settings to detect
   if(is.null(communities) | class(communities)=="function"){
+    if(useCommunities != "all"){
+      stop("You must prespecify communities to use the useCommunities argument")
+    }
     communities <- try(igraph::spinglass.community(g, spins=3))
     if(class(communities)=="try-error") {stop("Automatic community detection failed. Please prespecify communities")}
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
@@ -114,7 +107,25 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
 
   if(is.null(nodes)){nodes <- colnames(adj)}
   if(class(communities)=="communities") {communities <- communities$membership}
+  if(is.list(communities)){communities <- as.character(utils::stack(communities)$ind)}
 
+  #useCommunities
+  if(useCommunities[1]!="all"){
+    innodes <- communities %in% useCommunities
+    communities <- communities[innodes]
+    adj <- adjmat <- adj[innodes,innodes]
+  }
+
+  #Check for common communities issues
+  if(length(unique(communities))==0){
+    stop("No viable communities")
+  }
+  if(length(unique(communities))==1){
+    stop("Only 1 community specified, bridge centrality cannot be computed")
+  }
+  if(length(communities)!=length(nodes)){
+    stop("Length of communities argument does not match number of nodes")
+  }
 
   #take inverse of weight for igraph object "g" only (igraph's length functions view small edges as closer)
   igraph::E(g)$weight <- 1/igraph::E(g)$weight
@@ -200,8 +211,12 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     names(communities) <- nodes
     included_nodes <- unique(c(node_of_interest, names(communities[communities==unique(communities)[j]])))
     new_net <- network[included_nodes, included_nodes]
-    new_net[node_of_interest, node_of_interest] <- 0 # a self loop isn't a bridge
-    ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
+    if(is.matrix(new_net)){
+      new_net[node_of_interest, node_of_interest] <- 0 # a self loop isn't a bridge
+      ei1_node <- expectedInf(new_net, step=1, directed=directed)[[1]][node_of_interest]
+    } else {
+      ei1_node <- 0
+    }
     return(ei1_node)
   }
   ## This loop creates a list of j vectors

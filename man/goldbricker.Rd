@@ -5,7 +5,7 @@
 \title{Goldbricker - Identifying redundant nodes in networks using compared correlations}
 \usage{
 goldbricker(data, p = 0.05, method = "hittner2003", threshold = 0.25,
-  progressbar = TRUE)
+  corMin = 0.5, progressbar = TRUE)
 }
 \arguments{
 \item{data}{a data frame consisting of n rows (participants) and j columns (variables)}
@@ -16,6 +16,9 @@ goldbricker(data, p = 0.05, method = "hittner2003", threshold = 0.25,
 
 \item{threshold}{variable pairs which have less than the threshold proportion of significantly different
 correlations will be considered "bad pairs"}
+
+\item{corMin}{the minimum zero-order correlation between two items to be considered "bad pairs". Items
+that are uncorrelated are unlikely to represent the same underlying construct}
 
 \item{progressbar}{logical. prints a progress bar in the console}
 }
