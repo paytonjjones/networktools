@@ -13,3 +13,7 @@
 * The goldbricker() and net_reduce() functions are now available. Useful for comparing correlations 
   in order to eliminate nodes in networks which ostensibly measure the same construct
 
+# networktools 1.1.2
+
+* Additions to bridge() function: can use list input for communities, improved error handling
+* New argument "corMin" in goldbricker function

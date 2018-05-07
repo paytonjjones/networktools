@@ -9,7 +9,8 @@
 #' a network
 #' @param communities an object of class "communities" (igraph) OR a character vector of
 #' community  assignments for each node (e.g., c("Comm1", "Comm1", "Comm2", "Comm2)).
-#' The ordering of this vector should correspond to the vector from argument "nodes"
+#' The ordering of this vector should correspond to the vector from argument "nodes".
+#' Can also be in list format (e.g., list("Comm1"=c(1:10), "Comm2"=c(11:20)))
 #' @param useCommunities character vector specifying which communities should be included. Default set to "all"
 #' @param directed logical. Directedness is automatically detected if set to "NULL" (the default).
 #' Symmetric adjacency matrices will be undirected, asymmetric matrices will be directed
