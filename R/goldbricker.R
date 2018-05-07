@@ -38,7 +38,7 @@
 #' reduced_depression <- net_reduce(data=depression, badpairs=gb_depression)
 #'
 #' ## Set a new threshold quickly
-#' goldbricker(gb_depression, threshold=0.6)
+#' gb_depression_60 <- goldbricker(data=gb_depression, threshold=0.6)
 #'
 #'}
 #' @return \code{\link{goldbricker}} returns a list of class "\code{goldbricker}" which contains:
@@ -84,6 +84,7 @@ goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, corM
     diag(perc_reject) <- NA
   } else{
     perc_reject <- data$proportion_matrix
+    cormat <- perc_reject
   }
   combnames <- matrix(as.numeric(),dim(perc_reject)[1],dim(perc_reject)[1])
   for(i in 1:dim(perc_reject)[1]){for(j in 1:dim(perc_reject)[1]){

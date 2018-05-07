@@ -13,7 +13,8 @@ a network}
 
 \item{communities}{an object of class "communities" (igraph) OR a character vector of
 community  assignments for each node (e.g., c("Comm1", "Comm1", "Comm2", "Comm2)).
-The ordering of this vector should correspond to the vector from argument "nodes"}
+The ordering of this vector should correspond to the vector from argument "nodes".
+Can also be in list format (e.g., list("Comm1"=c(1:10), "Comm2"=c(11:20)))}
 
 \item{useCommunities}{character vector specifying which communities should be included. Default set to "all"}
 
