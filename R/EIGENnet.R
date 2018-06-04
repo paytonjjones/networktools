@@ -23,13 +23,13 @@
 #' @export
 EIGENnet <- function(qgraph_net, EIGENadj=NULL, S=1000, burn=200,  seed=1, ...) {
   if(is.null(EIGENadj)){
-    adj <- getWmat(qgraph_net)
+    adj <- qgraph::getWmat(qgraph_net)
   } else {
     adj <- EIGENadj
   }
   diag(adj) <- NA   
-  fitEM <- eigenmodel_mcmc(Y = adj, R = 2, S = S, burn = burn, seed = seed)
+  fitEM <- eigenmodel::eigenmodel_mcmc(Y = adj, R = 2, S = S, burn = burn, seed = seed,...)
   EVD <- eigen(fitEM$ULU_postmean) 
-  evecs <- EVD$vec[, 1:p]      
-  qgraph(adult_glasso, layout=evecs)
+  evecs <- EVD$vec[, 1:2]      
+  qgraph::qgraph(qgraph_net, layout=evecs)
 }

@@ -26,12 +26,12 @@ PCAnet <- function(qgraph_net, cormat, varTxt=T,...) {
     on.exit(options(op))
     options(warn=1)
     warning("Correlation matrix not provided: using network adjacency matrix to perform PCA")
-    cormat <- getWmat(qgraph_net)
+    cormat <- qgraph::getWmat(qgraph_net)
   }
   PCAfit <- psych::principal(cormat, nfactors = 2)
-  qgraph(qgraph_net, layout=PCAfit$loadings)
+  qgraph::qgraph(qgraph_net, layout=PCAfit$loadings)
   if(varTxt){
-    text(-1,-1, paste("% var=", round(sum(PCAfit$values[1:2]/length(PCAfit$values)),2)))
+    graphics::text(-1,-1, paste("% var=", round(sum(PCAfit$values[1:2]/length(PCAfit$values)),2)))
   }
 }
 

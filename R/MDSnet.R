@@ -24,14 +24,14 @@
 MDSnet <- function(qgraph_net, type=c("ordinal", "interval", "ratio", "mspline"), 
                    MDSadj=NULL, stressTxt=T,...) {
   if(is.null(MDSadj)){
-    adj <- getWmat(qgraph_net)
+    adj <- qgraph::getWmat(qgraph_net)
   } else {
     adj <- MDSadj
   }
-  MDSfit <- mds(sim2diss(adj), type=match.arg(type), ...)
-  qgraph(qgraph_net, layout=MDSfit$conf)
+  MDSfit <- smacof::mds(smacof::sim2diss(adj), type=match.arg(type), ...)
+  qgraph::qgraph(qgraph_net, layout=MDSfit$conf)
   if(stressTxt){
-    text(-1,-1, paste("Stress=", round(MDSfit$stress,2)))
+    graphics::text(-1,-1, paste("Stress=", round(MDSfit$stress,2)))
   }
 }
 

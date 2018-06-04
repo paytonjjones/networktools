@@ -16,6 +16,8 @@
 #' Symmetric adjacency matrices will be undirected, asymmetric matrices will be directed
 #' @param nodes a vector containing the names of the nodes. If set to "NULL", this vector will
 #' be automatically detected in the order extracted
+#' @param average logical. Bridge centralities are divided by the total number of nodes outside their community,
+#' making bridge centrality more comparable across large and small communities.
 #'
 #' @details
 #'
@@ -47,8 +49,9 @@
 #' only considers edges extending from the given node (e.g., out-degree)
 #'
 #' Bridge expected influence (2-step) is similar to 1-step, but also considers the indirect effect that a node A may have
-#' through other nodes (e.g, an indirect effect on node C as in A -> B -> C).
-#' Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence
+#' on other communities through other nodes (e.g, an indirect effect on node C as in A -> B -> C).
+#' Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence.
+#' Indirect effects back on node A's own community (A -> B -> A) are not counted.
 #'
 #' If negative edges exist, bridge expected influence should be used. Bridge closeness and bridge betweenness are only defined
 #' for positive edge weights, thus negative edges, if present, are deleted in the calculation of these metrics. Bridge strength
@@ -79,7 +82,7 @@
 #'Each contains a vector of named centrality values
 #'
 #'@export
-bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL) {
+bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL, average=FALSE) {
   adj <- coerce_to_adjacency(network)
   if(NA %in% adj){
     adj[is.na(adj)] <- 0
@@ -255,6 +258,15 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
                 "Bridge Expected Influence (1-step)"=ei1, "Bridge Expected Influence (2-step)"=ei2,
                 communities=communities)
   }
+
+  if(average) {
+    for(l in 1:(length(res)-1)){
+      for(i in 1:length(res[[1]])){
+        res[[l]][i] <- res[[l]][i] / length(communities[communities!=communities[i]])
+      }
+    }
+  }
+
   class(res) <- "bridge"
   return(res)
 }

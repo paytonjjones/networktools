@@ -497,7 +497,8 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' @param include a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", "Bridge Closeness",
 #' "Bridge Expected Influence (1-step)", "Bridge Expected Influence (2-step)"),
 #' if missing all available measures will be plotted
-#' @param RColorBrewer A palette name from RColorBrewer, for coloring of axis labels
+#' @param color logical. Color each community seperately in the plot?
+#' @param colpalette A palette name from RColorBrewer, for coloring of axis labels
 #' @param ... other plotting specifications in ggplot2 (aes)
 #'
 #' @details
@@ -515,12 +516,16 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #'}
 #' @method plot bridge
 #' @export
-plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, RColorBrewer="Dark2", ...){
+plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, color=FALSE, colpallete="Dark2", ...){
   attr(x, "class") <- NULL
   nodes <- names(x[[1]])
-  comm <- x$communities; commcol <- vector(); pal <- brewer.pal(max(length(unique(comm)), 3), RColorBrewer)
-  for(i in 1:length(unique(comm))){commcol[i] <- pal[i]}
-  cols <- commcol[match(comm, unique(comm))]
+  comm <- x$communities; commcol <- vector()
+  if(color) {pal <- RColorBrewer::brewer.pal(max(length(unique(comm)), 3), colpallete)
+    for(i in 1:length(unique(comm))){commcol[i] <- pal[i]}
+    cols <- commcol[match(comm, unique(comm))]
+  } else {
+    cols <- "black"
+  }
   x$communities <- NULL
   if(zscore) {
     scalenoatt <- function(y){
