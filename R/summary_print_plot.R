@@ -497,7 +497,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' @param include a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", "Bridge Closeness",
 #' "Bridge Expected Influence (1-step)", "Bridge Expected Influence (2-step)"),
 #' if missing all available measures will be plotted
-#' @param color logical. Color each community seperately in the plot?
+#' @param color logical. Color each community separately in the plot?
 #' @param colpalette A palette name from RColorBrewer, for coloring of axis labels
 #' @param ... other plotting specifications in ggplot2 (aes)
 #'

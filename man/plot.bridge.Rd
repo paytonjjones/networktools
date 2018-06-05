@@ -19,7 +19,7 @@ highest to lowest centrality values}
 "Bridge Expected Influence (1-step)", "Bridge Expected Influence (2-step)"),
 if missing all available measures will be plotted}
 
-\item{color}{logical. Color each community seperately in the plot?}
+\item{color}{logical. Color each community separately in the plot?}
 
 \item{colpalette}{A palette name from RColorBrewer, for coloring of axis labels}
 
