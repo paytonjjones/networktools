@@ -516,11 +516,11 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #'}
 #' @method plot bridge
 #' @export
-plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, color=FALSE, colpallete="Dark2", ...){
+plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, color=FALSE, colpalette="Dark2", ...){
   attr(x, "class") <- NULL
   nodes <- names(x[[1]])
   comm <- x$communities; commcol <- vector()
-  if(color) {pal <- RColorBrewer::brewer.pal(max(length(unique(comm)), 3), colpallete)
+  if(color) {pal <- RColorBrewer::brewer.pal(max(length(unique(comm)), 3), colpalette)
     for(i in 1:length(unique(comm))){commcol[i] <- pal[i]}
     cols <- commcol[match(comm, unique(comm))]
   } else {

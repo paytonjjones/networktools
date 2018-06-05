@@ -17,3 +17,9 @@
 
 * Additions to bridge() function: can use list input for communities, improved error handling
 * New argument "corMin" in goldbricker function
+
+# networktools 1.2.0
+
+* Three new functions for plotting networks using MDS, PCA, and eigenmodels (MDSnet, PCAnet, EIGENnet)
+* Added an argument in bridge() to average bridge centrality by number of nodes in communities
+

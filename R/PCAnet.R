@@ -12,7 +12,7 @@
 #' @details
 #'
 #' A network plotted with PCA can be interpreted based on coordinate placement
-#' of each node. A node in the top right corner scored high on both the first and second 
+#' of each node. A node in the top right corner scored high on both the first and second
 #' principal components
 #'
 #' @references
@@ -20,19 +20,26 @@
 #' Jones, P. J., Mair, P., & McNally, R. J. (2017). Scaling networks for two-dimensional visualization: a tutorial. Retrieved from osf.io/eugsz
 #'
 #' @export
-PCAnet <- function(qgraph_net, cormat, varTxt=T,...) {
+PCAnet <- function(qgraph_net, cormat, varTxt=F,...) {
   if(missing(cormat)){
     op <- options("warn")
     on.exit(options(op))
     options(warn=1)
     warning("Correlation matrix not provided: using network adjacency matrix to perform PCA")
     cormat <- qgraph::getWmat(qgraph_net)
+    diag(cormat) <- 1
   }
-  PCAfit <- psych::principal(cormat, nfactors = 2)
+  PCAfit <- R.utils::withTimeout({psych::principal(cormat, nfactors = 2,...)},
+                                 timeout=10,onTimeout="silent")
+  if(is.null(PCAfit)){
+    stop("Timeout: PCA could not be computed. Check correlation matrix.")
+  }
   qgraph::qgraph(qgraph_net, layout=PCAfit$loadings)
   if(varTxt){
     graphics::text(-1,-1, paste("% var=", round(sum(PCAfit$values[1:2]/length(PCAfit$values)),2)))
   }
+  class(PCAfit$loadings) <- "matrix"
+  invisible(PCAfit$loadings)
 }
 
 

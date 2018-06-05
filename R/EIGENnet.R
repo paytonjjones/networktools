@@ -13,13 +13,13 @@
 #' @details
 #'
 #' An eigenmodel can be interpreted based on coordinate placement
-#' of each node. A node in the top right corner scored high on both the first and second 
+#' of each node. A node in the top right corner scored high on both the first and second
 #' latent components
 #'
-#' @references 
-#' 
+#' @references
+#'
 #' Jones, P. J., Mair, P., & McNally, R. J. (2017). Scaling networks for two-dimensional visualization: a tutorial. Retrieved from osf.io/eugsz
-#' 
+#'
 #' @export
 EIGENnet <- function(qgraph_net, EIGENadj=NULL, S=1000, burn=200,  seed=1, ...) {
   if(is.null(EIGENadj)){
@@ -27,9 +27,10 @@ EIGENnet <- function(qgraph_net, EIGENadj=NULL, S=1000, burn=200,  seed=1, ...) 
   } else {
     adj <- EIGENadj
   }
-  diag(adj) <- NA   
+  diag(adj) <- NA
   fitEM <- eigenmodel::eigenmodel_mcmc(Y = adj, R = 2, S = S, burn = burn, seed = seed,...)
-  EVD <- eigen(fitEM$ULU_postmean) 
-  evecs <- EVD$vec[, 1:2]      
+  EVD <- eigen(fitEM$ULU_postmean)
+  evecs <- EVD$vec[, 1:2]
   qgraph::qgraph(qgraph_net, layout=evecs)
+  invisible(evecs)
 }

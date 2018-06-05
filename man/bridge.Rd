@@ -5,7 +5,7 @@
 \title{Bridge Centrality}
 \usage{
 bridge(network, communities = NULL, useCommunities = "all",
-  directed = NULL, nodes = NULL)
+  directed = NULL, nodes = NULL, average = FALSE)
 }
 \arguments{
 \item{network}{a network of class "igraph", "qgraph", or an adjacency matrix representing
@@ -23,6 +23,9 @@ Symmetric adjacency matrices will be undirected, asymmetric matrices will be dir
 
 \item{nodes}{a vector containing the names of the nodes. If set to "NULL", this vector will
 be automatically detected in the order extracted}
+
+\item{average}{logical. Bridge centralities are divided by the total number of nodes outside their community,
+making bridge centrality more comparable across large and small communities.}
 }
 \value{
 \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
@@ -72,8 +75,9 @@ exist between a node A and all nodes that are not in the same community as node 
 only considers edges extending from the given node (e.g., out-degree)
 
 Bridge expected influence (2-step) is similar to 1-step, but also considers the indirect effect that a node A may have
-through other nodes (e.g, an indirect effect on node C as in A -> B -> C).
-Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence
+on other communities through other nodes (e.g, an indirect effect on node C as in A -> B -> C).
+Indirect effects are weighted by the first edge weight (e.g., A -> B), and then added to the 1-step expected influence.
+Indirect effects back on node A's own community (A -> B -> A) are not counted.
 
 If negative edges exist, bridge expected influence should be used. Bridge closeness and bridge betweenness are only defined
 for positive edge weights, thus negative edges, if present, are deleted in the calculation of these metrics. Bridge strength

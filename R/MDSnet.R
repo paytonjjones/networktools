@@ -13,16 +13,16 @@
 #' @details
 #'
 #' A network plotted with multidimensional scaling can be interpreted based on the distances
-#' between nodes. Nodes close together represent closely associated nodes, whereas nodes that are far 
+#' between nodes. Nodes close together represent closely associated nodes, whereas nodes that are far
 #' apart represent unassociated or negatively associated nodes.
 #'
 #' @references
-#' 
+#'
 #' Jones, P. J., Mair, P., & McNally, R. J. (2017). Scaling networks for two-dimensional visualization: a tutorial. Retrieved from osf.io/eugsz
 #'
 #' @export
-MDSnet <- function(qgraph_net, type=c("ordinal", "interval", "ratio", "mspline"), 
-                   MDSadj=NULL, stressTxt=T,...) {
+MDSnet <- function(qgraph_net, type=c("ordinal", "interval", "ratio", "mspline"),
+                   MDSadj=NULL, stressTxt=F,...) {
   if(is.null(MDSadj)){
     adj <- qgraph::getWmat(qgraph_net)
   } else {
@@ -33,6 +33,7 @@ MDSnet <- function(qgraph_net, type=c("ordinal", "interval", "ratio", "mspline")
   if(stressTxt){
     graphics::text(-1,-1, paste("Stress=", round(MDSfit$stress,2)))
   }
+  invisible(MDSfit$conf)
 }
 
 
