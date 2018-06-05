@@ -16,8 +16,8 @@
 #' Symmetric adjacency matrices will be undirected, asymmetric matrices will be directed
 #' @param nodes a vector containing the names of the nodes. If set to "NULL", this vector will
 #' be automatically detected in the order extracted
-#' @param average logical. Bridge centralities are divided by the total number of nodes outside their community,
-#' making bridge centrality more comparable across large and small communities.
+#' @param normalize logical. Bridge centralities are divided by their highest possible value (assuming max edge strength=1)
+#' in order to normalize by different community sizes
 #'
 #' @details
 #'
@@ -41,7 +41,7 @@
 #' Bridge betweenness is defined as the number of times a node B lies on the shortest path between
 #' nodes A and C, where nodes A and C come from different communities.
 #'
-#' Bridge closeness is defined as the average length of the path from a node A to all nodes that are
+#' Bridge closeness is defined as the inverse of the average length of the path from a node A to all nodes that are
 #' not in the same community as node A.
 #'
 #' Bridge expected influence (1-step) is defined as the sum of the value (+ or -) of all edges that
@@ -82,7 +82,7 @@
 #'Each contains a vector of named centrality values
 #'
 #'@export
-bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL, average=FALSE) {
+bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL, normalize=FALSE) {
   adj <- coerce_to_adjacency(network)
   if(NA %in% adj){
     adj[is.na(adj)] <- 0
@@ -259,11 +259,22 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
                 communities=communities)
   }
 
-  if(average) {
-    for(l in 1:(length(res)-1)){
+  if(normalize) {
+    divbyp <- if(directed){c(1,2,3,6)}else{c(1,4)}
+    betw <- if(directed){4}else{2}
+    for(l in divbyp){ # indegree, outdegree, strength, BEI
       for(i in 1:length(res[[1]])){
-        res[[l]][i] <- res[[l]][i] / length(communities[communities!=communities[i]])
+        p <- length(communities[communities!=communities[i]])
+        res[[l]][i] <- res[[l]][i] / p
       }
+    }
+    for(i in 1:length(res[[1]])){ # BEI-2
+      p <- length(communities[communities!=communities[i]])
+      res[[length(res)-1]][i] <- res[[length(res)-1]][i] / (p + (length(communities)-1)*(p-(p/(length(communities)-1)))) # For BEI-2
+    }
+    for(i in 1:length(res[[1]])){ # betweenness
+      p <- length(communities[communities!=communities[i]])
+      res[[betw]][i] <- res[[betw]][i] / ((length(communities)-1) * p)
     }
   }
 

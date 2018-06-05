@@ -1,6 +1,6 @@
 Package: networktools
 Title: Tools for Identifying Important Nodes in Networks
-Version: 1.2.0
+Version: 1.2.1
 Date: 2018-6-5
 Authors@R: person("Payton", "Jones", email = "payton_jones@g.harvard.edu", role = c("aut", "cre"))
 Description: Includes assorted tools for network analysis. Bridge centrality, impact, & goldbricker.
