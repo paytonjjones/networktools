@@ -101,7 +101,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
 
   #if communities not supplied, use spinglass default settings to detect
   if(is.null(communities) | class(communities)=="function"){
-    if(useCommunities != "all"){
+    if(useCommunities[1] != "all"){
       stop("You must prespecify communities to use the useCommunities argument")
     }
     communities <- try(igraph::spinglass.community(g, spins=3))
@@ -110,16 +110,31 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   }
 
   if(is.null(nodes)){nodes <- colnames(adj)}
+  allnodes <- nodes
   if(class(communities)=="communities") {communities <- communities$membership}
   if(is.list(communities)){communities <- as.character(utils::stack(communities)$ind)}
 
+  #Check for communities mismatch
+  if(length(communities)!=length(nodes)){
+    stop("Length of communities argument does not match number of nodes")
+  }
+  
   #useCommunities
+  innodes <- communities %in% communities
   if(useCommunities[1]!="all"){
     innodes <- communities %in% useCommunities
     communities <- communities[innodes]
     adj <- adjmat <- adj[innodes,innodes]
+    # Recompute g
+    # get igraph of complete network
+    if(directed) {
+      g <- igraph::graph_from_adjacency_matrix(adj, mode="directed", diag=FALSE, weighted= TRUE)
+    } else {
+      g <- igraph::graph_from_adjacency_matrix(adj, mode="upper", diag=FALSE, weighted= TRUE)
+    }
+    nodes <- nodes[innodes]
   }
-
+  
   #Check for common communities issues
   if(length(unique(communities))==0){
     stop("No viable communities")
@@ -127,13 +142,9 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   if(length(unique(communities))==1){
     stop("Only 1 community specified, bridge centrality cannot be computed")
   }
-  if(length(communities)!=length(nodes)){
-    stop("Length of communities argument does not match number of nodes")
-  }
 
   #take inverse of weight for igraph object "g" only (igraph's length functions view small edges as closer)
   igraph::E(g)$weight <- 1/igraph::E(g)$weight
-
 
   ## Bridge strength
   out_degree <- in_degree <- total_strength <- vector()
@@ -143,7 +154,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     total_strength[i] <- sum(out_degree[i], in_degree[i])
   }
   if(!directed){total_strength <- out_degree}
-
+  
   names(out_degree)<-names(in_degree)<-names(total_strength)<- nodes
 
 
@@ -247,6 +258,18 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   ei2 <- sapply(nodes, FUN=ei2func, network=adjmat, nodes=nodes, communities=communities)
   names(ei2) <- nodes
 
+  if(useCommunities[1]!="all"){
+    NAvec <- rep(NA, length(allnodes)-length(nodes))
+    names(NAvec) <- allnodes[!(allnodes %in% nodes)]
+    in_degree <- c(in_degree, NAvec)[allnodes]
+    out_degree <- c(out_degree, NAvec)[allnodes]
+    total_strength <- c(total_strength, NAvec)[allnodes]
+    betweenness <- c(betweenness, NAvec)[allnodes]
+    closeness <- c(closeness, NAvec)[allnodes]
+    ei1 <- c(ei1, NAvec)[allnodes]
+    ei2 <- c(ei2, NAvec)[allnodes]
+    communities <- c(communities, NAvec)[allnodes]
+  }
 
   if(directed){
     res <- list("Bridge Indegree"=in_degree, "Bridge Outdegree"=out_degree, "Bridge Strength"=total_strength,
