@@ -7,6 +7,8 @@
 #' @param cormat the correlation matrix of the relevant data. If this argument is missing,
 #' the function will assume that the adjacency matrix from \code{qgraph_net} is a correlation matrix
 #' @param varTxt logical. Print the variance accounted for by the PCA in the lower left corner of the plot
+#' @param repulse logical. Add a small repulsion force with wordcloud package to avoid node overlap?
+#' @param repulsion scalar for the repulsion force (if repulse=T). Larger values add more repulsion
 #' @param ... additional arguments passed to \code{psych::principal}
 #'
 #' @details
@@ -20,7 +22,7 @@
 #' Jones, P. J., Mair, P., & McNally, R. J. (2017). Scaling networks for two-dimensional visualization: a tutorial. Retrieved from osf.io/eugsz
 #'
 #' @export
-PCAnet <- function(qgraph_net, cormat, varTxt=F,...) {
+PCAnet <- function(qgraph_net, cormat, varTxt=F, repulse=F, repulsion=1,...) {
   if(missing(cormat)){
     op <- options("warn")
     on.exit(options(op))
@@ -34,7 +36,13 @@ PCAnet <- function(qgraph_net, cormat, varTxt=F,...) {
   if(is.null(PCAfit)){
     stop("Timeout: PCA could not be computed. Check correlation matrix.")
   }
-  qgraph::qgraph(qgraph_net, layout=PCAfit$loadings)
+  if(!repulse){
+    qgraph::qgraph(qgraph_net, layout=PCAfit$loadings)
+  } else {
+    message("When repulsion is used, plot is not exact. Compare to unrepulsed graph before interpreting")
+    repulse <- repulseLayout(qgraph_net, layout=PCAfit$loadings, repulsion=repulsion*.5)
+    qgraph::qgraph(qgraph_net, layout=repulse)
+  }
   if(varTxt){
     graphics::text(-1,-1, paste("% var=", round(sum(PCAfit$values[1:2]/length(PCAfit$values)),2)))
   }

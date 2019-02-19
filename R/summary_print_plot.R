@@ -524,7 +524,7 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
     for(i in 1:length(unique(comm))){commcol[i] <- pal[i]}
     cols <- commcol[match(comm, unique(comm))]
   } else {
-    cols <- "black"
+    cols <- rep("black", length(comm))
   }
   x$communities <- NULL
   if(zscore) {
@@ -559,13 +559,13 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
   } else if(order[1]=="value") {
     glist <- list()
     for(i in 1:length(include)) {
-      temp_Long <- Long[Long$measure==include[i],]
-      temp_Long <- temp_Long[with(temp_Long, order(temp_Long$value)),]
+      temp_Long_orig <- Long[Long$measure==include[i],]
+      temp_Long <- temp_Long_orig[with(temp_Long_orig, order(temp_Long_orig$value)),]
       temp_Long$node <- factor(as.character(temp_Long$node), levels = unique(as.character(temp_Long$node)[order(temp_Long$value)]))
       glist[[i]] <- ggplot2::ggplot(temp_Long, ggplot2::aes_string(x='value', y='node', group='type',...)) +
         ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
         ggplot2::facet_grid('~measure', scales="free") +
-        ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(temp_Long$value, decreasing=T)]))
+        ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(temp_Long_orig$value)]))
     }
     if(length(include)==1){g <- gridExtra::grid.arrange(glist[[1]])
     } else if(length(include)==2){gridExtra::grid.arrange(glist[[1]],glist[[2]], ncol=2)

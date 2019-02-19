@@ -180,4 +180,23 @@ comm_edgelist_to_igraph <- function(edgelist, directed) {
   return(g)
 }
 
+## Repulses nodes (wraps wordcloud) to avoid overlap in MCAnet, PCAnet, EIGENnet
+repulseLayout <- function(qgraph, layout=NULL, repulsion=1){
+  vsize <- qgraph$graphAttributes$Nodes$width[1]
+  if(is.null(layout)){
+    layout <- qgraph$layout
+  }
+  plotSize <- dev.size("in")
+  constant <- .025 *(plotSize[1]*plotSize[2]) ## approximately maps size of node size to @ symbol
+  cexRepulseFull <- vsize * constant * repulsion
+  newlayout <- try(wordcloud::wordlayout(layout[,1],layout[,2], words=rep('@', nrow(layout)),
+                          cex=cexRepulseFull), silent=T)
+  if(class(newlayout)=="try-error"){
+    plot.new()
+    newlayout <- wordcloud::wordlayout(layout[,1],layout[,2], words=rep('@', nrow(layout)),
+                                           cex=cexRepulseFull)
+  }
+  return(newlayout[,1:2])
+}
+
 

@@ -84,6 +84,10 @@
 #'@export
 bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL, normalize=FALSE) {
   adj <- coerce_to_adjacency(network)
+  ## name nodes
+  if(is.null(nodes)){nodes <- colnames(adj)}
+  allnodes <- nodes
+  colnames(adj) <- rownames(adj) <- nodes
   if(NA %in% adj){
     adj[is.na(adj)] <- 0
     message("Note: NAs detected in adjacency matrix, will be treated as 0s")
@@ -109,8 +113,6 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
   }
 
-  if(is.null(nodes)){nodes <- colnames(adj)}
-  allnodes <- nodes
   if(class(communities)=="communities") {communities <- communities$membership}
   if(is.list(communities)){communities <- as.character(utils::stack(communities)$ind)}
 
@@ -118,11 +120,12 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   if(length(communities)!=length(nodes)){
     stop("Length of communities argument does not match number of nodes")
   }
-  
+
   #useCommunities
   innodes <- communities %in% communities
   if(useCommunities[1]!="all"){
     innodes <- communities %in% useCommunities
+    communities_orig <- communities
     communities <- communities[innodes]
     adj <- adjmat <- adj[innodes,innodes]
     # Recompute g
@@ -134,7 +137,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     }
     nodes <- nodes[innodes]
   }
-  
+
   #Check for common communities issues
   if(length(unique(communities))==0){
     stop("No viable communities")
@@ -154,7 +157,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     total_strength[i] <- sum(out_degree[i], in_degree[i])
   }
   if(!directed){total_strength <- out_degree}
-  
+
   names(out_degree)<-names(in_degree)<-names(total_strength)<- nodes
 
 
@@ -268,7 +271,8 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     closeness <- c(closeness, NAvec)[allnodes]
     ei1 <- c(ei1, NAvec)[allnodes]
     ei2 <- c(ei2, NAvec)[allnodes]
-    communities <- c(communities, NAvec)[allnodes]
+    #communities <- c(communities, NAvec)[allnodes]
+    communities <- communities_orig
   }
 
   if(directed){
