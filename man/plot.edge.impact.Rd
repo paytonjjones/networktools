@@ -5,8 +5,8 @@
 \title{Plot "edge.impact" objects}
 \usage{
 \method{plot}{edge.impact}(x, nodes = c("first", "all"),
-  type.edgeplot = c("contrast", "single"), title = NULL, maximum = "auto",
-  ...)
+  type.edgeplot = c("contrast", "single"), title = NULL,
+  maximum = "auto", ...)
 }
 \arguments{
 \item{x}{an output object from an impact function (\code{edge.impact})}

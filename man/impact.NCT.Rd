@@ -5,9 +5,9 @@
 \title{Network Comparison Test for Impact Statistics}
 \usage{
 impact.NCT(input, it, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
-  "quartiles"), paired = FALSE, AND = TRUE, test.edges = FALSE, edges,
-  progressbar = TRUE)
+  weighted = TRUE, split = c("median", "mean", "forceEqual",
+  "cutEqual", "quartiles"), paired = FALSE, AND = TRUE,
+  test.edges = FALSE, edges, progressbar = TRUE)
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).

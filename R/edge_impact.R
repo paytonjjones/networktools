@@ -1,5 +1,7 @@
 #' Edge Impact
 #'
+#' This function is DEPRECATED and will be replaced by impact().
+#'
 #' Generates a matrix of edge impacts for each specified node. Each scalar in a given
 #' matrix represents the degree to which the level of a node impacts the strength of
 #' a specified edge in the network
@@ -34,31 +36,6 @@
 #' The $hi and $lo output of \code{edge.impact} can also be used to quickly visualize
 #' the difference in network structure depending on node level (see examples).
 #'
-#' @examples
-#' out <- edge.impact(depression[450:550,1:3], nodes="anhedonia")
-#' \donttest{
-#' out1 <- edge.impact(depression)
-#' out2 <- edge.impact(depression, gamma=0.65,
-#'         nodes=c("sleep_disturbance", "psychomotor_retardation"))
-#' out3 <- edge.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
-#'
-#' summary(out1)
-#' plot(out1, nodes="concentration_problems")
-#'
-#' # Visualize edge impacts of psychomotor_retardation
-#' # as a single network
-#' plot(out1, nodes="psychomotor_retardation", type.edgeplot="single")
-#'
-#' # Visualize the edge impacts of psychomotor_retardation
-#' # as contrast between high and low
-#' plot(out1, nodes="psychomotor_retardation", type.edgeplot="contrast")
-#'
-#'# Extract the impact of psychomotor_retardation on a single edge
-#' out1$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
-#'
-#' # Extract edge impacts of node Dan in edgelist format
-#' out3$edgelist$Dan
-#'}
 #'
 #' @return \code{edge.impact()} returns a list of class "\code{edge.impact}" which contains:
 #'  \item{impact}{a list of matrices. Each symmetric matrix contains the edge
@@ -72,7 +49,7 @@
 #' @export
 edge.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
                         split=c("median","mean", "forceEqual", "cutEqual", "quartiles")) {
-
+  message("Note: This function is DEPRECATED and will be replaced by impact()")
   if (missing(gamma)){
     if (binary.data){
       gamma <- 0.25

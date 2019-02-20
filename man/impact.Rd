@@ -5,8 +5,8 @@
 \title{Network Impact (combined function)}
 \usage{
 impact(input, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
-  "quartiles"))
+  weighted = TRUE, split = c("median", "mean", "forceEqual",
+  "cutEqual", "quartiles"))
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).
@@ -84,5 +84,17 @@ plot(out1)
 # Extract the impact of psychomotor_retardation on the
 # edge that runs between worthlessness and fatigue
 out1$Edge$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
+
+# Extract edge impacts of node Dan in edgelist format
+out3$Edge$edgelist$Dan
+
+# Visualize edge impacts of psychomotor_retardation
+# as a single network
+plot(out1$Edge, nodes="psychomotor_retardation", type.edgeplot="single")
+
+# Visualize the edge impacts of psychomotor_retardation
+# as contrast between high and low
+plot(out1$Edge, nodes="psychomotor_retardation", type.edgeplot="contrast")
+
 }
 }

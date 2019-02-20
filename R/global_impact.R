@@ -1,5 +1,7 @@
 #' Global Strength Impact
 #'
+#' This function is DEPRECATED and will be replaced by impact().
+#'
 #' Generates the global strength impact of each specified node. Global strength impact can be interpreted
 #' as the degree to which the level of a node impacts the overall connectivity of the network
 #'
@@ -26,18 +28,6 @@
 #' sum of edges not accounting for absolute values). Global strength impact measures to what degree
 #' the global strength varies as a function of each node.
 #'
-#'@examples
-#' out <- global.impact(depression[,1:3])
-#' \donttest{
-#' out1 <- global.impact(depression)
-#' out2 <- global.impact(depression, gamma=0.65,
-#'     nodes=c("sleep_disturbance", "psychomotor_retardation"))
-#' out3 <- global.impact(social, binary.data=TRUE)
-#' out4 <- global.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
-#'
-#' summary(out1)
-#' plot(out1)
-#' }
 #' @return \code{global.impact()} returns a list of class "\code{global.impact}" which contains:
 #'  \item{impact}{a named vector containing the global strength impact for each node tested}
 #'  \item{lo}{a named vector containing the global strength estimate for the lower half}
@@ -46,7 +36,7 @@
 #' @export
 global.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
                           split=c("median","mean", "forceEqual", "cutEqual", "quartiles")) {
-
+  message("Note: This function is DEPRECATED and will be replaced by impact()")
   if (missing(gamma)){
     if (binary.data){
       gamma <- 0.25

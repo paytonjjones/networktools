@@ -4,8 +4,8 @@
 \alias{EIGENnet}
 \title{EIGENnet}
 \usage{
-EIGENnet(qgraph_net, EIGENadj = NULL, S = 1000, burn = 200, seed = 1,
-  ...)
+EIGENnet(qgraph_net, EIGENadj = NULL, S = 1000, burn = 200,
+  seed = 1, repulse = F, repulsion = 1, ...)
 }
 \arguments{
 \item{qgraph_net}{an object of type \code{qgraph}}
@@ -18,6 +18,10 @@ stored in \code{qgraph_net}, provide it in this argument}
 \item{burn}{number of initial scans of the Markov chain to be dropped}
 
 \item{seed}{a random seed}
+
+\item{repulse}{logical. Add a small repulsion force with wordcloud package to avoid node overlap?}
+
+\item{repulsion}{scalar for the repulsion force (if repulse=T). Larger values add more repulsion}
 
 \item{...}{additional arguments passed to \code{eigenmodel::eigenmodel_mcmc}}
 }

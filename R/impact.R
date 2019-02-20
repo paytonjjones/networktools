@@ -58,6 +58,18 @@
 #'# Extract the impact of psychomotor_retardation on the
 #'# edge that runs between worthlessness and fatigue
 #' out1$Edge$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
+#'
+#' # Extract edge impacts of node Dan in edgelist format
+#' out3$Edge$edgelist$Dan
+#'
+#' # Visualize edge impacts of psychomotor_retardation
+#' # as a single network
+#' plot(out1$Edge, nodes="psychomotor_retardation", type.edgeplot="single")
+#'
+#' # Visualize the edge impacts of psychomotor_retardation
+#' # as contrast between high and low
+#' plot(out1$Edge, nodes="psychomotor_retardation", type.edgeplot="contrast")
+#'
 #'}
 #' @return \code{\link{impact}} returns a list of class "\code{all.impact}" which contains:
 #'

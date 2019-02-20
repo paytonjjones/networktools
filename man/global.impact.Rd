@@ -5,8 +5,8 @@
 \title{Global Strength Impact}
 \usage{
 global.impact(input, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
-  "quartiles"))
+  weighted = TRUE, split = c("median", "mean", "forceEqual",
+  "cutEqual", "quartiles"))
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).
@@ -35,27 +35,18 @@ column numbers (e.g., c(1,2)).}
  \item{hi}{a named vector containing the global strength estimate for the upper half}
 }
 \description{
-Generates the global strength impact of each specified node. Global strength impact can be interpreted
-as the degree to which the level of a node impacts the overall connectivity of the network
+This function is DEPRECATED and will be replaced by impact().
 }
 \details{
+Generates the global strength impact of each specified node. Global strength impact can be interpreted
+as the degree to which the level of a node impacts the overall connectivity of the network
+
+
+
 For an explanation of impact functions in general, see \code{\link{impact}}.
 
 Global strength is defined as the sum of the absolute value
 of all edges in the network, and is closely related to the concept of density (density is the
 sum of edges not accounting for absolute values). Global strength impact measures to what degree
 the global strength varies as a function of each node.
-}
-\examples{
-out <- global.impact(depression[,1:3])
-\donttest{
-out1 <- global.impact(depression)
-out2 <- global.impact(depression, gamma=0.65,
-    nodes=c("sleep_disturbance", "psychomotor_retardation"))
-out3 <- global.impact(social, binary.data=TRUE)
-out4 <- global.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
-
-summary(out1)
-plot(out1)
-}
 }

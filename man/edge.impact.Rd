@@ -5,8 +5,8 @@
 \title{Edge Impact}
 \usage{
 edge.impact(input, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
-  "quartiles"))
+  weighted = TRUE, split = c("median", "mean", "forceEqual",
+  "cutEqual", "quartiles"))
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).
@@ -41,11 +41,15 @@ edge weights or binarize edges.}
  edge impacts}
 }
 \description{
+This function is DEPRECATED and will be replaced by impact().
+}
+\details{
 Generates a matrix of edge impacts for each specified node. Each scalar in a given
 matrix represents the degree to which the level of a node impacts the strength of
 a specified edge in the network
-}
-\details{
+
+
+
 For an explanation of impact functions in general, see \code{\link{impact}}.
 
 Edge impact is the change in an edge's value as a function of a given node.
@@ -58,31 +62,4 @@ by the given node.
 
 The $hi and $lo output of \code{edge.impact} can also be used to quickly visualize
 the difference in network structure depending on node level (see examples).
-}
-\examples{
-out <- edge.impact(depression[450:550,1:3], nodes="anhedonia")
-\donttest{
-out1 <- edge.impact(depression)
-out2 <- edge.impact(depression, gamma=0.65,
-        nodes=c("sleep_disturbance", "psychomotor_retardation"))
-out3 <- edge.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
-
-summary(out1)
-plot(out1, nodes="concentration_problems")
-
-# Visualize edge impacts of psychomotor_retardation
-# as a single network
-plot(out1, nodes="psychomotor_retardation", type.edgeplot="single")
-
-# Visualize the edge impacts of psychomotor_retardation
-# as contrast between high and low
-plot(out1, nodes="psychomotor_retardation", type.edgeplot="contrast")
-
-# Extract the impact of psychomotor_retardation on a single edge
-out1$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
-
-# Extract edge impacts of node Dan in edgelist format
-out3$edgelist$Dan
-}
-
 }

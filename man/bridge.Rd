@@ -5,7 +5,7 @@
 \title{Bridge Centrality}
 \usage{
 bridge(network, communities = NULL, useCommunities = "all",
-  directed = NULL, nodes = NULL, average = FALSE)
+  directed = NULL, nodes = NULL, normalize = FALSE)
 }
 \arguments{
 \item{network}{a network of class "igraph", "qgraph", or an adjacency matrix representing
@@ -24,8 +24,8 @@ Symmetric adjacency matrices will be undirected, asymmetric matrices will be dir
 \item{nodes}{a vector containing the names of the nodes. If set to "NULL", this vector will
 be automatically detected in the order extracted}
 
-\item{average}{logical. Bridge centralities are divided by the total number of nodes outside their community,
-making bridge centrality more comparable across large and small communities.}
+\item{normalize}{logical. Bridge centralities are divided by their highest possible value (assuming max edge strength=1)
+in order to normalize by different community sizes}
 }
 \value{
 \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
@@ -67,7 +67,7 @@ separated into bridge in-degree and bridge out-degree.
 Bridge betweenness is defined as the number of times a node B lies on the shortest path between
 nodes A and C, where nodes A and C come from different communities.
 
-Bridge closeness is defined as the average length of the path from a node A to all nodes that are
+Bridge closeness is defined as the inverse of the average length of the path from a node A to all nodes that are
 not in the same community as node A.
 
 Bridge expected influence (1-step) is defined as the sum of the value (+ or -) of all edges that

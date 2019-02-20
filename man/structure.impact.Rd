@@ -5,8 +5,8 @@
 \title{Network Structure Impact}
 \usage{
 structure.impact(input, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual", "cutEqual",
-  "quartiles"))
+  weighted = TRUE, split = c("median", "mean", "forceEqual",
+  "cutEqual", "quartiles"))
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).
@@ -38,11 +38,15 @@ structure impact of 0 or 1.}
  \item{hi}{a named vector containing the edge estimate for the upper half of the most strongly impacted edge}
 }
 \description{
+This function is DEPRECATED and will be replaced by impact().
+}
+\details{
 Generates the network structure impact of each specified node. Network structure
 impact can be interpreted as the degree to which the level of a node causes change
 in the network structure
-}
-\details{
+
+
+
 For an explanation of impact functions in general, see \code{\link{impact}}.
 
 Network structure impact computes network structure invariance as a
@@ -51,20 +55,4 @@ the single largest edge invariance between two networks. A large network structu
 is generally used to indicate the \emph{instability} of network structure across groups. For instance, a low global
 strength invariance coupled with a high network structure invariance would mean that although the
 overall connectivity remains stable, the actual structure of those edges is unstable across groups.
-}
-\examples{
-out <- structure.impact(depression[,1:3])
-\donttest{
-out1 <- structure.impact(depression)
-out2 <- structure.impact(depression, gamma=0.65,
-    nodes=c("sleep_disturbance", "psychomotor_retardation"))
-out3 <- structure.impact(social, binary.data=TRUE)
-out4 <- structure.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
-
-summary(out1)
-plot(out1)
-
-#Determine which edge drove network structure impact of "sadness"
-out1$edge$sadness
-}
 }

@@ -1,5 +1,7 @@
 #' Network Structure Impact
 #'
+#' This function is DEPRECATED and will be replaced by impact().
+#'
 #' Generates the network structure impact of each specified node. Network structure
 #' impact can be interpreted as the degree to which the level of a node causes change
 #' in the network structure
@@ -31,21 +33,6 @@
 #' strength invariance coupled with a high network structure invariance would mean that although the
 #' overall connectivity remains stable, the actual structure of those edges is unstable across groups.
 #'
-#' @examples
-#' out <- structure.impact(depression[,1:3])
-#' \donttest{
-#' out1 <- structure.impact(depression)
-#' out2 <- structure.impact(depression, gamma=0.65,
-#'     nodes=c("sleep_disturbance", "psychomotor_retardation"))
-#' out3 <- structure.impact(social, binary.data=TRUE)
-#' out4 <- structure.impact(social, nodes=c(1:6, 9), binary.data=TRUE)
-#'
-#' summary(out1)
-#' plot(out1)
-#'
-#' #Determine which edge drove network structure impact of "sadness"
-#' out1$edge$sadness
-#'}
 #' @return \code{structure.impact()} returns a list of class "\code{structure.impact}" which contains:
 #'  \item{impact}{a named vector containing the network structure impact for each node tested. Network structure impacts are given as absolute values}
 #'  \item{edge}{a list of vectors. Each vector contains a the edge impact of the most strongly impacted edge (e.g., the network structure impact)}
@@ -54,6 +41,8 @@
 #' @export
 structure.impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
                              split=c("median","mean", "forceEqual", "cutEqual", "quartiles")) {
+
+  message("Note: This function is DEPRECATED and will be replaced by impact()")
 
   if (missing(gamma)){
     if (binary.data){

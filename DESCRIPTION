@@ -5,11 +5,11 @@ Date: 2018-6-5
 Authors@R: person("Payton", "Jones", email = "payton_jones@g.harvard.edu", role = c("aut", "cre"))
 Description: Includes assorted tools for network analysis. Bridge centrality, impact, & goldbricker.
 Depends: R (>= 3.0.0)
-License:  GPL-3
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: qgraph,igraph,IsingFit,reshape2,nnet,ggplot2,gridExtra,stats,graphics,utils,NetworkComparisonTest,devtools,cocor,RColorBrewer,R.utils,eigenmodel,psych,smacof
-RoxygenNote: 6.0.1
+Imports: qgraph,igraph,IsingFit,reshape2,nnet,ggplot2,gridExtra,stats,graphics,utils,NetworkComparisonTest,devtools,cocor,RColorBrewer,R.utils,eigenmodel,psych,smacof,wordcloud
+RoxygenNote: 6.1.1
 Suggests: R.rsp
 VignetteBuilder: R.rsp
 URL: https://CRAN.R-project.org/package=networktools

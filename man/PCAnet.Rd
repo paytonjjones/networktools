@@ -4,7 +4,8 @@
 \alias{PCAnet}
 \title{PCAnet}
 \usage{
-PCAnet(qgraph_net, cormat, varTxt = F, ...)
+PCAnet(qgraph_net, cormat, varTxt = F, repulse = F, repulsion = 1,
+  ...)
 }
 \arguments{
 \item{qgraph_net}{an object of type \code{qgraph}}
@@ -13,6 +14,10 @@ PCAnet(qgraph_net, cormat, varTxt = F, ...)
 the function will assume that the adjacency matrix from \code{qgraph_net} is a correlation matrix}
 
 \item{varTxt}{logical. Print the variance accounted for by the PCA in the lower left corner of the plot}
+
+\item{repulse}{logical. Add a small repulsion force with wordcloud package to avoid node overlap?}
+
+\item{repulsion}{scalar for the repulsion force (if repulse=T). Larger values add more repulsion}
 
 \item{...}{additional arguments passed to \code{psych::principal}}
 }

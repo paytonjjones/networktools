@@ -7,4 +7,7 @@
 #' @importFrom eigenmodel eigenmodel_mcmc
 #' @importFrom R.utils withTimeout
 #' @importFrom graphics text
+#' @importFrom grDevices dev.size
+#' @importFrom graphics plot.new
+#' @importFrom wordcloud wordlayout
 NULL
