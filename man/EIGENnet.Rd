@@ -5,7 +5,8 @@
 \title{EIGENnet}
 \usage{
 EIGENnet(qgraph_net, EIGENadj = NULL, S = 1000, burn = 200,
-  seed = 1, repulse = F, repulsion = 1, ...)
+  seed = 1, repulse = F, repulsion = 1, eigenmodelArgs = list(),
+  ...)
 }
 \arguments{
 \item{qgraph_net}{an object of type \code{qgraph}}
@@ -23,7 +24,9 @@ stored in \code{qgraph_net}, provide it in this argument}
 
 \item{repulsion}{scalar for the repulsion force (if repulse=T). Larger values add more repulsion}
 
-\item{...}{additional arguments passed to \code{eigenmodel::eigenmodel_mcmc}}
+\item{eigenmodelArgs}{additional arguments in list format passed to \code{eigenmodel::eigenmodel_mcmc}}
+
+\item{...}{additional arguments passed to \code{qgraph}}
 }
 \description{
 Convenience function for converting a qgraph object to an eigenmodel layout

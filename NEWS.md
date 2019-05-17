@@ -23,3 +23,8 @@
 * Three new functions for plotting networks using MDS, PCA, and eigenmodels (MDSnet, PCAnet, EIGENnet)
 * Added an argument in bridge() to average bridge centrality by number of nodes in communities
 
+# networktools 1.2.1
+
+* MDSnet, EIGENnet, & PCAnet now include an optional repulsion paramter. This allows the user to avoid any node overlap in plots. Additional arguments can now be passed to qgraph via ...
+* The "average" argument in bridge has been changed to "normalize" & normalizes bridge centralities
+

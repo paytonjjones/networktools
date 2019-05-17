@@ -23,7 +23,8 @@
 #' Jones, P. J., Mair, P., & McNally, R. J. (2017). Scaling networks for two-dimensional visualization: a tutorial. Retrieved from osf.io/eugsz
 #'
 #' @export
-PCAnet <- function(qgraph_net, cormat, varTxt=F, repulse=F, principalArgs=list(),repulsion=1,...) {
+PCAnet <- function(qgraph_net, cormat, varTxt=F, repulse=F, repulsion=1,
+                   principalArgs=list(),...) {
   if(missing(cormat)){
     op <- options("warn")
     on.exit(options(op))

@@ -1,14 +1,14 @@
 ---
 title: "cran-comments"
 author: "Payton Jones"
-date: "August 8, 2017"
+date: "May 17, 2019"
 output: html_document
 ---
 
 ## Test environments
-* local windows, R 3.5.0
-* ubuntu 12.04 (on travis-ci), R 3.5.0
-* win-builder (devel)
+* local windows, R 3.6.0
+* ubuntu linux 16.04, R 3.6.0 (R-hub)
+* Windows Server 2008 R SP1, R-devel (R-hub)
 
 ## R CMD Check results
 There were no ERRORS or WARNINGS
