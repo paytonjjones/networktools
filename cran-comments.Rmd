@@ -1,8 +1,9 @@
 ---
 title: "cran-comments"
 author: "Payton Jones"
-date: "May 17, 2019"
-output: html_document
+date: "May 20, 2019"
+output:
+  md_document
 ---
 
 ## Test environments
@@ -14,4 +15,4 @@ output: html_document
 There were no ERRORS or WARNINGS
 
 ## Downstream dependencies
-There are currently no downstream dependencies for this package.
+There is 1 downstream dependency for this package (bootnet), which passed checks.

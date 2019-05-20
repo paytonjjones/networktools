@@ -1,17 +1,17 @@
-  
+Test environments
+-----------------
 
-## Test environments
-* local windows, R 3.3.3
-* ubuntu 12.04 (on travis-ci), R 3.3.3
-* win-builder (devel and release)
-* local OS X R 3.3.1
+-   local windows, R 3.6.0
+-   ubuntu linux 16.04, R 3.6.0 (R-hub)
+-   Windows Server 2008 R SP1, R-devel (R-hub)
 
-## R CMD Check results
-There were no ERRORS or WARNINGS.
+R CMD Check results
+-------------------
 
+There were no ERRORS or WARNINGS
 
-## Downstream dependencies
-There are currently no downstream dependencies for this package.
+Downstream dependencies
+-----------------------
 
----
-
+There is 1 downstream dependency for this package (bootnet), which
+passed checks.
