@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 # networktools 1.0.0
 
 * Added a `NEWS.md` file to track changes to the package.
@@ -25,6 +30,9 @@
 
 # networktools 1.2.1
 
-* MDSnet, EIGENnet, & PCAnet now include an optional repulsion paramter. This allows the user to avoid any node overlap in plots. Additional arguments can now be passed to qgraph via ...
+* MDSnet, EIGENnet, & PCAnet now include an optional repulsion parameter. This allows the user to avoid any node overlap in plots. Additional arguments can now be passed to qgraph via ...
 * The "average" argument in bridge has been changed to "normalize" & normalizes bridge centralities
 
+# networktools 1.2.2
+
+* In plot.bridge, argument plotNA (default FALSE) now controls whether nodes with NA values are plotted

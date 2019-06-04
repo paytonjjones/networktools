@@ -5,7 +5,8 @@
 \title{Plot "bridge" objects}
 \usage{
 \method{plot}{bridge}(x, order = c("given", "alphabetical", "value"),
-  zscore = FALSE, include, color = FALSE, colpalette = "Dark2", ...)
+  zscore = FALSE, include, color = FALSE, colpalette = "Dark2",
+  plotNA = FALSE, ...)
 }
 \arguments{
 \item{x}{an output object from \code{bridge} (class \code{bridge})}
@@ -22,6 +23,8 @@ if missing all available measures will be plotted}
 \item{color}{logical. Color each community separately in the plot?}
 
 \item{colpalette}{A palette name from RColorBrewer, for coloring of axis labels}
+
+\item{plotNA}{should nodes with NA values be included on the y axis?}
 
 \item{...}{other plotting specifications in ggplot2 (aes)}
 }

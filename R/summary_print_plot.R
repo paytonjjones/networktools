@@ -499,6 +499,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' if missing all available measures will be plotted
 #' @param color logical. Color each community separately in the plot?
 #' @param colpalette A palette name from RColorBrewer, for coloring of axis labels
+#' @param plotNA should nodes with NA values be included on the y axis?
 #' @param ... other plotting specifications in ggplot2 (aes)
 #'
 #' @details
@@ -516,8 +517,16 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #'}
 #' @method plot bridge
 #' @export
-plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE, include, color=FALSE, colpalette="Dark2", ...){
+plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALSE,
+                        include, color=FALSE, colpalette="Dark2", plotNA=FALSE, ...){
   attr(x, "class") <- NULL
+  if(!plotNA){
+    if(TRUE%in%is.na(x[[1]])){
+      message("Missing values have been removed from the plot, set plotNA = TRUE to show missing values")
+      x<-lapply(x, function(x){x[!is.na(x)]})
+      if(length(x[[1]])==0){warning("No values remain after removing missing values")}
+    }
+  }
   nodes <- names(x[[1]])
   comm <- x$communities; commcol <- vector()
   if(color) {pal <- RColorBrewer::brewer.pal(max(length(unique(comm)), 3), colpalette)
