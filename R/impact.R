@@ -2,8 +2,6 @@
 #'
 #' Generates the global strength impact, network structure
 #' impact, and edge impact simultaneously for a given set of nodes.
-#' See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}} for
-#' additional details
 #'
 #' @param input a matrix or data frame of observations (not a network/edgelist).
 #' See included example datasets \code{\link{depression}} and \code{\link{social}}.
@@ -33,8 +31,7 @@
 #' Three relevant impact statistics are included
 #' in the \code{networktools} package: global strength impact, network structure
 #' impact, and edge impact. To ease computational burden, all three statistics are calculated
-#' simultaneously in the \code{\link{impact}} function. They can also be calculated separately
-#' using \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}}.
+#' simultaneously in the \code{\link{impact}} function.
 #'
 #' Impact statistics are calculated by temporarily regarding a node as an \emph{external} variable
 #' to the network. The remaining data are then divided into two networks according to a median
@@ -78,10 +75,6 @@
 #' 2. A list of class "structure.impact"
 #'
 #' 3. A list of class "edge.impact"
-#'
-#' See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}} for
-#' details on each list
-#'
 #'
 #' @export
 impact <- function(input, gamma, nodes = c("all"), binary.data = FALSE, weighted = TRUE,
@@ -149,8 +142,8 @@ for(i in 1:length(nodesTested)) {
       lo <- input[input[,j]<= stats::quantile(input[,j],probs=.25),][,-j]
     }
   if((abs(dim(hi)[1]-dim(lo)[1])/dim(input)[1]) > 0.1) {message(colnames(input)[nodesTested[i]], ": Sample size difference after median split is >10% of total sample, try using split=\"forceEqual\"")}
-    catch1 <- try(qgraph::EBICglasso(stats::cor(hi),nrow(hi),gamma=gamma), silent = FALSE)
-    catch2 <- try(qgraph::EBICglasso(stats::cor(lo),nrow(lo),gamma=gamma), silent = FALSE)
+    catch1 <- try(suppressMessages(suppressWarnings(qgraph::EBICglasso(stats::cor(hi),nrow(hi),gamma=gamma, verbose=F))), silent = FALSE)
+    catch2 <- try(suppressMessages(suppressWarnings(qgraph::EBICglasso(stats::cor(lo),nrow(lo),gamma=gamma, verbose=F))), silent = FALSE)
     if(inherits(catch1, "try-error") | inherits(catch2, "try-error")) { }
     if(!inherits(catch1, "try-error") & !inherits(catch2, "try-error")) {
      nw1 <- catch1 ## This calculates the network for the upper half

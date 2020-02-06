@@ -36,15 +36,10 @@ column numbers (e.g., c(1,2)).}
 2. A list of class "structure.impact"
 
 3. A list of class "edge.impact"
-
-See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}} for
-details on each list
 }
 \description{
 Generates the global strength impact, network structure
 impact, and edge impact simultaneously for a given set of nodes.
-See \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}} for
-additional details
 }
 \details{
 The structures of networks sometimes vary as a function of certain external variables.
@@ -59,8 +54,7 @@ in the sense that they are a property of each node in a network.
 Three relevant impact statistics are included
 in the \code{networktools} package: global strength impact, network structure
 impact, and edge impact. To ease computational burden, all three statistics are calculated
-simultaneously in the \code{\link{impact}} function. They can also be calculated separately
-using \code{\link{global.impact}}, \code{\link{structure.impact}}, and \code{\link{edge.impact}}.
+simultaneously in the \code{\link{impact}} function.
 
 Impact statistics are calculated by temporarily regarding a node as an \emph{external} variable
 to the network. The remaining data are then divided into two networks according to a median

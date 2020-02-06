@@ -192,15 +192,8 @@ plot.all.impact <- function(x, order=c("given","value", "alphabetical"), zscore=
 #' will return a line plot that shows the relative global impacts of each node.
 #'
 #' @examples
-#' out <- global.impact(depression[,1:5])
-#' plot(out)
-#' \donttest{
-#' out1 <- global.impact(depression)
-#' plot(out1)
-#' plot(out1, order="value", zscore=TRUE)
-#' out2 <- impact(depression)
-#' plot(out2$Global.Strength)
-#' }
+#' out <- impact(depression[,1:5])
+#' plot(out$Global.Strength)
 #' @method plot global.impact
 #' @export
 plot.global.impact <- function(x, order=c("given","value","alphabetical"), zscore=FALSE,abs_val=FALSE,...) {
@@ -255,15 +248,8 @@ plot.global.impact <- function(x, order=c("given","value","alphabetical"), zscor
 #' will return a line plot that shows the relative network impacts of each node.
 #'
 #' @examples
-#' out <- structure.impact(depression[,1:5])
-#' plot(out)
-#' \donttest{
-#' out1 <- structure.impact(depression)
-#' plot(out1)
-#' plot(out1, order="value", zscore=TRUE)
-#' out2 <- impact(depression)
-#' plot(out2$Network.Structure)
-#' }
+#' out <- impact(depression[,1:5])
+#' plot(out$Network.Structure)
 #' @method plot structure.impact
 #' @export
 plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zscore=FALSE,abs_val=FALSE,...) {
@@ -325,17 +311,8 @@ plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zs
 #' edge impact)
 #'
 #' @examples
-#' out <- edge.impact(depression[450:550,1:3])
-#' plot(out, nodes="anhedonia", type.edgeplot="single")
-#' \donttest{
-#' out1 <- edge.impact(depression)
-#' plot(out1, nodes="concentration_problems")
-#' plot(out1, nodes="psychomotor_retardation",
-#'     type.edgeplot="single")
-#'
-#' out2 <- impact(depression)
-#' plot(out2$Edge, nodes="concentration_problems")
-#'}
+#' out <- impact(depression[400:550,1:3])
+#' plot(out$Edge, type.edgeplot="single")
 #' @method plot edge.impact
 #' @export
 plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contrast","single"), title=NULL, maximum="auto",...) {

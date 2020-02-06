@@ -36,7 +36,7 @@ column numbers (e.g., c(1,2)).}
 \code{\link{impact.boot}} returns a list of class "impact.boot"
 }
 \description{
-impact.boot is BETA software. Please report any bugs. Plotting/printing/summary will be added soon.
+impact.boot is DEPRECATED. The function will be removed in the next update. Use impact.NCT instead.
 }
 \details{
 This function wraps the function \code{impact} and bootstraps to

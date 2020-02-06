@@ -7,9 +7,10 @@ output:
 ---
 
 ## Test environments
-* ubuntu linux 16.04, R-release 3.6.2 (R-hub)
+* Ubuntu Linux 16.04 LTS, R-release, GCC (R-hub)
+* Windows Server 2008 R2 SP1, R-devel, 32/64 bit (R-hub)
 * Windows Server x86_64-w64-mingw32, R-devel (winbuilder)
-* Windows Server x86_64-w64-mingw32, R-release 3.6.2 (winbuilder)
+* Windows Server x86_64-w64-mingw32, R-release (winbuilder)
 
 ## R CMD Check results
 There were no ERRORS or WARNINGS

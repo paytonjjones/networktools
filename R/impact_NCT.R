@@ -130,7 +130,7 @@ for(i in 1:length(nodesTested)) {
     }
   res[[i]] <- NetworkComparisonTest::NCT(hi, lo, gamma=gamma, it=it, binary.data=binary.data,
                                        paired=paired, weighted=weighted,AND=AND, test.edges=test.edges,
-                                       edges=edges, progressbar=progressbar)
+                                       edges=edges, progressbar=progressbar, verbose=FALSE)
 }
   names(res) <- names(input)[nodesTested]
   return(res)

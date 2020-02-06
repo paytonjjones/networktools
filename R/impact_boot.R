@@ -1,6 +1,6 @@
 #' Bootstrapping convenience function for impact statistics
 #'
-#' impact.boot is BETA software. Please report any bugs. Plotting/printing/summary will be added soon.
+#' impact.boot is DEPRECATED. The function will be removed in the next update. Use impact.NCT instead.
 #'
 #' This function wraps the function \code{impact} and bootstraps to
 #' provide confidence intervals of node impacts.
