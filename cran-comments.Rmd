@@ -1,15 +1,15 @@
 ---
 title: "cran-comments"
 author: "Payton Jones"
-date: "May 20, 2019"
+date: "February 6, 2020"
 output:
   md_document
 ---
 
 ## Test environments
-* local windows, R 3.6.0
-* ubuntu linux 16.04, R 3.6.0 (R-hub)
-* Windows Server 2008 R SP1, R-devel (R-hub)
+* ubuntu linux 16.04, R-release 3.6.2 (R-hub)
+* Windows Server x86_64-w64-mingw32, R-devel (winbuilder)
+* Windows Server x86_64-w64-mingw32, R-release 3.6.2 (winbuilder)
 
 ## R CMD Check results
 There were no ERRORS or WARNINGS

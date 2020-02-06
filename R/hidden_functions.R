@@ -84,7 +84,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
 #' @export
 coerce_to_adjacency <- function(input, directed=NULL) {
   ## igraph input
-  if(class(input)=="igraph"){
+  if("igraph" %in% class(input)){
     if(is.null(E(input)$weight)){
       mat <- as.matrix(igraph::get.adjacency(input, type="both"))
     } else {
@@ -95,7 +95,7 @@ coerce_to_adjacency <- function(input, directed=NULL) {
     }
 
     ## qgraph input
-    } else if(class(input)=="qgraph"){
+    } else if("qgraph" %in% class(input)){
     col1 <- input$Edgelist$from
     col3 <- input$Edgelist$to
     edgelist <- as.data.frame(cbind(col1, col3, input$Edgelist$weight))

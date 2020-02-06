@@ -20,7 +20,6 @@
 #' "mean": mean split, "forceEqual": creates equally sized groups by partitioning random median observations
 #'  to the smaller group, "cutEqual": creates equally sized groups by deleting random values
 #'  from the bigger group,"quartile": uses the top and bottom quartile as groups
-#' @param ... additional optional arguments to be passed to the NCT function internally
 #' (paired, AND, test.edges, edges, progressbar)
 #' @param paired Logical. Can be TRUE of FALSE to indicate whether the samples are dependent or not. If paired is TRUE, relabeling is performed within each pair of observations. If paired is FALSE, relabeling is not restricted to pairs of observations. Note that, currently, dependent data is assumed to entail one group measured twice.
 #' @param AND Logical. Can be TRUE of FALSE to indicate whether the AND-rule or the OR-rule should be used to define the edges in the network. Defaults to TRUE. Only necessary for binary data.

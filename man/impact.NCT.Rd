@@ -29,7 +29,8 @@ column numbers (e.g., c(1,2)).}
 \item{split}{method by which to split network given non-binary data. "median": median split (excluding the median),
 "mean": mean split, "forceEqual": creates equally sized groups by partitioning random median observations
  to the smaller group, "cutEqual": creates equally sized groups by deleting random values
- from the bigger group,"quartile": uses the top and bottom quartile as groups}
+ from the bigger group,"quartile": uses the top and bottom quartile as groups
+(paired, AND, test.edges, edges, progressbar)}
 
 \item{paired}{Logical. Can be TRUE of FALSE to indicate whether the samples are dependent or not. If paired is TRUE, relabeling is performed within each pair of observations. If paired is FALSE, relabeling is not restricted to pairs of observations. Note that, currently, dependent data is assumed to entail one group measured twice.}
 
@@ -40,9 +41,6 @@ column numbers (e.g., c(1,2)).}
 \item{edges}{Character or list. When 'all', differences between all individual edges are tested. When provided a list with one or more pairs of indices referring to variables, the provided edges are tested. A Holm-Bonferroni correction is applied to control for multiple testing.}
 
 \item{progressbar}{Logical. Should the pbar be plotted in order to see the progress of the estimation procedure? Defaults to TRUE.}
-
-\item{...}{additional optional arguments to be passed to the NCT function internally
-(paired, AND, test.edges, edges, progressbar)}
 }
 \value{
 \code{\link{impact}} returns a list where each element is an object of class \code{NCT}
