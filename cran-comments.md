@@ -1,9 +1,9 @@
 Test environments
 -----------------
 
--   local windows, R 3.6.0
--   ubuntu linux 16.04, R 3.6.0 (R-hub)
--   Windows Server 2008 R SP1, R-devel (R-hub)
+-   Windows Server 2008 R2 SP1, R-devel, 32/64 bit (R-hub)
+-   Ubuntu Linux 16.04 LTS, R-release, GCC (R-hub)
+-   Ubuntu Linux 16.04.6 LTS, R-release, GCC (Travis)
 
 R CMD Check results
 -------------------
