@@ -35,4 +35,7 @@ output:
 
 # networktools 1.2.2
 
+* Added PROCRUSTESnet function for plotting two networks with Procrustes-aligned MDS
 * In plot.bridge, argument plotNA (default FALSE) now controls whether nodes with NA values are plotted
+* Removed previously deprecated functions edge.impact, global.impact, and structure.impact
+* Fixed a bug in impact.NCT where multiple booleans were passed to if statement
