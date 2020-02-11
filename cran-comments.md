@@ -13,5 +13,5 @@ There were no ERRORS or WARNINGS
 Downstream dependencies
 -----------------------
 
-There is 1 downstream dependency for this package (bootnet), which
-passed checks.
+There are 3 downstream dependencies for this package (bootnet, psychNET,
+SemNeT), which passed checks.
