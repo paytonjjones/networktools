@@ -49,9 +49,6 @@ out_igraph <- expectedInf(igraph_obj)
 qgraph_obj <- qgraph::qgraph(cor(depression), DoNotPlot=TRUE)
 out_qgraph <- expectedInf(qgraph_obj)
 
-Ising_adj_mat <- IsingFit::IsingFit(social, plot=FALSE)$weiadj
-out_Ising <- expectedInf(Ising_adj_mat)
-plot(out_Ising)
 }
 }
 \references{

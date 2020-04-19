@@ -28,12 +28,3 @@ Inputting an object of class \code{global.impact} or \code{structure.impact}
 will return a line plot that shows the relative impacts of each node.
 Inputting a \code{all.impact} object will return both of these plots simultaneously
 }
-\examples{
-out <- impact(depression[,1:5])
-plot(out)
-\donttest{
-out1 <- impact(depression)
-plot(out1)
-plot(out1, order="value", zscore=TRUE)
-}
-}

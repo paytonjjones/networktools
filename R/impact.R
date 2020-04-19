@@ -41,33 +41,6 @@
 #' The median split excludes observations that fall exactly on the median. In the case of binary data, data are split
 #' by level rather than by median.
 #'
-#' @examples
-#' out <- impact(depression[,1:3])
-#' \donttest{
-#' out1 <- impact(depression)
-#' out2 <- impact(depression, gamma=0.65, nodes=c("sleep_disturbance", "psychomotor_retardation"))
-#' out3 <- impact(social, binary.data=TRUE)
-#' out4 <- impact(social, nodes=c(1:6, 9), binary.data=TRUE)
-#'
-#' summary(out1)
-#' plot(out1)
-#'
-#'# Extract the impact of psychomotor_retardation on the
-#'# edge that runs between worthlessness and fatigue
-#' out1$Edge$impact[["psychomotor_retardation"]]["worthlessness", "fatigue"]
-#'
-#' # Extract edge impacts of node Dan in edgelist format
-#' out3$Edge$edgelist$Dan
-#'
-#' # Visualize edge impacts of psychomotor_retardation
-#' # as a single network
-#' plot(out1$Edge, nodes="psychomotor_retardation", type.edgeplot="single")
-#'
-#' # Visualize the edge impacts of psychomotor_retardation
-#' # as contrast between high and low
-#' plot(out1$Edge, nodes="psychomotor_retardation", type.edgeplot="contrast")
-#'
-#'}
 #' @return \code{\link{impact}} returns a list of class "\code{all.impact}" which contains:
 #'
 #' 1. A list of class "global.impact"

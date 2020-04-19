@@ -28,14 +28,6 @@
 #'
 #' \code{impact.boot} returns an object of class \code{impact.boot}, which includes confidence intervals.
 #'
-#' @examples
-#' \donttest{
-#' boot1 <- impact.boot(depression, boots=25, nodes="psychomotor_retardation")
-#'
-#' boot2 <- impact.boot(social, boots=25, nodes="Kim", binary.data=TRUE, split="cutEqual")
-#'
-#' ##Note: for speed, 25 boots are used here; more are necessary in practice
-#' }
 #' @return \code{\link{impact.boot}} returns a list of class "impact.boot"
 #'
 #' @export

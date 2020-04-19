@@ -37,7 +37,3 @@ selected node. Using "single" will return a network where the edges represent th
 impacts for the selected node (e.g., thick positive edges represent a strong positive
 edge impact)
 }
-\examples{
-out <- impact(depression[400:550,1:3])
-plot(out$Edge, type.edgeplot="single")
-}

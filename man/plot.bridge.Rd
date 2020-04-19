@@ -40,7 +40,6 @@ values of each node
 \donttest{
 b <- bridge(cor(depression))
 plot(b)
-plot(b, order="value", zscore=TRUE)
-plot(b, include=c("Bridge Strength", "Bridge Betweenness"))
+plot(b, order="value", zscore=TRUE,include=c("Bridge Strength", "Bridge Betweenness"))
 }
 }

@@ -27,7 +27,3 @@ Convenience function for generating global strength impact plots
 Inputting an object of class \code{global.impact}
 will return a line plot that shows the relative global impacts of each node.
 }
-\examples{
-out <- impact(depression[,1:5])
-plot(out$Global.Strength)
-}

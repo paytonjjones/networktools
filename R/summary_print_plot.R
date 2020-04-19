@@ -115,14 +115,6 @@ print.goldbricker <- function(x,...){
 #' will return a line plot that shows the relative impacts of each node.
 #' Inputting a \code{all.impact} object will return both of these plots simultaneously
 #'
-#' @examples
-#' out <- impact(depression[,1:5])
-#' plot(out)
-#' \donttest{
-#' out1 <- impact(depression)
-#' plot(out1)
-#' plot(out1, order="value", zscore=TRUE)
-#' }
 #' @method plot all.impact
 #' @export
 plot.all.impact <- function(x, order=c("given","value", "alphabetical"), zscore=FALSE, abs_val=FALSE,...){
@@ -191,9 +183,6 @@ plot.all.impact <- function(x, order=c("given","value", "alphabetical"), zscore=
 #' Inputting an object of class \code{global.impact}
 #' will return a line plot that shows the relative global impacts of each node.
 #'
-#' @examples
-#' out <- impact(depression[,1:5])
-#' plot(out$Global.Strength)
 #' @method plot global.impact
 #' @export
 plot.global.impact <- function(x, order=c("given","value","alphabetical"), zscore=FALSE,abs_val=FALSE,...) {
@@ -247,9 +236,6 @@ plot.global.impact <- function(x, order=c("given","value","alphabetical"), zscor
 #' Inputting an object of class \code{network.impact}
 #' will return a line plot that shows the relative network impacts of each node.
 #'
-#' @examples
-#' out <- impact(depression[,1:5])
-#' plot(out$Network.Structure)
 #' @method plot structure.impact
 #' @export
 plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zscore=FALSE,abs_val=FALSE,...) {
@@ -310,9 +296,6 @@ plot.structure.impact <- function(x, order=c("given","alphabetical", "value"),zs
 #' impacts for the selected node (e.g., thick positive edges represent a strong positive
 #' edge impact)
 #'
-#' @examples
-#' out <- impact(depression[400:550,1:3])
-#' plot(out$Edge, type.edgeplot="single")
 #' @method plot edge.impact
 #' @export
 plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contrast","single"), title=NULL, maximum="auto",...) {
@@ -368,21 +351,11 @@ plot.edge.impact <- function(x, nodes=c("first", "all"), type.edgeplot=c("contra
 #' expected influence of each node.
 #'
 #' @examples
-#' \dontshow{myNetwork <- cor(depression[,1:5])}
+#' myNetwork <- cor(depression[,1:5])
 #' out1 <- expectedInf(myNetwork)
 #' plot(out1$step1)
 #' \donttest{
 #' plot(out1, order="value", zscore=TRUE)
-#'
-#' igraph_obj <- igraph::graph_from_adjacency_matrix(cor(depression))
-#' ei_igraph <- expectedInf(igraph_obj)
-#'
-#' qgraph_obj <- qgraph::qgraph(cor(depression), plot=FALSE)
-#' ei_qgraph <- expectedInf(qgraph_obj)
-#'
-#' Ising_adj_mat <- IsingFit::IsingFit(social, plot=FALSE)$weiadj
-#' ei_Ising <- expectedInf(Ising_adj_mat)
-#' plot(ei_Ising)
 #'}
 #' @method plot expectedInf
 #' @export
@@ -489,8 +462,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #'\donttest{
 #' b <- bridge(cor(depression))
 #' plot(b)
-#' plot(b, order="value", zscore=TRUE)
-#' plot(b, include=c("Bridge Strength", "Bridge Betweenness"))
+#' plot(b, order="value", zscore=TRUE,include=c("Bridge Strength", "Bridge Betweenness"))
 #'}
 #' @method plot bridge
 #' @export

@@ -14,21 +14,6 @@
 #'
 #' @examples
 #' head(depression)
-#' \donttest{
-#' out1 <- impact(depression)
-#' summary(out1)
-#' plot(out1)
-#'
-#' out2 <- edge.impact(depression, gamma=0.75, nodes=c("sleep_disturbance", "psychomotor_retardation"))
-#' summary(out2)
-#' plot(out2)
-#'
-#' # Visualize depression networks for "low" psychomotor retardation vs. "high" psychomotor retardation
-#' par(mfrow=c(1,2))
-#' qgraph::qgraph(out2$lo$psychomotor_retardation, title="Low Psychomotor Retardation")
-#' qgraph::qgraph(out2$hi$psychomotor_retardation, title="High Psychomotor Retardation")
-#'}
-#'
 "depression"
 
 
@@ -48,26 +33,4 @@
 #'
 #' @examples
 #' head(social)
-#' \donttest{
-#' out1 <- impact(social, binary.data=TRUE)
-#' summary(out1)
-#' plot(out1)
-#'
-#' out2 <- edge.impact(social, binary.data=TRUE, gamma=0.2, nodes=c("Kim", "Bob", "Dan"))
-#' summary(out2)
-#' plot(out2)
-#'
-#' # Visualize the difference in the social networks depending
-#' # on whether or not Joe participated (large global strength impact)
-#' par(mfrow=c(1,2))
-#' qgraph::qgraph(out1$Edge$lo$Joe, title="Joe Absent")
-#' qgraph::qgraph(out1$Edge$hi$Joe, title="Joe Present")
-#'
-#' # Visualize the difference in the social networks depending
-#' # on whether or not Don participated (large network structure impact)
-#' par(mfrow=c(1,2))
-#' qgraph::qgraph(out1$Edge$lo$Don, title="Don Absent")
-#' qgraph::qgraph(out1$Edge$hi$Don, title="Don Present")
-#'
-#'}
 "social"
