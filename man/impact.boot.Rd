@@ -4,9 +4,16 @@
 \alias{impact.boot}
 \title{Bootstrapping convenience function for impact statistics}
 \usage{
-impact.boot(input, boots, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual",
-  "cutEqual", "quartiles"), progressbar = TRUE)
+impact.boot(
+  input,
+  boots,
+  gamma,
+  nodes = c("all"),
+  binary.data = FALSE,
+  weighted = TRUE,
+  split = c("median", "mean", "forceEqual", "cutEqual", "quartiles"),
+  progressbar = TRUE
+)
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).

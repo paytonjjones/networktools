@@ -4,9 +4,16 @@
 \alias{MDSnet}
 \title{MDSnet}
 \usage{
-MDSnet(qgraph_net, type = c("ordinal", "interval", "ratio", "mspline"),
-  MDSadj = NULL, stressTxt = F, repulse = F, repulsion = 1,
-  mdsArgs = list(), ...)
+MDSnet(
+  qgraph_net,
+  type = c("ordinal", "interval", "ratio", "mspline"),
+  MDSadj = NULL,
+  stressTxt = F,
+  repulse = F,
+  repulsion = 1,
+  mdsArgs = list(),
+  ...
+)
 }
 \arguments{
 \item{qgraph_net}{an object of type \code{qgraph}}

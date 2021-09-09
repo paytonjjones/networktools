@@ -4,7 +4,9 @@
 \name{depression}
 \alias{depression}
 \title{Simulated Depression Profiles}
-\format{a dataframe. Columns represent symptoms and rows represent individuals}
+\format{
+a dataframe. Columns represent symptoms and rows represent individuals
+}
 \usage{
 depression
 }

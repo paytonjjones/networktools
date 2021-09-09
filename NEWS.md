@@ -43,3 +43,7 @@ output:
 # networktools 1.2.3
 
 * Fixed deprecated /donttest examples
+
+# networktools 1.3.0
+
+* Fixed a bug in bridge that resulted in incorrect communities if a non-sequential list was supplied, e.g., communities <- list("Comm1"=c(1:2, 4), "Comm2"=c(3))

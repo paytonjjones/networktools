@@ -4,9 +4,14 @@
 \alias{impact}
 \title{Network Impact (combined function)}
 \usage{
-impact(input, gamma, nodes = c("all"), binary.data = FALSE,
-  weighted = TRUE, split = c("median", "mean", "forceEqual",
-  "cutEqual", "quartiles"))
+impact(
+  input,
+  gamma,
+  nodes = c("all"),
+  binary.data = FALSE,
+  weighted = TRUE,
+  split = c("median", "mean", "forceEqual", "cutEqual", "quartiles")
+)
 }
 \arguments{
 \item{input}{a matrix or data frame of observations (not a network/edgelist).

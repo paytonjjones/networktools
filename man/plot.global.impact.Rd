@@ -4,8 +4,13 @@
 \alias{plot.global.impact}
 \title{Plot "global.impact" objects}
 \usage{
-\method{plot}{global.impact}(x, order = c("given", "value",
-  "alphabetical"), zscore = FALSE, abs_val = FALSE, ...)
+\method{plot}{global.impact}(
+  x,
+  order = c("given", "value", "alphabetical"),
+  zscore = FALSE,
+  abs_val = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{an output object from an impact function (class \code{global.impact})}

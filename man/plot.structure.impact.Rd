@@ -4,8 +4,13 @@
 \alias{plot.structure.impact}
 \title{Plot "structure.impact" objects}
 \usage{
-\method{plot}{structure.impact}(x, order = c("given", "alphabetical",
-  "value"), zscore = FALSE, abs_val = FALSE, ...)
+\method{plot}{structure.impact}(
+  x,
+  order = c("given", "alphabetical", "value"),
+  zscore = FALSE,
+  abs_val = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{an output object from an impact function (class \code{structure.impact})}

@@ -3,7 +3,6 @@
 \docType{package}
 \name{networktools}
 \alias{networktools}
-\alias{networktools-package}
 \title{networktools.}
 \description{
 Tools for Identifying Important Nodes in Networks

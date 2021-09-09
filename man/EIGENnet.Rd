@@ -4,9 +4,17 @@
 \alias{EIGENnet}
 \title{EIGENnet}
 \usage{
-EIGENnet(qgraph_net, EIGENadj = NULL, S = 1000, burn = 200,
-  seed = 1, repulse = F, repulsion = 1, eigenmodelArgs = list(),
-  ...)
+EIGENnet(
+  qgraph_net,
+  EIGENadj = NULL,
+  S = 1000,
+  burn = 200,
+  seed = 1,
+  repulse = F,
+  repulsion = 1,
+  eigenmodelArgs = list(),
+  ...
+)
 }
 \arguments{
 \item{qgraph_net}{an object of type \code{qgraph}}

@@ -4,8 +4,14 @@
 \alias{bridge}
 \title{Bridge Centrality}
 \usage{
-bridge(network, communities = NULL, useCommunities = "all",
-  directed = NULL, nodes = NULL, normalize = FALSE)
+bridge(
+  network,
+  communities = NULL,
+  useCommunities = "all",
+  directed = NULL,
+  nodes = NULL,
+  normalize = FALSE
+)
 }
 \arguments{
 \item{network}{a network of class "igraph", "qgraph", or an adjacency matrix representing

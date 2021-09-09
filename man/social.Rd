@@ -4,7 +4,9 @@
 \name{social}
 \alias{social}
 \title{Simulated Social Engagement Data}
-\format{a dataframe. Columns represent individuals (nodes) and rows represent engagement in social media group conversations}
+\format{
+a dataframe. Columns represent individuals (nodes) and rows represent engagement in social media group conversations
+}
 \usage{
 social
 }

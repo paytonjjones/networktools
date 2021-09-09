@@ -4,9 +4,15 @@
 \alias{assumptionCheck}
 \title{Assumption Checking Function}
 \usage{
-assumptionCheck(data, type = c("network", "impact"), percent = 20,
+assumptionCheck(
+  data,
+  type = c("network", "impact"),
+  percent = 20,
   split = c("median", "mean", "forceEqual", "cutEqual", "quartiles"),
-  plot = FALSE, binary.data = FALSE, na.rm = TRUE)
+  plot = FALSE,
+  binary.data = FALSE,
+  na.rm = TRUE
+)
 }
 \arguments{
 \item{data}{dataframe or matrix of observational data (rows: observations, columns: nodes)}

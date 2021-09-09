@@ -4,8 +4,15 @@
 \alias{PCAnet}
 \title{PCAnet}
 \usage{
-PCAnet(qgraph_net, cormat, varTxt = F, repulse = F, repulsion = 1,
-  principalArgs = list(), ...)
+PCAnet(
+  qgraph_net,
+  cormat,
+  varTxt = F,
+  repulse = F,
+  repulsion = 1,
+  principalArgs = list(),
+  ...
+)
 }
 \arguments{
 \item{qgraph_net}{an object of type \code{qgraph}}

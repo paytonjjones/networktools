@@ -4,8 +4,14 @@
 \alias{goldbricker}
 \title{Goldbricker - Identifying redundant nodes in networks using compared correlations}
 \usage{
-goldbricker(data, p = 0.05, method = "hittner2003", threshold = 0.25,
-  corMin = 0.5, progressbar = TRUE)
+goldbricker(
+  data,
+  p = 0.05,
+  method = "hittner2003",
+  threshold = 0.25,
+  corMin = 0.5,
+  progressbar = TRUE
+)
 }
 \arguments{
 \item{data}{a data frame consisting of n rows (participants) and j columns (variables)}

@@ -4,9 +4,16 @@
 \alias{plot.bridge}
 \title{Plot "bridge" objects}
 \usage{
-\method{plot}{bridge}(x, order = c("given", "alphabetical", "value"),
-  zscore = FALSE, include, color = FALSE, colpalette = "Dark2",
-  plotNA = FALSE, ...)
+\method{plot}{bridge}(
+  x,
+  order = c("given", "alphabetical", "value"),
+  zscore = FALSE,
+  include,
+  color = FALSE,
+  colpalette = "Dark2",
+  plotNA = FALSE,
+  ...
+)
 }
 \arguments{
 \item{x}{an output object from \code{bridge} (class \code{bridge})}

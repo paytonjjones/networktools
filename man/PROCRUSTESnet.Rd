@@ -4,10 +4,20 @@
 \alias{PROCRUSTESnet}
 \title{PROCRUSTESnet}
 \usage{
-PROCRUSTESnet(qgraph_net1, qgraph_net2, type1 = c("ordinal", "interval",
-  "ratio", "mspline"), type2 = type1, MDSadj1 = NULL, MDSadj2 = NULL,
-  stressTxt = F, congCoef = F, repulse = F, repulsion = 1,
-  mdsArgs = list(), ...)
+PROCRUSTESnet(
+  qgraph_net1,
+  qgraph_net2,
+  type1 = c("ordinal", "interval", "ratio", "mspline"),
+  type2 = type1,
+  MDSadj1 = NULL,
+  MDSadj2 = NULL,
+  stressTxt = F,
+  congCoef = F,
+  repulse = F,
+  repulsion = 1,
+  mdsArgs = list(),
+  ...
+)
 }
 \arguments{
 \item{qgraph_net1}{an object of type \code{qgraph}}

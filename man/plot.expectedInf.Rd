@@ -4,8 +4,7 @@
 \alias{plot.expectedInf}
 \title{Plot "expectedInf" objects}
 \usage{
-\method{plot}{expectedInf}(x, order = c("given", "alphabetical",
-  "value"), zscore = TRUE, ...)
+\method{plot}{expectedInf}(x, order = c("given", "alphabetical", "value"), zscore = TRUE, ...)
 }
 \arguments{
 \item{x}{an output object from an \code{expectedInf} (class \code{expectedInf})}

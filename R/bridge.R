@@ -110,7 +110,10 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   }
 
   if(class(communities)=="communities") {communities <- communities$membership}
-  if(is.list(communities)){communities <- as.character(utils::stack(communities)$ind)}
+  if(is.list(communities)){
+    stacked <- utils::stack(communities)
+    communities <- as.character(stacked[stacked$values,"ind"])
+  }
 
   #Check for communities mismatch
   if(length(communities)!=length(nodes)){
