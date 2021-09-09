@@ -11,4 +11,4 @@ LazyData: true
 Imports: qgraph,igraph,IsingFit,reshape2,nnet,ggplot2,gridExtra,stats,graphics,utils,NetworkComparisonTest,cocor,RColorBrewer,R.utils,eigenmodel,psych,smacof,wordcloud
 RoxygenNote: 7.1.1
 URL: https://CRAN.R-project.org/package=networktools
-BugReports: http://github.com/paytonjjones/networktools/issues
+BugReports: https://github.com/paytonjjones/networktools/issues
