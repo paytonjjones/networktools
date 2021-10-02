@@ -40,7 +40,7 @@ net_reduce <- function(data, badpairs, method=c("PCA","best_goldbricker")){
   if("tbl" %in% class(data)){
     data <- as.data.frame(data)
   }
-  if(class(badpairs)=="goldbricker"){
+  if("goldbricker" %in% class(badpairs)){
     bp_full <- unlist(strsplit(names(badpairs$suggested_reductions), split= " & "))
   } else if (is.list(badpairs)){
     bp_full <- unlist(badpairs)
@@ -58,6 +58,9 @@ net_reduce <- function(data, badpairs, method=c("PCA","best_goldbricker")){
   }
   if(!all(is.na(bp_unable))){
     bp <- bp_mat[!bp_unable_vec,]
+    if(!("matrix" %in% class(bp))){
+      bp <- matrix(bp, ncol = 2, byrow = TRUE)
+    }
     warning("The following pairs were not reduced because they contained duplicates found in prior pairs: \n", paste(out_unable, collapse=", "))
   }
   newcols <- matrix(numeric(), nrow(data),nrow(bp))
@@ -75,7 +78,7 @@ net_reduce <- function(data, badpairs, method=c("PCA","best_goldbricker")){
     }
     bp_colnames <- paste("PCA", bp[,1], bp[,2], sep=".")
   } else if (method[1]=="best_goldbricker") {
-    if(class(badpairs)!="goldbricker"){stop("Argument badpairs must be of class goldbricker to use method best_goldbricker")}
+    if(!("goldbricker" %in% class(badpairs))){stop("Argument badpairs must be of class goldbricker to use method best_goldbricker")}
     bp_colnames <- vector()
     for(i in 1:nrow(bp)){
       if(mean(na.omit(badpairs$proportion_matrix[,bp[i,1]])) >= mean(na.omit(badpairs$proportion_matrix[,bp[i,2]]))){

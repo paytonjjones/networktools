@@ -10,5 +10,6 @@ Encoding: UTF-8
 LazyData: true
 Imports: qgraph,igraph,IsingFit,reshape2,nnet,ggplot2,gridExtra,stats,graphics,utils,NetworkComparisonTest,cocor,RColorBrewer,R.utils,eigenmodel,psych,smacof,wordcloud
 RoxygenNote: 7.1.1
+Suggests: dplyr, testthat
 URL: https://CRAN.R-project.org/package=networktools
 BugReports: https://github.com/paytonjjones/networktools/issues
