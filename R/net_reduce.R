@@ -37,6 +37,9 @@
 #'
 #'@export
 net_reduce <- function(data, badpairs, method=c("PCA","best_goldbricker")){
+  if("tbl" %in% class(data)){
+    data <- as.data.frame(data)
+  }
   if(class(badpairs)=="goldbricker"){
     bp_full <- unlist(strsplit(names(badpairs$suggested_reductions), split= " & "))
   } else if (is.list(badpairs)){

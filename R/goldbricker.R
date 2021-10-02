@@ -53,7 +53,10 @@
 #'@export
 goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, corMin=0.5, progressbar=TRUE) {
   if(method=="zou2007"){warning("zou2007 uses a confidence interval, argument \"p\" is ignored")}
-  if(class(data)!="goldbricker"){
+  if("tbl" %in% class(data)){
+    data <- as.data.frame(data)
+  }
+  if(!("goldbricker" %in% class(data))){
     cormat <- qgraph::cor_auto(data)
     n <- nrow(data)
     d <- dim(cormat)[1]
