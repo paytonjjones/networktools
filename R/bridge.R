@@ -70,12 +70,19 @@
 #' @return \code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
 #'
 #'$'Bridge Strength'
+#'
 #'$'Bridge Betweenness'
+#'
 #'$'Bridge Closeness'
+#'
 #'$'Bridge Expected Influence (1-step)'
+#'
 #'$'Bridge Expected Influence (2-step)'
 #'
-#'Each contains a vector of named centrality values
+#'Each of these contains a vector of named centrality values
+#'
+#'$'communities' is also returned, which returns the communities in vector format. If communities were supplied as a list or igraph object, it is advised that one check the accuracy of this vector.
+#'
 #'
 #'@export
 bridge <- function(network, communities=NULL, useCommunities="all", directed=NULL, nodes=NULL, normalize=FALSE) {
@@ -109,10 +116,17 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
   }
 
-  if(class(communities)=="communities") {communities <- communities$membership}
+  if(class(communities)=="communities") {communities <- as.character(communities$membership)}
   if(is.list(communities)){
     stacked <- utils::stack(communities)
-    communities <- as.character(stacked[stacked$values,"ind"])
+    if("" %in% stacked$ind){
+      warning("Check communities list: possible missing community names")
+    }
+    stacked <- stacked[order(stacked$values),]
+    if(FALSE %in% c(stacked$values == 1:nrow(stacked))){
+      stop("Invalid communities object")
+    }
+    communities <- as.character(stacked$ind)
   }
 
   #Check for communities mismatch

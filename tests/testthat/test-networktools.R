@@ -1,11 +1,12 @@
-require(dplyr)
-
 ## ---- Common Data Generation ----
 
 data(depression)
 data(social)
 
-depression_tibble <- tibble(depression)
+dep_cor <- cor(depression)
+dep_cor_g <- igraph::graph_from_adjacency_matrix(dep_cor, mode = "undirected")
+
+depression_tibble <- dplyr::tibble(depression)
 
 
 ## ---- Testing ----
@@ -99,3 +100,66 @@ test_that("net_reduce - raises error when best_goldbricker called without gb obj
   )
 })
 
+
+
+## ---- bridge ----
+
+communities_vector <- c("Comm3","Comm3","Comm3", "Comm1", "Comm1", "Comm2", "Comm1", "Comm1", "Comm1")
+communities_list <- list("Comm3" = c(1:3), "Comm2" = 6, "Comm1" = c(4:5, 7:9))
+communities_list_missing_name <- list(c(1:3), "Comm2" = 6, "Comm3" = c(4:5, 7:9))
+communities_vector_with_extra_val <- c("Comm3","Comm3","Comm3", "Comm1", "Comm1", "Comm2", "Comm1", "Comm1", "Comm1", "CommExtra")
+communities_list_missing_slot <- list("Comm3" = c(1:3), "Comm2" = 6, "Comm1" = c(4:5, 7:8, 10))
+communities_list_too_many <- list("Comm3" = c(1:3), "Comm2" = 6, "Comm1" = c(4:5, 7:10))
+numeric_comm_vector <- c(3, 3, 3, 1, 1, 2, 1, 1, 1)
+communities_igraph <- igraph::make_clusters(dep_cor_g, numeric_comm_vector)
+
+skip_on_cran()
+test_that("bridge - default interface runs without errors", {
+  expect_error(
+    bridge(dep_cor, communities = communities_vector),
+    NA
+  )
+})
+
+test_that("bridge - runs with communities as complex list", {
+  expect_equal(
+    bridge(dep_cor, communities = communities_list)$communities,
+    communities_vector
+  )
+})
+
+test_that("bridge - runs with igraph communities", {
+  expect_equal(
+    bridge(dep_cor, communities = communities_igraph)$communities,
+    as.character(numeric_comm_vector)
+  )
+})
+
+test_that("bridge - warns when communities list is missing names", {
+  expect_warning(
+    bridge(dep_cor, communities = communities_list_missing_name),
+    "Check communities list: possible missing community names"
+  )
+})
+
+test_that("bridge - fails when communities object does not match length of nodes", {
+  expect_error(
+    bridge(dep_cor, communities = communities_vector_with_extra_val),
+    "Length of communities argument does not match number of nodes"
+  )
+  expect_error(
+    bridge(dep_cor, communities = communities_vector[1:8]),
+    "Length of communities argument does not match number of nodes"
+  )
+  expect_error(
+    bridge(dep_cor, communities = communities_list_too_many),
+    "Length of communities argument does not match number of nodes"
+  )
+})
+
+test_that("bridge - fails when communities list skips over a value", {
+  expect_error(
+    bridge(dep_cor, communities = communities_list_missing_slot),
+    "Invalid communities object"
+  )
+})

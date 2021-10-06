@@ -47,3 +47,9 @@ output:
 # networktools 1.3.0
 
 * Fixed a bug in bridge that resulted in incorrect communities if a non-sequential list was supplied, e.g., communities <- list("Comm1"=c(1:2, 4), "Comm2"=c(3))
+
+# networktools 1.4.0
+
+* Amended the previous fix to work in a wider variety of cases
+* Adjusted goldbricker to handle tibbles
+* Added testing with testthat

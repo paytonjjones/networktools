@@ -1,7 +1,7 @@
 ---
 title: "cran-comments"
 author: "Payton Jones"
-date: "September 10, 2021"
+date: "October 6, 2021"
 output:
   md_document
 ---
@@ -14,8 +14,6 @@ output:
 
 ## R CMD Check results
 There were no ERRORS or WARNINGS
-
-There was one NOTE (updating email address for maintainer from university @g.harvard.edu to permanent @gmail.com)
 
 ## Downstream dependencies
 There are 3 downstream dependencies for this package (bootnet, BGGM, NeworkComparisonTest), which passed checks.

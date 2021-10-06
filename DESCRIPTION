@@ -1,7 +1,7 @@
 Package: networktools
 Title: Tools for Identifying Important Nodes in Networks
-Version: 1.3.0.9000
-Date: 2021-9-10
+Version: 1.4.0
+Date: 2021-10-6
 Authors@R: person("Payton", "Jones", email = "paytonjjones@gmail.com", role = c("aut", "cre"))
 Description: Includes assorted tools for network analysis. Bridge centrality; goldbricker; MDS, PCA, & eigenmodel network plotting.
 Depends: R (>= 3.0.0)
@@ -9,7 +9,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: qgraph,igraph,IsingFit,reshape2,nnet,ggplot2,gridExtra,stats,graphics,utils,NetworkComparisonTest,cocor,RColorBrewer,R.utils,eigenmodel,psych,smacof,wordcloud
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: dplyr, testthat
 URL: https://CRAN.R-project.org/package=networktools
 BugReports: https://github.com/paytonjjones/networktools/issues
