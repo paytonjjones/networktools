@@ -57,7 +57,7 @@ significantly different for each different pair of nodes.
 Using the threshold argument, one can set the proportion of correlations which is deemed "too low". All pairs of nodes
 which fall below this threshold are returned as defined "bad pairs".
 
-Pairs can then be combined using the reduce_net function
+Pairs can then be combined using the net_reduce function
 
 Note: to quickly change the threshold, one may simply enter an object of class "goldbricker" in the data argument, and change the threshold.
 The p-value cannot be modified in the same fashion, as re-computation is necessary.
