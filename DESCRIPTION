@@ -1,7 +1,7 @@
 Package: networktools
 Title: Tools for Identifying Important Nodes in Networks
 Version: 1.5.0
-Date: 2021-10-6
+Date: 2022-6-3
 Authors@R: person("Payton", "Jones", email = "paytonjjones@gmail.com", role = c("aut", "cre"))
 Description: Includes assorted tools for network analysis. Bridge centrality; goldbricker; MDS, PCA, & eigenmodel network plotting.
 Depends: R (>= 3.0.0)

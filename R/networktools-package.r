@@ -10,9 +10,6 @@
 #'are tools for dealing with redundant nodes. For plotting networks, see \code{MDSnet()},
 #'\code{PCAnet()}, and \code{EIGENnet()}.
 #'
-#'For a complete list of functions, use library(help = "networktools")
-#'
-#'For a complete list of vignettes, use browseVignettes("networktools")
 #'
 #'Scholarly references:
 #'

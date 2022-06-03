@@ -41,13 +41,16 @@
 #' gb_depression_60 <- goldbricker(data=gb_depression, threshold=0.6)
 #'
 #'}
-#' @return \code{\link{goldbricker}} returns a list of class "\code{goldbricker}" which contains:
+#' @return \code{\link{goldbricker}} returns a list of class \code{goldbricker} which contains:
 #'
-#' $proportion_matrix - a j x j matrix of proportions. Each proportion signifies the amount of significantly
+#' \code{$proportion_matrix} - a j x j matrix of proportions. Each proportion signifies the amount of significantly
 #' different correlations between the given node pair (j x j)
-#' $suggested_reductions - a vector of "bad pairs" (names) and their proportions (values)
-#' $p - p value from input
-#' $threshold - threshold from input
+#'
+#' \code{$suggested_reductions} - a vector of "bad pairs" (names) and their proportions (values)
+#'
+#' \code{$p} - p value from input
+#'
+#' \code{$threshold} - threshold from input
 #'
 #'
 #'@export

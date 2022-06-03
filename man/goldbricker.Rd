@@ -29,13 +29,16 @@ that are uncorrelated are unlikely to represent the same underlying construct}
 \item{progressbar}{logical. prints a progress bar in the console}
 }
 \value{
-\code{\link{goldbricker}} returns a list of class "\code{goldbricker}" which contains:
+\code{\link{goldbricker}} returns a list of class \code{goldbricker} which contains:
 
-$proportion_matrix - a j x j matrix of proportions. Each proportion signifies the amount of significantly
+\code{$proportion_matrix} - a j x j matrix of proportions. Each proportion signifies the amount of significantly
 different correlations between the given node pair (j x j)
-$suggested_reductions - a vector of "bad pairs" (names) and their proportions (values)
-$p - p value from input
-$threshold - threshold from input
+
+\code{$suggested_reductions} - a vector of "bad pairs" (names) and their proportions (values)
+
+\code{$p} - p value from input
+
+\code{$threshold} - threshold from input
 }
 \description{
 This function compares correlations in a psychometric network in order to identify nodes

@@ -34,21 +34,21 @@ be automatically detected in the order extracted}
 in order to normalize by different community sizes}
 }
 \value{
-\code{\link{bridge}} returns a list of class "\code{bridge}" which contains:
+\code{\link{bridge}} returns a list of class \code{bridge} which contains:
 
-$'Bridge Strength'
+\code{$'Bridge Strength'}
 
-$'Bridge Betweenness'
+\code{$'Bridge Betweenness'}
 
-$'Bridge Closeness'
+\code{$'Bridge Closeness'}
 
-$'Bridge Expected Influence (1-step)'
+\code{$'Bridge Expected Influence (1-step)'}
 
-$'Bridge Expected Influence (2-step)'
+\code{$'Bridge Expected Influence (2-step)'}
 
 Each of these contains a vector of named centrality values
 
-$'communities' is also returned, which returns the communities in vector format. If communities were supplied as a list or igraph object, it is advised that one check the accuracy of this vector.
+\code{$'communities'} is also returned, which returns the communities in vector format. If communities were supplied as a list or igraph object, it is advised that one check the accuracy of this vector.
 }
 \description{
 Calculates bridge centrality metrics (bridge strength, bridge betweenness, bridge closeness, and bridge expected influence)
