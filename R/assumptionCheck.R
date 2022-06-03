@@ -3,7 +3,6 @@
 #' Checks some basic assumptions about the suitability of network analysis on
 #' your data
 #'
-#' This function is in BETA. Please report any errors.
 #'
 #' @param data dataframe or matrix of observational data (rows: observations, columns: nodes)
 #' @param type which assumptions to check? "network" tests the suitability for

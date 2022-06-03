@@ -107,16 +107,16 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   }
 
   #if communities not supplied, use spinglass default settings to detect
-  if(is.null(communities) | class(communities)=="function"){
+  if(is.null(communities) | inherits(communities, "function")){
     if(useCommunities[1] != "all"){
       stop("You must prespecify communities to use the useCommunities argument")
     }
     communities <- try(igraph::spinglass.community(g, spins=3))
-    if(class(communities)=="try-error") {stop("Automatic community detection failed. Please prespecify communities")}
+    if(inherits(communities, "try-error")) {stop("Automatic community detection failed. Please prespecify communities")}
     message("Note: Communities automatically detected with spinglass. Use \'communities\' argument to prespecify community structure")
   }
 
-  if(class(communities)=="communities") {communities <- as.character(communities$membership)}
+  if(inherits(communities, "communities")) {communities <- as.character(communities$membership)}
   if(is.list(communities)){
     stacked <- utils::stack(communities)
     if("" %in% stacked$ind){
@@ -206,7 +206,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
     return(c)
   }
   closeness <- try(sapply(1:length(nodes), b.close), silent=TRUE)
-  if(class(closeness)=="try-error") {
+  if(inherits(closeness, "try-error")) {
     b.close2 <- function(x) {
       # note: mode="all", so it will take the shortest path either in or out, whichever is closer
       b <- igraph::distances(g2, v=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]], mode="all")

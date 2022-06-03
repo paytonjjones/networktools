@@ -2,7 +2,7 @@
 ## and a vector of community names that matches the vector of nodes, and
 ## returns an edgelist with "from_comm" and "to_comm" columns
 coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, nodes=NULL) {
-  if(class(input)=="igraph"){
+  if(inherits(input, "igraph")){
     if(is.null(E(input)$weight)){
       mat <- as.matrix(igraph::get.adjacency(input, type="lower"))
     } else {
@@ -16,7 +16,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
     if(is.null(nodes)){
       nodes <- names(igraph::V(input))
     }
-  } else if(class(input)=="qgraph"){
+  } else if(inherits(input, "qgraph")){
     if(is.null(nodes)){
       if(is.null(input$graphAttributes$Nodes$names)) {
         nodes <- 1:length(unique(c(input$Edgelist$from, input$Edgelist$to)))
@@ -29,7 +29,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
       if(TRUE %in% input$Edgelist$directed){
         directed <-TRUE} else {directed <- FALSE}
     }
-  } else if (class(input)=="matrix") {
+  } else if (inherits(input, "matrix")) {
     if(is.null(directed)){
       directed <- !isSymmetric(unname(as.matrix(input)))
     }
@@ -63,7 +63,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
   if(is.null(communities)) {
     edgelist$comm_from <- NA
     edgelist$comm_to <- NA
-  } else if(class(communities)=="communities") {
+  } else if(inherits(communities,"communities")) {
     edgelist$comm_from <- communities$membership[match(edgelist$from, nodes)]
     edgelist$comm_to <- communities$membership[match(edgelist$to, nodes)]
   } else {
@@ -84,7 +84,7 @@ coerce_to_comm_edgelist <- function(input, communities=NULL, directed=NULL, node
 #' @export
 coerce_to_adjacency <- function(input, directed=NULL) {
   ## igraph input
-  if("igraph" %in% class(input)){
+  if(inherits(input, "igraph")) {
     if(is.null(E(input)$weight)){
       mat <- as.matrix(igraph::get.adjacency(input, type="both"))
     } else {
@@ -95,7 +95,7 @@ coerce_to_adjacency <- function(input, directed=NULL) {
     }
 
     ## qgraph input
-    } else if("qgraph" %in% class(input)){
+    } else if(inherits(input, "qgraph")){
     col1 <- input$Edgelist$from
     col3 <- input$Edgelist$to
     edgelist <- as.data.frame(cbind(col1, col3, input$Edgelist$weight))
@@ -191,7 +191,7 @@ repulseLayout <- function(qgraph, layout=NULL, repulsion=1){
   cexRepulseFull <- vsize * constant * repulsion
   newlayout <- try(wordcloud::wordlayout(layout[,1],layout[,2], words=rep('@', nrow(layout)),
                           cex=cexRepulseFull), silent=T)
-  if(class(newlayout)=="try-error"){
+  if(inherits(newlayout, "try-error")){
     plot.new()
     newlayout <- wordcloud::wordlayout(layout[,1],layout[,2], words=rep('@', nrow(layout)),
                                            cex=cexRepulseFull)

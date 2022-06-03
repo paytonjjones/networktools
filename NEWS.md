@@ -53,3 +53,7 @@ output:
 * Amended the previous fix to work in a wider variety of cases
 * Adjusted goldbricker to handle tibbles
 * Added testing with testthat
+
+# networktools 1.5.0
+
+* Removed deprecated impact functions, resolving circular dependency on NetworkComparisonTest package

@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .DS_Store
+tarball/*
 Backups for safe keeping
 creating intercommunity
 dependencies
