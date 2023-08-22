@@ -64,7 +64,7 @@ MDSnet <- function(qgraph_net, type=c("ordinal", "interval", "ratio", "mspline")
 #' @param MDSadj2 to use a proximities matrix other than the adjacency matrix
 #' stored in \code{qgraph_net2}, provide it in this argument
 #' @param stressTxt logical. Print the stress value in the lower left corner of the plots?
-#' @param congCoef logical. Print the congruence coefficient fo the two layouts?
+#' @param congCoef logical. Print the congruence coefficient for the two layouts?
 #' @param repulse logical. Add a small repulsion force with wordcloud package to avoid node overlap?
 #' @param repulsion scalar for the repulsion force. Larger values add more repulsion
 #' @param mdsArgs additional arguments in list format passed to \code{smacof::mds}

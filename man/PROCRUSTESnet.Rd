@@ -36,7 +36,7 @@ stored in \code{qgraph_net2}, provide it in this argument}
 
 \item{stressTxt}{logical. Print the stress value in the lower left corner of the plots?}
 
-\item{congCoef}{logical. Print the congruence coefficient fo the two layouts?}
+\item{congCoef}{logical. Print the congruence coefficient for the two layouts?}
 
 \item{repulse}{logical. Add a small repulsion force with wordcloud package to avoid node overlap?}
 

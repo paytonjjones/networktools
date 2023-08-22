@@ -57,3 +57,7 @@ output:
 # networktools 1.5.0
 
 * Removed deprecated impact functions, resolving circular dependency on NetworkComparisonTest package
+
+# networktools 1.5.1
+
+* Update package description to conform to roxygen2 7.0.0

@@ -1,23 +1,13 @@
-#' networktools.
+#' @keywords internal
+#' @references
 #'
-#'Tools for Identifying Important Nodes in Networks
+#' Cite this package: \href{https://scholar.google.com/citations?view_op=view_citation&hl=en&user=KRBoSPoAAAAJ&citation_for_view=KRBoSPoAAAAJ:UeHWp8X0CEIC}{Google Scholar}
 #'
-#'@details
+#' Cite bridge centrality: \href{https://www.paytonjjones.com/publication/bridge_centrality/jones_ma_mcnally_2019.pdf}{PDF}
 #'
-#'Includes assorted tools for network analysis. Bridge centrality (\code{bridge()})
-#'calculates the extent to which nodes act as important communication points between
-#'predefined community structures. The \code{goldbricker()} and \code{net_reduce()} functions
-#'are tools for dealing with redundant nodes. For plotting networks, see \code{MDSnet()},
-#'\code{PCAnet()}, and \code{EIGENnet()}.
+#' Cite goldbricker / node redundancy: \href{https://pubmed.ncbi.nlm.nih.gov/30102777/}{PubMed}
 #'
+#' Cite plots: \href{https://www.frontiersin.org/articles/10.3389/fpsyg.2018.01742/full}{Frontiers}
 #'
-#'Scholarly references:
-#'
-#'Bridge centrality: https://www.paytonjjones.com/publication/bridge_centrality/jones_ma_mcnally_2019.pdf
-#'Node redundancy: https://pubmed.ncbi.nlm.nih.gov/30102777/
-#'Interpretable network plotting: https://www.frontiersin.org/articles/10.3389/fpsyg.2018.01742/full
-#'
-#' @author Payton J. Jones
-#' @name networktools
-#' @docType package
+"_PACKAGE"
 NULL
