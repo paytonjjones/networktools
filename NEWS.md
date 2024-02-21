@@ -61,3 +61,7 @@ output:
 # networktools 1.5.1
 
 * Update package description to conform to roxygen2 7.0.0
+
+# networktools 1.5.2
+
+* Fixed a bug affecting the zou2007 method of goldbricker

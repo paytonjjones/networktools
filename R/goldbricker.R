@@ -55,7 +55,10 @@
 #'
 #'@export
 goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, corMin=0.5, progressbar=TRUE) {
-  if(method=="zou2007"){warning("zou2007 uses a confidence interval, argument \"p\" is ignored")}
+  if(method=="zou2007"){
+    p <- 0.5
+    warning("zou2007 uses a confidence interval, argument \"p\" is ignored")
+    }
   if("tbl" %in% class(data)){
     data <- as.data.frame(data)
   }
@@ -73,7 +76,7 @@ goldbricker <- function(data, p=0.05, method="hittner2003", threshold=0.25, corM
         for(k in 1:d){
           test <- switch(method,
                          hittner2003 = suppressWarnings(cocor::cocor.dep.groups.overlap(cormat[k,i], cormat[k,j], cormat[i, j], n, test="hittner2003"))@hittner2003$p.value,
-                         zou2007 = ifelse(prod(suppressWarnings(cocor::cocor.dep.groups.overlap(.3, .4, .4, 30, test="zou2007"))@zou2007$'conf.int'[1:2])<0,1,0),
+                         zou2007 = ifelse(prod(suppressWarnings(cocor::cocor.dep.groups.overlap(cormat[k,i], cormat[k,j], cormat[i, j], n, test="zou2007"))@zou2007$'conf.int'[1:2])<0,1,0),
                          pearson1898 = suppressWarnings(cocor::cocor.dep.groups.overlap(cormat[k,i], cormat[k,j], cormat[i, j], n, test="pearson1898"))@pearson1898$p.value,
                          hotelling1940 = suppressWarnings(cocor::cocor.dep.groups.overlap(cormat[k,i], cormat[k,j], cormat[i, j], n, test="hotelling1940"))@hotelling1940$p.value,
                          williams1959 = suppressWarnings(cocor::cocor.dep.groups.overlap(cormat[k,i], cormat[k,j], cormat[i, j], n, test="williams1959"))@williams1959$p.value,
