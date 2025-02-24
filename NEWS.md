@@ -65,3 +65,7 @@ output:
 # networktools 1.5.2
 
 * Fixed a bug affecting the zou2007 method of goldbricker
+
+# networktools 1.6.0
+
+* Amends an error in the calculation of bridge closeness introduced in 1.4.0. Versions 1.4.0-1.5.2 mistakenly used the mean of inverse distances (rather than the inverse of the mean distance) for networks without negative edges

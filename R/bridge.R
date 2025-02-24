@@ -202,7 +202,7 @@ bridge <- function(network, communities=NULL, useCommunities="all", directed=NUL
   b.close <- function(x) {
     # note: mode="all", so it will take the shortest path either in or out, whichever is closer
     b <- igraph::distances(g, v=nodes[x], to=nodes[communities!=communities[which(nodes==nodes[x])]], mode="all")
-    c <- mean(1/b[is.finite(b)])
+    c <-1/mean(b[is.finite(b)])
     return(c)
   }
   closeness <- try(sapply(1:length(nodes), b.close), silent=TRUE)
