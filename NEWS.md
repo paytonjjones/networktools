@@ -69,3 +69,8 @@ output:
 # networktools 1.6.0
 
 * Amends an error in the calculation of bridge closeness introduced in 1.4.0. Versions 1.4.0-1.5.2 mistakenly used the mean of inverse distances (rather than the inverse of the mean distance) for networks without negative edges
+
+# networktools 1.6.1
+
+* Removes label coloring in `plot.bridge`, which relied on a deprecated `ggplot2` feature
+* Updates the `return` signature of `plot.bridge` such that `ggplot` objects are still returned when `order = "value"`
