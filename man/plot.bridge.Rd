@@ -18,7 +18,7 @@
 \arguments{
 \item{x}{an output object from \code{bridge} (class \code{bridge})}
 
-\item{order}{"alphabetical" orders nodes alphabetically, "value" orders nodes from
+\item{order}{"given" preserves order, "alphabetical" orders nodes alphabetically, "value" orders nodes from
 highest to lowest centrality values}
 
 \item{zscore}{logical. Converts raw impact statistics to z-scores for plotting}
@@ -34,6 +34,10 @@ if missing all available measures will be plotted}
 \item{plotNA}{should nodes with NA values be included on the y axis?}
 
 \item{...}{other plotting specifications in ggplot2 (aes)}
+}
+\value{
+If order != "value": a ggplot object returned visibly.
+If order == "value": drawn with gridExtra::grid.arrange; a list of ggplot objects returned invisibly
 }
 \description{
 Convenience function for plotting bridge centrality
