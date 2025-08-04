@@ -150,7 +150,7 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' Convenience function for plotting bridge centrality
 #'
 #' @param x an output object from \code{bridge} (class \code{bridge})
-#' @param order "alphabetical" orders nodes alphabetically, "value" orders nodes from
+#' @param order "given" preserves order, "alphabetical" orders nodes alphabetically, "value" orders nodes from
 #' highest to lowest centrality values
 #' @param zscore logical. Converts raw impact statistics to z-scores for plotting
 #' @param include a vector of centrality measures to include ("Bridge Strength", "Bridge Betweenness", "Bridge Closeness",
@@ -160,6 +160,9 @@ plot.expectedInf <- function(x, order=c("given","alphabetical", "value"), zscore
 #' @param colpalette A palette name from RColorBrewer, for coloring of axis labels
 #' @param plotNA should nodes with NA values be included on the y axis?
 #' @param ... other plotting specifications in ggplot2 (aes)
+#'
+#' @return If order != "value": a ggplot object returned visibly.
+#' If order == "value": drawn with gridExtra::grid.arrange; a list of ggplot objects returned invisibly
 #'
 #' @details
 #'
@@ -214,16 +217,14 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
     Long$node <- factor(as.character(Long$node), levels = rev(unique(as.character(Long$node))))
     g <- ggplot2::ggplot(Long, ggplot2::aes_string(x = 'value', y = 'node', group = 'type', ...))
     g <- g + ggplot2::geom_path() + ggplot2::xlab("") + ggplot2::ylab("") + ggplot2::geom_point()
-    g <- g + ggplot2::facet_grid('~measure', scales = "free") +
-      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=rev(cols)))
+    g <- g + ggplot2::facet_grid('~measure', scales = "free")
   } else if(order[1]=="alphabetical"){
     Long <- Long[with(Long, order(Long$node)),]
     Long$node <- factor(as.character(Long$node), levels = unique(as.character(Long$node)[order(Long$node)]))
     g <- ggplot2::ggplot(Long, ggplot2::aes_string(x='value', y='node', group='type', ...))
     g <- g + ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
-      ggplot2::facet_grid('~measure', scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node))) +
-      ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(nodes, decreasing=T)]))
-  } else if(order[1]=="value") {
+      ggplot2::facet_grid('~measure', scales="free") + ggplot2::scale_y_discrete(limits = rev(levels(Long$node)))
+  } else if(order[1]=="value") { # "value" style uses gridExtra
     glist <- list()
     for(i in 1:length(include)) {
       temp_Long_orig <- Long[Long$measure==include[i],]
@@ -231,17 +232,13 @@ plot.bridge <- function(x, order=c("given","alphabetical", "value"), zscore=FALS
       temp_Long$node <- factor(as.character(temp_Long$node), levels = unique(as.character(temp_Long$node)[order(temp_Long$value)]))
       glist[[i]] <- ggplot2::ggplot(temp_Long, ggplot2::aes_string(x='value', y='node', group='type',...)) +
         ggplot2::geom_path() + ggplot2::geom_point() + ggplot2::xlab("") + ggplot2::ylab("") +
-        ggplot2::facet_grid('~measure', scales="free") +
-        ggplot2::theme(axis.text.y = ggplot2::element_text(colour=cols[order(temp_Long_orig$value)]))
+        ggplot2::facet_grid('~measure', scales="free")
     }
-    if(length(include)==1){g <- gridExtra::grid.arrange(glist[[1]])
-    } else if(length(include)==2){gridExtra::grid.arrange(glist[[1]],glist[[2]], ncol=2)
-    } else if(length(include)==3){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]], ncol=3)
-    } else if(length(include)==4){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]], ncol=4)
-    } else if(length(include)==5){gridExtra::grid.arrange(glist[[1]],glist[[2]],glist[[3]],glist[[4]],glist[[5]], ncol=5)
-    }
+    names(glist) <- include
+    do.call(gridExtra::grid.arrange, c(glist, ncol=length(include)))
+    return(invisible(glist)) # invisible return prevents double-plotting
   }
-  if(order[1]!="value") { # if "value", plotting is already done with gridExtra (552-557)
+  if(order[1]!="value") {
       return(g)
     }
 }
